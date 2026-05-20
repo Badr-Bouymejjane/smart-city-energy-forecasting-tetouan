@@ -1,0 +1,274 @@
+# ============================================================
+# Configuration générale du projet
+# ============================================================
+
+project:
+  name: "smart-city-energy-forecasting-tetouan"
+  version: "0.1.0"
+  description: "Prévision de la charge énergétique et optimisation de la consommation urbaine dans une Smart City"
+  author_1: "Nom étudiant 1"
+  author_2: "Nom étudiant 2"
+  random_seed: 42
+
+# ============================================================
+# Chemins
+# ============================================================
+
+paths:
+  raw_data: "data/raw/Tetuan City power consumption.csv"
+  processed_dir: "data/processed"
+  external_dir: "data/external"
+
+  hourly_data: "data/processed/tetouan_hourly.csv"
+  features_data: "data/processed/tetouan_features.csv"
+  holidays_data: "data/external/holidays_morocco.csv"
+
+  models_dir: "models"
+  results_dir: "results"
+  figures_dir: "results/figures"
+  tables_dir: "results/tables"
+  metrics_dir: "results/metrics"
+  predictions_dir: "results/predictions"
+  reports_dir: "reports"
+
+# ============================================================
+# Dataset Tetouan
+# ============================================================
+
+dataset:
+  original_datetime_col: "DateTime"
+
+  column_mapping:
+    DateTime: "datetime"
+    Temperature: "temperature"
+    Humidity: "humidity"
+    Wind Speed: "wind_speed"
+    general diffuse flows: "general_diffuse_flows"
+    diffuse flows: "diffuse_flows"
+    Zone 1 Power Consumption: "zone1_power"
+    Zone 2  Power Consumption: "zone2_power"
+    Zone 3  Power Consumption: "zone3_power"
+
+  datetime_col: "datetime"
+  target_col: "target"
+  main_zone_col: "zone1_power"
+  zone_cols:
+    - "zone1_power"
+    - "zone2_power"
+    - "zone3_power"
+
+  weather_cols:
+    - "temperature"
+    - "humidity"
+    - "wind_speed"
+    - "general_diffuse_flows"
+    - "diffuse_flows"
+
+  expected_raw_frequency: "10min"
+  modeling_frequency: "1H"
+  resampling_method: "mean"
+
+# ============================================================
+# Prétraitement
+# ============================================================
+
+preprocessing:
+  remove_duplicate_timestamps: true
+  sort_by_datetime: true
+  create_total_load: true
+  create_target: true
+
+  missing_values:
+    strategy: "time_interpolation"
+    interpolation_method: "time"
+    max_gap_limit: 3
+
+  outliers:
+    detection_method: "iqr"
+    iqr_multiplier: 1.5
+    treatment: "keep_real_peaks"
+    note: "Les pics réels de consommation doivent être conservés sauf erreur technique évidente."
+
+# ============================================================
+# Splits temporels
+# ============================================================
+
+splitting:
+  method: "chronological"
+  train_size: 0.70
+  validation_size: 0.15
+  test_size: 0.15
+  shuffle: false
+
+# ============================================================
+# Feature Engineering
+# ============================================================
+
+features:
+  temporal:
+    create_hour: true
+    create_dayofweek: true
+    create_month: true
+    create_quarter: true
+    create_dayofyear: true
+    create_is_weekend: true
+    create_is_peak_hour: true
+    create_is_offpeak_hour: true
+    cyclic_encoding: true
+
+  peak_hours:
+    morning_start: 7
+    morning_end: 9
+    evening_start: 18
+    evening_end: 21
+
+  offpeak_hours:
+    start: 0
+    end: 5
+
+  lags_hours:
+    - 1
+    - 2
+    - 3
+    - 6
+    - 12
+    - 24
+    - 48
+    - 72
+    - 168
+
+  rolling_windows_hours:
+    - 3
+    - 6
+    - 12
+    - 24
+    - 48
+    - 168
+
+  weather:
+    create_hdd: true
+    create_cdd: true
+    base_temperature: 18.0
+    create_temp_humidity_interaction: true
+
+# ============================================================
+# Modèles
+# ============================================================
+
+models:
+  baseline:
+    naive_previous_hour: true
+    naive_previous_day: true
+    naive_previous_week: true
+
+  sarima:
+    enabled: true
+    order:
+      - 2
+      - 1
+      - 2
+    seasonal_order:
+      - 1
+      - 1
+      - 1
+      - 24
+    use_exogenous: true
+
+  prophet:
+    enabled: true
+    daily_seasonality: true
+    weekly_seasonality: true
+    yearly_seasonality: true
+    seasonality_mode: "multiplicative"
+    changepoint_prior_scale: 0.05
+    seasonality_prior_scale: 10.0
+    use_weather_regressors: true
+    use_holidays: true
+
+  random_forest:
+    enabled: true
+    n_estimators: 300
+    max_depth: null
+    random_state: 42
+    n_jobs: -1
+
+  xgboost:
+    enabled: true
+    n_estimators: 500
+    learning_rate: 0.05
+    max_depth: 6
+    subsample: 0.8
+    colsample_bytree: 0.8
+    objective: "reg:squarederror"
+    random_state: 42
+
+  gru:
+    enabled: true
+    sequence_length: 24
+    horizon: 1
+    units_1: 64
+    units_2: 32
+    dropout: 0.2
+    batch_size: 64
+    epochs: 50
+    learning_rate: 0.001
+    early_stopping_patience: 5
+
+# ============================================================
+# Évaluation
+# ============================================================
+
+evaluation:
+  metrics:
+    - "MAE"
+    - "RMSE"
+    - "MAPE"
+    - "R2"
+
+  evaluate_by_hour: true
+  evaluate_by_dayofweek: true
+  evaluate_peak_periods: true
+  backtesting: true
+
+  high_load_quantile: 0.95
+
+# ============================================================
+# XAI
+# ============================================================
+
+xai:
+  shap:
+    enabled: true
+    model: "xgboost"
+    sample_size: 1000
+
+  lime:
+    enabled: true
+    sample_size: 100
+
+# ============================================================
+# Alertes Smart City
+# ============================================================
+
+alerts:
+  enabled: true
+  high_load_quantile: 0.95
+  warning_quantile: 0.90
+  critical_quantile: 0.98
+
+  messages:
+    normal: "Charge sous contrôle."
+    warning: "Risque de pic modéré : surveiller la consommation."
+    critical: "Alerte pic : préparer une action de réduction préventive."
+
+# ============================================================
+# Dashboard Streamlit
+# ============================================================
+
+dashboard:
+  enabled: true
+  title: "Smart City Energy Forecasting — Tetouan"
+  default_zone: "zone1_power"
+  show_weather: true
+  show_predictions: true
+  show_alerts: true
