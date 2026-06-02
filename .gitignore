@@ -96,6 +96,7 @@ data/external/*
 reports/*.pdf
 reports/*.pptx
 reports/*.html
+reports/*.md
 
 # ============================================================
 # Optional: uncomment if you do not want to push raw data
