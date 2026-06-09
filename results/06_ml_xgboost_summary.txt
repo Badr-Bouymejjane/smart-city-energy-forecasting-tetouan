@@ -1,0 +1,26 @@
+Synthèse ML — Notebook 06
+-------------------------
+
+Le meilleur modèle ML sur le jeu de test est : XGBoost.
+
+Performances sur le test :
+- MAE   = 648.040
+- RMSE  = 878.404
+- MAPE  = 2.236 %
+- sMAPE = 2.215 %
+- R²    = 0.9786
+- Bias  = 327.143
+
+Interprétation :
+Le modèle ML transforme la série temporelle en problème supervisé tabulaire à partir
+des variables de calendrier, météo, lags, rolling features et indicateurs thermiques.
+
+L'analyse globale des métriques doit être complétée par :
+- l'analyse par heure ;
+- l'analyse par jour de semaine ;
+- le test sur les fortes charges ;
+- l'importance des variables ;
+- l'explicabilité SHAP dans le notebook suivant.
+
+Cette étape permet de comparer Random Forest et XGBoost et de sélectionner le modèle
+ML le plus pertinent pour l'interprétation et la valorisation Smart City.

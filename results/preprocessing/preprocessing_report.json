@@ -3,6 +3,14 @@
         52416,
         9
     ],
+    "loaded_shape_with_target_total_load": [
+        52416,
+        10
+    ],
+    "hourly_shape": [
+        8736,
+        10
+    ],
     "clean_hourly_shape": [
         8736,
         15
@@ -28,9 +36,8 @@
     "invalid_dates": 0,
     "duplicates_before": 0,
     "duplicates_final": 0,
+    "missing_before_handling": 0,
     "missing_after_cleaning": 0,
-    "project_root": "D:\\UB\\0 Inbox\\00-projects-code\\dm-pfm-project\\smart-city-energy-forecasting-tetouan",
-    "raw_path": "D:\\UB\\0 Inbox\\00-projects-code\\dm-pfm-project\\smart-city-energy-forecasting-tetouan\\data\\raw\\Tetuan City power consumption.csv",
     "missing_hours": 0,
     "hourly_counts_distribution": {
         "6": 8736
@@ -48,14 +55,14 @@
         "negative_wind_speed": 0
     },
     "outlier_summary": {
-        "temperature": 38,
-        "humidity": 67,
         "wind_speed": 259,
-        "general_diffuse_flows": 40,
         "diffuse_flows": 84,
+        "humidity": 67,
+        "general_diffuse_flows": 40,
+        "temperature": 38,
+        "zone3_power": 1,
         "zone1_power": 0,
         "zone2_power": 0,
-        "zone3_power": 1,
         "target": 0,
         "total_load": 0
     },
@@ -63,6 +70,13 @@
     "total_load_outliers": 0,
     "load_outliers": 0,
     "target_column": "target",
+    "feature_columns_base": [
+        "temperature",
+        "humidity",
+        "wind_speed",
+        "general_diffuse_flows",
+        "diffuse_flows"
+    ],
     "forbidden_direct_features": [
         "target",
         "zone1_power",
@@ -75,25 +89,54 @@
         "is_total_load_outlier",
         "is_load_outlier"
     ],
-    "feature_columns_base": [
-        "temperature",
-        "humidity",
-        "wind_speed",
-        "general_diffuse_flows",
-        "diffuse_flows"
-    ],
+    "feature_engineering_rules": {
+        "allowed_consumption_usage": [
+            "target_lag_1h",
+            "target_lag_24h",
+            "target_lag_168h",
+            "rolling_features_with_shift_1"
+        ],
+        "allowed_other_features": [
+            "weather_features",
+            "calendar_features",
+            "cyclical_time_encoding",
+            "holiday_features_if_available"
+        ],
+        "forbidden_direct_features": [
+            "target",
+            "zone1_power",
+            "zone2_power",
+            "zone3_power",
+            "total_load",
+            "target_rolling_zscore",
+            "total_load_rolling_zscore",
+            "is_target_outlier",
+            "is_total_load_outlier",
+            "is_load_outlier"
+        ],
+        "main_rule": "Les colonnes de consommation instantanée sont conservées pour construire des lags et rolling features, mais ne doivent pas être utilisées directement comme variables explicatives au même timestamp."
+    },
     "strict_validation": {
-        "missing_final": 0,
-        "duplicated_final": 0,
-        "final_frequency": "h",
-        "anti_leakage_checked": true
+        "missing_total": 0,
+        "duplicated_total": 0,
+        "inferred_frequency": "h",
+        "n_rows": 8736,
+        "n_columns": 15,
+        "start_date": "2017-01-01 00:00:00",
+        "end_date": "2017-12-30 23:00:00"
     },
     "saved_files": {
-        "clean_full": "D:\\UB\\0 Inbox\\00-projects-code\\dm-pfm-project\\smart-city-energy-forecasting-tetouan\\data\\processed\\tetouan_hourly_clean.csv",
-        "train_clean": "D:\\UB\\0 Inbox\\00-projects-code\\dm-pfm-project\\smart-city-energy-forecasting-tetouan\\data\\processed\\train_clean.csv",
-        "val_clean": "D:\\UB\\0 Inbox\\00-projects-code\\dm-pfm-project\\smart-city-energy-forecasting-tetouan\\data\\processed\\val_clean.csv",
-        "test_clean": "D:\\UB\\0 Inbox\\00-projects-code\\dm-pfm-project\\smart-city-energy-forecasting-tetouan\\data\\processed\\test_clean.csv",
-        "scaler_X_base": "D:\\UB\\0 Inbox\\00-projects-code\\dm-pfm-project\\smart-city-energy-forecasting-tetouan\\models\\scaler_X_base.pkl",
-        "scaler_y_base": "D:\\UB\\0 Inbox\\00-projects-code\\dm-pfm-project\\smart-city-energy-forecasting-tetouan\\models\\scaler_y_base.pkl"
+        "clean_full": "C:\\Users\\Badr\\UB\\0_Inbox\\00-projects-code\\dm-pfm-project\\smart-city-energy-forecasting-tetouan\\data\\processed\\tetouan_hourly_clean.csv",
+        "train_clean": "C:\\Users\\Badr\\UB\\0_Inbox\\00-projects-code\\dm-pfm-project\\smart-city-energy-forecasting-tetouan\\data\\processed\\train_clean.csv",
+        "val_clean": "C:\\Users\\Badr\\UB\\0_Inbox\\00-projects-code\\dm-pfm-project\\smart-city-energy-forecasting-tetouan\\data\\processed\\val_clean.csv",
+        "test_clean": "C:\\Users\\Badr\\UB\\0_Inbox\\00-projects-code\\dm-pfm-project\\smart-city-energy-forecasting-tetouan\\data\\processed\\test_clean.csv",
+        "X_train": "C:\\Users\\Badr\\UB\\0_Inbox\\00-projects-code\\dm-pfm-project\\smart-city-energy-forecasting-tetouan\\data\\processed\\X_train_scaled_base.csv",
+        "X_val": "C:\\Users\\Badr\\UB\\0_Inbox\\00-projects-code\\dm-pfm-project\\smart-city-energy-forecasting-tetouan\\data\\processed\\X_val_scaled_base.csv",
+        "X_test": "C:\\Users\\Badr\\UB\\0_Inbox\\00-projects-code\\dm-pfm-project\\smart-city-energy-forecasting-tetouan\\data\\processed\\X_test_scaled_base.csv",
+        "y_train": "C:\\Users\\Badr\\UB\\0_Inbox\\00-projects-code\\dm-pfm-project\\smart-city-energy-forecasting-tetouan\\data\\processed\\y_train_scaled_base.csv",
+        "y_val": "C:\\Users\\Badr\\UB\\0_Inbox\\00-projects-code\\dm-pfm-project\\smart-city-energy-forecasting-tetouan\\data\\processed\\y_val_scaled_base.csv",
+        "y_test": "C:\\Users\\Badr\\UB\\0_Inbox\\00-projects-code\\dm-pfm-project\\smart-city-energy-forecasting-tetouan\\data\\processed\\y_test_scaled_base.csv",
+        "scaler_X": "C:\\Users\\Badr\\UB\\0_Inbox\\00-projects-code\\dm-pfm-project\\smart-city-energy-forecasting-tetouan\\models\\scaler_X_base.pkl",
+        "scaler_y": "C:\\Users\\Badr\\UB\\0_Inbox\\00-projects-code\\dm-pfm-project\\smart-city-energy-forecasting-tetouan\\models\\scaler_y_base.pkl"
     }
 }
