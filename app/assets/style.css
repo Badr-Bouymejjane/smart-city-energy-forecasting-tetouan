@@ -1,0 +1,59 @@
+/* Premium Look & Feel CSS */
+
+/* Padding haut global */
+.block-container {
+    padding-top: 2rem !important;
+}
+
+/* Style des cartes de métriques (KPIs) */
+[data-testid="stMetric"] {
+    background-color: #262730;
+    padding: 15px;
+    border-radius: 10px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.3);
+    border-left: 5px solid #00d2ff;
+    transition: transform 0.2s ease;
+}
+
+[data-testid="stMetric"]:hover {
+    transform: translateY(-2px);
+}
+
+/* Titres */
+h1 {
+    color: #00d2ff !important;
+    font-weight: 700 !important;
+}
+
+/* Boîte d'alerte critique avec animation pulse */
+.alert-box {
+    padding: 20px;
+    background-color: #ff4b4b;
+    color: white;
+    border-radius: 10px;
+    font-weight: bold;
+    text-align: center;
+    font-size: 1.2rem;
+    box-shadow: 0 4px 10px rgba(255, 75, 75, 0.4);
+    animation: pulse 2s infinite;
+    margin-bottom: 20px;
+}
+
+@keyframes pulse {
+    0% { box-shadow: 0 0 0 0 rgba(255, 75, 75, 0.7); }
+    70% { box-shadow: 0 0 0 15px rgba(255, 75, 75, 0); }
+    100% { box-shadow: 0 0 0 0 rgba(255, 75, 75, 0); }
+}
+
+/* Boîte statut normal */
+.normal-box {
+    padding: 20px;
+    background-color: #00cc96;
+    color: white;
+    border-radius: 10px;
+    font-weight: bold;
+    text-align: center;
+    font-size: 1.2rem;
+    box-shadow: 0 4px 10px rgba(0, 204, 150, 0.4);
+    margin-bottom: 20px;
+}

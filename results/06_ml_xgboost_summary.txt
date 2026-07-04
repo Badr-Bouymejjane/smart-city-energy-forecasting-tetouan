@@ -4,12 +4,12 @@ Synthèse ML — Notebook 06
 Le meilleur modèle ML sur le jeu de test est : XGBoost.
 
 Performances sur le test :
-- MAE   = 648.040
-- RMSE  = 878.404
-- MAPE  = 2.236 %
-- sMAPE = 2.215 %
-- R²    = 0.9786
-- Bias  = 327.143
+- MAE   = 707.284
+- RMSE  = 1042.628
+- MAPE  = 2.436 %
+- sMAPE = 2.449 %
+- R²    = 0.9698
+- Bias  = -14.563
 
 Interprétation :
 Le modèle ML transforme la série temporelle en problème supervisé tabulaire à partir
