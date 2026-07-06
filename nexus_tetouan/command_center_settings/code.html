@@ -1,0 +1,398 @@
+<!DOCTYPE html>
+
+<html lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Settings - Nexus Tetouan</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "tertiary": "#4b5a70",
+                      "outline-variant": "#c2c6d8",
+                      "surface-dim": "#d8dadc",
+                      "on-surface-variant": "#424656",
+                      "primary-container": "#0066ff",
+                      "on-primary-fixed": "#001849",
+                      "on-tertiary-fixed-variant": "#38485d",
+                      "error": "#ba1a1a",
+                      "on-error-container": "#93000a",
+                      "tertiary-container": "#63738a",
+                      "on-primary": "#ffffff",
+                      "on-secondary": "#ffffff",
+                      "on-tertiary-fixed": "#0b1c30",
+                      "surface-container-lowest": "#ffffff",
+                      "outline": "#727687",
+                      "on-primary-container": "#f8f7ff",
+                      "secondary-fixed": "#69ff87",
+                      "on-primary-fixed-variant": "#003fa4",
+                      "on-background": "#191c1e",
+                      "on-secondary-fixed-variant": "#00531e",
+                      "on-tertiary-container": "#f6f8ff",
+                      "background": "#f7f9fb",
+                      "error-container": "#ffdad6",
+                      "surface-container-highest": "#e0e3e5",
+                      "on-tertiary": "#ffffff",
+                      "surface-container-high": "#e6e8ea",
+                      "primary-fixed-dim": "#b3c5ff",
+                      "tertiary-fixed-dim": "#b7c8e1",
+                      "secondary-container": "#5cfd80",
+                      "primary-fixed": "#dae1ff",
+                      "surface-variant": "#e0e3e5",
+                      "surface-container-low": "#f2f4f6",
+                      "on-secondary-fixed": "#002108",
+                      "inverse-surface": "#2d3133",
+                      "secondary-fixed-dim": "#3ce36a",
+                      "surface-tint": "#0054d6",
+                      "on-surface": "#191c1e",
+                      "on-secondary-container": "#00732c",
+                      "primary": "#0050cb",
+                      "surface": "#f7f9fb",
+                      "on-error": "#ffffff",
+                      "inverse-primary": "#b3c5ff",
+                      "secondary": "#006e2a",
+                      "surface-container": "#eceef0",
+                      "surface-bright": "#f7f9fb",
+                      "inverse-on-surface": "#eff1f3",
+                      "tertiary-fixed": "#d3e4fe"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "margin-mobile": "16px",
+                      "container-max": "1280px",
+                      "unit": "4px",
+                      "xl": "40px",
+                      "sm": "8px",
+                      "md": "16px",
+                      "xs": "4px",
+                      "gutter": "24px",
+                      "lg": "24px"
+              },
+              "fontFamily": {
+                      "body-sm": [
+                              "Inter"
+                      ],
+                      "label-md": [
+                              "Inter"
+                      ],
+                      "body-lg": [
+                              "Inter"
+                      ],
+                      "headline-xl": [
+                              "Inter"
+                      ],
+                      "body-md": [
+                              "Inter"
+                      ],
+                      "headline-lg": [
+                              "Inter"
+                      ],
+                      "label-sm": [
+                              "Inter"
+                      ],
+                      "headline-md": [
+                              "Inter"
+                      ],
+                      "headline-lg-mobile": [
+                              "Inter"
+                      ]
+              },
+              "fontSize": {
+                      "body-sm": [
+                              "14px",
+                              {
+                                      "lineHeight": "20px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "label-md": [
+                              "14px",
+                              {
+                                      "lineHeight": "16px",
+                                      "letterSpacing": "0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "body-lg": [
+                              "18px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-xl": [
+                              "48px",
+                              {
+                                      "lineHeight": "56px",
+                                      "letterSpacing": "-0.02em",
+                                      "fontWeight": "700"
+                              }
+                      ],
+                      "body-md": [
+                              "16px",
+                              {
+                                      "lineHeight": "24px",
+                                      "fontWeight": "400"
+                              }
+                      ],
+                      "headline-lg": [
+                              "32px",
+                              {
+                                      "lineHeight": "40px",
+                                      "letterSpacing": "-0.01em",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "label-sm": [
+                              "12px",
+                              {
+                                      "lineHeight": "16px",
+                                      "fontWeight": "500"
+                              }
+                      ],
+                      "headline-md": [
+                              "20px",
+                              {
+                                      "lineHeight": "28px",
+                                      "fontWeight": "600"
+                              }
+                      ],
+                      "headline-lg-mobile": [
+                              "24px",
+                              {
+                                      "lineHeight": "32px",
+                                      "fontWeight": "600"
+                              }
+                      ]
+              }
+      },
+          },
+        }
+    </script>
+<style>
+        body { font-family: 'Inter', sans-serif; }
+        .toggle-checkbox:checked {
+            right: 0;
+            border-color: #5cfd80;
+        }
+        .toggle-checkbox:checked + .toggle-label {
+            background-color: #5cfd80;
+        }
+        
+        /* Custom range slider styling */
+        input[type=range] {
+            -webkit-appearance: none;
+            width: 100%;
+            background: transparent;
+        }
+        input[type=range]::-webkit-slider-thumb {
+            -webkit-appearance: none;
+            height: 24px;
+            width: 24px;
+            border-radius: 50%;
+            background: #ffffff;
+            cursor: pointer;
+            margin-top: -10px;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+            border: 2px solid #0050cb;
+        }
+        input[type=range]::-webkit-slider-runnable-track {
+            width: 100%;
+            height: 4px;
+            cursor: pointer;
+            background: #e0e3e5;
+            border-radius: 2px;
+        }
+        input[type=range]:focus {
+            outline: none;
+        }
+        input[type=range]::-moz-range-thumb {
+            height: 24px;
+            width: 24px;
+            border-radius: 50%;
+            background: #ffffff;
+            cursor: pointer;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.2);
+            border: 2px solid #0050cb;
+        }
+        input[type=range]::-moz-range-track {
+            width: 100%;
+            height: 4px;
+            cursor: pointer;
+            background: #e0e3e5;
+            border-radius: 2px;
+        }
+    </style>
+</head>
+<body class="bg-surface text-on-surface h-screen overflow-hidden flex font-body-sm text-body-sm">
+<!-- SideNavBar -->
+<nav class="bg-surface dark:bg-inverse-surface shadow-sm h-screen w-64 fixed left-0 top-0 flex flex-col py-md px-sm z-50">
+<div class="mb-xl px-md pt-sm">
+<h1 class="font-headline-md text-headline-md font-bold text-primary dark:text-inverse-primary">Nexus Tetouan</h1>
+<p class="font-label-sm text-label-sm text-tertiary mt-xs">Energy Management</p>
+</div>
+<div class="flex-1 space-y-sm">
+<a class="flex items-center px-md py-sm rounded-lg hover:bg-surface-container-low dark:hover:bg-surface-container-highest transition-colors text-tertiary dark:text-tertiary-fixed-dim active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined mr-md">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<a class="flex items-center px-md py-sm rounded-lg hover:bg-surface-container-low dark:hover:bg-surface-container-highest transition-colors text-tertiary dark:text-tertiary-fixed-dim active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined mr-md">compare_arrows</span>
+<span class="font-label-md text-label-md">Model Comparison</span>
+</a>
+<a class="flex items-center px-md py-sm rounded-lg hover:bg-surface-container-low dark:hover:bg-surface-container-highest transition-colors text-tertiary dark:text-tertiary-fixed-dim active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined mr-md">history</span>
+<span class="font-label-md text-label-md">Historical Data</span>
+</a>
+<a class="flex items-center px-md py-sm bg-surface-container-low text-primary dark:text-inverse-primary font-bold border-r-4 border-primary rounded-lg active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined mr-md">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</div>
+<div class="mt-auto pt-md border-t border-surface-variant flex items-center px-md">
+<img alt="User profile photo" class="w-8 h-8 rounded-full object-cover mr-md" data-alt="A small circular avatar showing a professional engineer wearing a clean white hardhat and high-visibility vest. Bright, professional lighting, modern civic infrastructure setting, realistic photography." src="https://lh3.googleusercontent.com/aida-public/AB6AXuB2Scx9-H6KwieQIsqrc7w0xOpVvhTsImgJqh-87p4DS4CpCPQg2NQlITUDPa7Di149ueR8YkdX9GzOzGCOAC35NZAhHI-8wdNLeR0gAV4c1julf2EtuDe7nnBYb3pILY67CVgoZvNBipYttuK1wXKRr9MIYsvUopi8d5GMT9aLHLN8a1lNv6Eq98waIjLpvGnF_Sn1NHoZcOTd6_sfgpl26kwxGVUCUOHAfW4tl6OEJXk3BkYwGHEiDvgX7eDWUUQeCuBvyc5L8tHg"/>
+<div>
+<p class="font-label-sm text-label-sm font-semibold">Admin User</p>
+<p class="font-label-sm text-label-sm text-tertiary text-xs">System Operator</p>
+</div>
+</div>
+</nav>
+<!-- Main Content Area -->
+<div class="flex-1 flex flex-col ml-64 bg-background">
+<!-- TopAppBar -->
+<header class="bg-surface-bright dark:bg-surface-dim shadow-sm flex justify-between items-center h-16 px-lg sticky top-0 z-40">
+<div class="flex-1 max-w-md">
+<div class="relative flex items-center w-full h-10 rounded-full focus-within:shadow-md bg-surface border border-outline-variant overflow-hidden">
+<div class="grid place-items-center h-full w-12 text-outline">
+<span class="material-symbols-outlined text-sm">search</span>
+</div>
+<input class="peer h-full w-full outline-none text-sm text-on-surface bg-transparent pr-2" id="search" placeholder="Search settings..." type="text"/>
+</div>
+</div>
+<div class="flex items-center space-x-sm">
+<button class="p-sm text-on-surface-variant dark:text-outline-variant hover:text-primary-container dark:hover:text-primary-fixed transition-all rounded-full hover:bg-surface-container-low active:opacity-80 transition-opacity">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-sm text-on-surface-variant dark:text-outline-variant hover:text-primary-container dark:hover:text-primary-fixed transition-all rounded-full hover:bg-surface-container-low active:opacity-80 transition-opacity">
+<span class="material-symbols-outlined">help</span>
+</button>
+<img alt="Administrator Avatar" class="w-8 h-8 rounded-full object-cover ml-sm border border-outline-variant" data-alt="A small circular avatar showing a professional engineer wearing a clean white hardhat and high-visibility vest. Bright, professional lighting, modern civic infrastructure setting, realistic photography." src="https://lh3.googleusercontent.com/aida-public/AB6AXuAmr7Xq5MnpO5GM2Vpn3k_Ng-u_p_m9ssMFDRixp1G_XL5HcoSlh61crWMl21pX55jeV4KT6OQtXsRWLjayfoJfE6JGH_zAE2iBAJUk8-M5SxaOwiOpJbbZSj0cikXoZFs_j7WxhMLSHHeI7ovZSsFrA31Xp7j28Os_aRphPvO5NSm9J_2zfMCV0MF2XQ-gJurmKYPu8z3bHQS5chBRcOZ7qLmWuHIdVaiRAUUAonzZLNiQUI23lpthuDv9UIcdBmhG3peoTmiWvHJA"/>
+</div>
+</header>
+<!-- Settings Content -->
+<main class="flex-1 overflow-y-auto p-xl">
+<div class="max-w-6xl mx-auto flex gap-xl h-full pb-20">
+<!-- Settings Navigation Sidebar -->
+<aside class="w-64 flex-shrink-0">
+<h2 class="font-headline-lg text-headline-lg mb-lg text-on-surface">Settings</h2>
+<nav class="space-y-sm">
+<a class="block px-md py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors font-label-md text-label-md" href="#">General</a>
+<a class="block px-md py-sm rounded-lg bg-primary-container text-on-primary-container font-label-md text-label-md" href="#">Alert Thresholds</a>
+<a class="block px-md py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors font-label-md text-label-md" href="#">API Integrations</a>
+<a class="block px-md py-sm rounded-lg text-on-surface-variant hover:bg-surface-container-low transition-colors font-label-md text-label-md" href="#">User Access</a>
+</nav>
+</aside>
+<!-- Configuration Panel -->
+<div class="flex-1 flex flex-col">
+<div class="bg-surface-container-lowest rounded-xl shadow-[0_4px_6px_-1px_rgba(0,0,0,0.05),0_2px_4px_-2px_rgba(0,0,0,0.03)] p-lg border border-surface-container-low flex-1">
+<div class="mb-lg pb-md border-b border-surface-container-low">
+<h3 class="font-headline-md text-headline-md text-on-surface">Threshold Configuration</h3>
+<p class="font-body-sm text-body-sm text-tertiary mt-xs">Define operational limits and automated response triggers.</p>
+</div>
+<div class="space-y-xl">
+<!-- Slider Section -->
+<section>
+<div class="flex justify-between items-center mb-md">
+<label class="font-label-md text-label-md text-on-surface">Critical Load Limit (MW)</label>
+<span class="font-label-md text-label-md text-primary bg-primary-fixed px-sm py-xs rounded" id="sliderValue">750 MW</span>
+</div>
+<div class="relative w-full">
+<input class="w-full h-2 bg-surface-container-highest rounded-lg appearance-none cursor-pointer" id="loadSlider" max="1000" min="0" type="range" value="750"/>
+<div class="absolute -z-10 top-1 left-0 h-1 bg-primary rounded-l-lg pointer-events-none" id="sliderProgress" style="width: 75%;"></div>
+</div>
+<div class="flex justify-between text-label-sm font-label-sm text-outline mt-sm">
+<span>0</span>
+<span>500</span>
+<span>1000</span>
+</div>
+</section>
+<!-- Toggles Section -->
+<section class="space-y-md">
+<div class="flex items-center justify-between p-md bg-surface-container-low rounded-lg border border-surface-variant">
+<div>
+<h4 class="font-label-md text-label-md text-on-surface">Auto-Initiate Challenges</h4>
+<p class="font-body-sm text-body-sm text-tertiary text-sm mt-xs">Automatically deploy load reduction protocols when limits are breached.</p>
+</div>
+<div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
+<input checked="" class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 appearance-none cursor-pointer transition-all duration-300 z-10 top-0" id="toggle1" name="toggle" type="checkbox"/>
+<label class="toggle-label block overflow-hidden h-6 rounded-full bg-surface-container-highest cursor-pointer transition-colors duration-300" for="toggle1"></label>
+</div>
+</div>
+<div class="flex items-center justify-between p-md bg-surface-container-low rounded-lg border border-surface-variant">
+<div>
+<h4 class="font-label-md text-label-md text-on-surface">System Notifications</h4>
+<p class="font-body-sm text-body-sm text-tertiary text-sm mt-xs">Receive instant alerts for threshold anomalies.</p>
+</div>
+<div class="relative inline-block w-12 mr-2 align-middle select-none transition duration-200 ease-in">
+<input class="toggle-checkbox absolute block w-6 h-6 rounded-full bg-white border-4 border-surface-variant appearance-none cursor-pointer transition-all duration-300 z-10 top-0" id="toggle2" name="toggle2" type="checkbox"/>
+<label class="toggle-label block overflow-hidden h-6 rounded-full bg-surface-container-highest cursor-pointer transition-colors duration-300" for="toggle2"></label>
+</div>
+</div>
+</section>
+<!-- Inputs Section -->
+<section class="space-y-md">
+<h4 class="font-headline-sm text-headline-sm text-on-surface font-semibold mb-sm">API Integration Settings</h4>
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-xs">Primary Endpoint URL</label>
+<input class="w-full border border-outline-variant rounded-md px-md py-sm bg-surface-bright text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors font-body-sm text-body-sm" type="text" value="https://api.nexustetouan.gov/v2/telemetry"/>
+</div>
+<div>
+<label class="block font-label-sm text-label-sm text-on-surface-variant mb-xs">API Authentication Key</label>
+<div class="relative">
+<input class="w-full border border-outline-variant rounded-md px-md py-sm bg-surface-bright text-on-surface focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary transition-colors font-body-sm text-body-sm pr-10" type="password" value="sk_test_1234567890abcdef"/>
+<button class="absolute right-2 top-1/2 -translate-y-1/2 p-xs text-outline hover:text-primary transition-colors">
+<span class="material-symbols-outlined text-sm">visibility</span>
+</button>
+</div>
+</div>
+</section>
+</div>
+</div>
+</div>
+</div>
+</main>
+<!-- Sticky Bottom Action Bar -->
+<div class="fixed bottom-0 right-0 left-64 bg-surface-container-lowest border-t border-surface-container-low p-md px-xl flex justify-end shadow-[0_-4px_6px_-1px_rgba(0,0,0,0.05)] z-30">
+<button class="px-lg py-sm bg-surface-container-high text-on-surface font-label-md text-label-md rounded-md hover:bg-surface-variant transition-colors mr-md">
+                Cancel
+            </button>
+<button class="px-lg py-sm bg-primary text-on-primary font-label-md text-label-md rounded-md hover:bg-on-primary-fixed-variant shadow-sm transition-colors flex items-center">
+<span class="material-symbols-outlined text-sm mr-xs">save</span>
+                Save Changes
+            </button>
+</div>
+</div>
+<script>
+        // Simple slider visual update script
+        const slider = document.getElementById('loadSlider');
+        const display = document.getElementById('sliderValue');
+        const progress = document.getElementById('sliderProgress');
+
+        slider.addEventListener('input', function() {
+            display.textContent = this.value + ' MW';
+            const percent = (this.value / this.max) * 100;
+            progress.style.width = percent + '%';
+        });
+    </script>
+</body></html>

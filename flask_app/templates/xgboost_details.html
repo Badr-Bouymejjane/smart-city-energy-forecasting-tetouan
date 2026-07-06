@@ -1,0 +1,398 @@
+{% extends "base.html" %}
+
+{% block breadcrumb %}
+<span class="font-label-md text-label-md">Model Comparison</span><span class="material-symbols-outlined mx-1" style="font-size: 16px;">chevron_right</span><span class="font-label-md text-label-md text-primary">XGBoost Detailed View</span>
+{% endblock %}
+
+{% block content %}
+<div class="p-lg max-w-container-max mx-auto w-full space-y-lg">
+<!-- Header Section -->
+<div class="flex justify-between items-end mb-xl">
+<div>
+<h2 class="font-headline-xl text-headline-xl text-on-surface mb-2">XGBoost Performance</h2>
+<p class="font-body-lg text-body-lg text-on-surface-variant max-w-2xl">
+                        Detailed breakdown of the XGBoost regression model trained on Tetouan city energy consumption data. Current status indicates optimal performance against baseline metrics.
+                    </p>
+</div>
+<div class="flex gap-3">
+<button id="exportBtn" class="px-4 py-2 rounded-lg bg-surface-container-low text-primary font-label-md text-label-md hover:bg-surface-container transition-colors flex items-center gap-2 border border-surface-variant">
+<span class="material-symbols-outlined" style="font-size: 18px;">download</span>
+                        Export Diagrams
+                    </button>
+<button id="retrainBtn" class="px-4 py-2 rounded-lg bg-primary text-on-primary font-label-md text-label-md shadow-sm hover:bg-primary-container transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined" style="font-size: 18px;" id="retrainIcon">model_training</span>
+                        <span id="retrainText">Retrain Model</span>
+                    </button>
+</div>
+</div>
+<!-- Section 1: Detailed Error Metrics -->
+<div class="grid grid-cols-2 lg:grid-cols-5 gap-md">
+<!-- Metric Card 1 -->
+<div class="bg-surface-container-lowest p-lg rounded-xl ambient-shadow border border-surface-variant">
+<div class="flex justify-between items-start mb-4">
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">MAE</p>
+<span class="material-symbols-outlined text-outline-variant" style="font-size: 20px;">info</span>
+</div>
+<div class="flex items-baseline gap-2 mb-1">
+<h3 class="font-headline-lg text-headline-lg text-primary">{{ mae }}</h3>
+<span class="font-body-sm text-body-sm text-on-surface-variant">MW</span>
+</div>
+<div class="flex items-center gap-1 text-secondary">
+<span class="material-symbols-outlined" style="font-size: 16px;">trending_down</span>
+<span class="font-label-sm text-label-sm">0.15 MW vs Baseline</span>
+</div>
+</div>
+<!-- Metric Card 2 -->
+<div class="bg-surface-container-lowest p-lg rounded-xl ambient-shadow border border-surface-variant">
+<div class="flex justify-between items-start mb-4">
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">RMSE</p>
+<span class="material-symbols-outlined text-outline-variant" style="font-size: 20px;">info</span>
+</div>
+<div class="flex items-baseline gap-2 mb-1">
+<h3 class="font-headline-lg text-headline-lg text-primary">{{ rmse }}</h3>
+<span class="font-body-sm text-body-sm text-on-surface-variant">MW</span>
+</div>
+<div class="flex items-center gap-1 text-secondary">
+<span class="material-symbols-outlined" style="font-size: 16px;">trending_down</span>
+<span class="font-label-sm text-label-sm">0.22 MW vs Baseline</span>
+</div>
+</div>
+<!-- Metric Card 3 -->
+<div class="bg-surface-container-lowest p-lg rounded-xl ambient-shadow border border-surface-variant">
+<div class="flex justify-between items-start mb-4">
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">MAPE</p>
+<span class="material-symbols-outlined text-outline-variant" style="font-size: 20px;">info</span>
+</div>
+<div class="flex items-baseline gap-2 mb-1">
+<h3 class="font-headline-lg text-headline-lg text-primary">{{ mape }}</h3>
+<span class="font-body-sm text-body-sm text-on-surface-variant">%</span>
+</div>
+<div class="flex items-center gap-1 text-secondary">
+<span class="material-symbols-outlined" style="font-size: 16px;">check_circle</span>
+<span class="font-label-sm text-label-sm">Target &lt; 3.0%</span>
+</div>
+</div>
+<!-- Metric Card 4 -->
+<div class="bg-surface-container-lowest p-lg rounded-xl ambient-shadow border border-surface-variant">
+<div class="flex justify-between items-start mb-4">
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">R-Squared</p>
+<span class="material-symbols-outlined text-outline-variant" style="font-size: 20px;">info</span>
+</div>
+<div class="flex items-baseline gap-2 mb-1">
+<h3 class="font-headline-lg text-headline-lg text-on-surface">0.98</h3>
+</div>
+<div class="flex items-center gap-1 text-secondary">
+<span class="material-symbols-outlined" style="font-size: 16px;">show_chart</span>
+<span class="font-label-sm text-label-sm">High explanatory power</span>
+</div>
+</div>
+<!-- Metric Card 5 -->
+<div class="bg-surface-container-lowest p-lg rounded-xl ambient-shadow border border-surface-variant">
+<div class="flex justify-between items-start mb-4">
+<p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Training Time</p>
+<span class="material-symbols-outlined text-outline-variant" style="font-size: 20px;">timer</span>
+</div>
+<div class="flex items-baseline gap-2 mb-1">
+<h3 class="font-headline-lg text-headline-lg text-on-surface">45.2</h3>
+<span class="font-body-sm text-body-sm text-on-surface-variant">sec</span>
+</div>
+<div class="flex items-center gap-1 text-tertiary">
+<span class="font-label-sm text-label-sm">On 10k sample set</span>
+</div>
+</div>
+</div>
+<!-- Middle Row: Features & Residuals -->
+<div class="grid grid-cols-1 lg:grid-cols-2 gap-lg">
+<!-- Section 2: Feature Importance -->
+<div class="bg-surface-container-lowest p-lg rounded-xl ambient-shadow border border-surface-variant flex flex-col">
+<h3 class="font-headline-md text-headline-md text-on-surface mb-6">Feature Importance</h3>
+<div class="flex-1 flex flex-col justify-center space-y-5">
+<!-- Feature 1 -->
+<div>
+<div class="flex justify-between text-body-sm font-body-sm mb-1">
+<span class="text-on-surface">Previous Load (t-1)</span>
+<span class="text-primary font-medium">0.42</span>
+</div>
+<div class="w-full bg-surface-container h-2 rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full" style="width: 85%"></div>
+</div>
+</div>
+<!-- Feature 2 -->
+<div>
+<div class="flex justify-between text-body-sm font-body-sm mb-1">
+<span class="text-on-surface">Temperature (°C)</span>
+<span class="text-primary font-medium">0.28</span>
+</div>
+<div class="w-full bg-surface-container h-2 rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full opacity-90" style="width: 55%"></div>
+</div>
+</div>
+<!-- Feature 3 -->
+<div>
+<div class="flex justify-between text-body-sm font-body-sm mb-1">
+<span class="text-on-surface">Hour of Day</span>
+<span class="text-primary font-medium">0.15</span>
+</div>
+<div class="w-full bg-surface-container h-2 rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full opacity-75" style="width: 30%"></div>
+</div>
+</div>
+<!-- Feature 4 -->
+<div>
+<div class="flex justify-between text-body-sm font-body-sm mb-1">
+<span class="text-on-surface">Humidity (%)</span>
+<span class="text-primary font-medium">0.08</span>
+</div>
+<div class="w-full bg-surface-container h-2 rounded-full overflow-hidden">
+<div class="bg-primary h-full rounded-full opacity-60" style="width: 15%"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Section 3: Residual Analysis -->
+<div class="bg-surface-container-lowest p-lg rounded-xl ambient-shadow border border-surface-variant flex flex-col">
+<div class="flex justify-between items-center mb-6">
+<h3 class="font-headline-md text-headline-md text-on-surface">Residual Analysis</h3>
+<span class="inline-flex items-center px-2 py-1 rounded-full bg-surface-container-low text-on-surface-variant font-label-sm text-label-sm border border-surface-variant">
+                            n = 1,440
+                        </span>
+</div>
+<!-- Chart.js Residuals Container -->
+<div class="flex-1 w-full relative min-h-[200px] bg-surface-bright rounded-lg border border-surface-variant p-4">
+    <canvas id="residualChart"></canvas>
+</div>
+</div>
+</div>
+<!-- Section 4: Forecast Breakdown -->
+<div class="grid grid-cols-1 lg:grid-cols-3 gap-lg">
+  <!-- Temperature vs Load -->
+  <div class="bg-surface-container-lowest p-lg rounded-xl ambient-shadow border border-surface-variant flex flex-col">
+    <h3 class="font-label-md text-label-md text-on-surface mb-4 uppercase tracking-wider">Temperature vs Load</h3>
+    <div class="flex-1 w-full relative min-h-[160px] bg-surface-bright rounded-lg border border-surface-variant p-2">
+      <svg width="100%" height="100%" viewBox="0 0 200 120" preserveAspectRatio="none">
+        <line x1="20" y1="100" x2="180" y2="100" class="chart-grid-line" stroke="#c2c6d8" stroke-dasharray="2 2"></line>
+        <line x1="20" y1="20" x2="20" y2="100" class="chart-grid-line" stroke="#c2c6d8" stroke-dasharray="2 2"></line>
+        <g fill="#0050cb" opacity="0.5">
+          <circle cx="40" cy="90" r="2"></circle><circle cx="60" cy="80" r="2"></circle><circle cx="80" cy="75" r="2"></circle>
+          <circle cx="100" cy="60" r="2"></circle><circle cx="120" cy="50" r="2"></circle><circle cx="140" cy="45" r="2"></circle>
+          <circle cx="160" cy="30" r="2"></circle>
+        </g>
+      </svg>
+      <div class="flex justify-between mt-1 px-2">
+        <span class="text-[10px] text-outline">Temp (°C)</span>
+        <span class="text-[10px] text-outline">Load (MW)</span>
+      </div>
+    </div>
+  </div>
+  <!-- Humidity vs Load -->
+  <div class="bg-surface-container-lowest p-lg rounded-xl ambient-shadow border border-surface-variant flex flex-col">
+    <h3 class="font-label-md text-label-md text-on-surface mb-4 uppercase tracking-wider">Humidity vs Load</h3>
+    <div class="flex-1 w-full relative min-h-[160px] bg-surface-bright rounded-lg border border-surface-variant p-2">
+      <svg width="100%" height="100%" viewBox="0 0 200 120" preserveAspectRatio="none">
+        <line x1="20" y1="100" x2="180" y2="100" class="chart-grid-line" stroke="#c2c6d8" stroke-dasharray="2 2"></line>
+        <line x1="20" y1="20" x2="20" y2="100" class="chart-grid-line" stroke="#c2c6d8" stroke-dasharray="2 2"></line>
+        <g fill="#0050cb" opacity="0.5">
+          <circle cx="40" cy="40" r="2"></circle><circle cx="60" cy="55" r="2"></circle><circle cx="80" cy="50" r="2"></circle>
+          <circle cx="100" cy="70" r="2"></circle><circle cx="120" cy="65" r="2"></circle><circle cx="140" cy="85" r="2"></circle>
+          <circle cx="160" cy="90" r="2"></circle>
+        </g>
+      </svg>
+      <div class="flex justify-between mt-1 px-2">
+        <span class="text-[10px] text-outline">Humidity (%)</span>
+        <span class="text-[10px] text-outline">Load (MW)</span>
+      </div>
+    </div>
+  </div>
+  <!-- Wind Speed vs Load -->
+  <div class="bg-surface-container-lowest p-lg rounded-xl ambient-shadow border border-surface-variant flex flex-col">
+    <h3 class="font-label-md text-label-md text-on-surface mb-4 uppercase tracking-wider">Wind Speed vs Load</h3>
+    <div class="flex-1 w-full relative min-h-[160px] bg-surface-bright rounded-lg border border-surface-variant p-2">
+      <svg width="100%" height="100%" viewBox="0 0 200 120" preserveAspectRatio="none">
+        <line x1="20" y1="100" x2="180" y2="100" class="chart-grid-line" stroke="#c2c6d8" stroke-dasharray="2 2"></line>
+        <line x1="20" y1="20" x2="20" y2="100" class="chart-grid-line" stroke="#c2c6d8" stroke-dasharray="2 2"></line>
+        <path d="M 40 80 Q 100 70 160 75" fill="none" stroke="#0050cb" stroke-width="2" opacity="0.6"></path>
+        <g fill="#0050cb" opacity="0.3">
+          <circle cx="45" cy="82" r="2"></circle><circle cx="75" cy="68" r="2"></circle><circle cx="110" cy="72" r="2"></circle><circle cx="150" cy="78" r="2"></circle>
+        </g>
+      </svg>
+      <div class="flex justify-between mt-1 px-2">
+        <span class="text-[10px] text-outline">Wind (km/h)</span>
+        <span class="text-[10px] text-outline">Load (MW)</span>
+      </div>
+    </div>
+  </div>
+</div><div class="bg-surface-container-lowest p-lg rounded-xl ambient-shadow border border-surface-variant">
+<div class="flex justify-between items-center mb-6">
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface">24-Hour Forecast Breakdown</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">XGBoost prediction vs Actuals with 95% Confidence Interval</p>
+</div>
+<div class="flex items-center gap-4 bg-surface-bright p-2 rounded-lg border border-surface-variant">
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 rounded-full bg-primary"></div>
+<span class="font-label-sm text-label-sm text-on-surface">XGBoost Predicted</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-3 h-0 border-t-2 border-dashed border-outline-variant"></div>
+<span class="font-label-sm text-label-sm text-on-surface">Actual Load</span>
+</div>
+<div class="flex items-center gap-2">
+<div class="w-3 h-3 rounded-sm bg-primary opacity-10"></div>
+<span class="font-label-sm text-label-sm text-on-surface">95% CI</span>
+</div>
+</div>
+</div>
+<!-- Chart.js Forecast Container -->
+<div class="w-full h-72 relative mt-4">
+    <canvas id="forecastChart"></canvas>
+</div>
+</div>
+</main>
+</div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const rawData = {{ chart_data|safe }};
+        
+        // 1. Residuals Scatter Plot
+        const resCtx = document.getElementById('residualChart').getContext('2d');
+        const resData = rawData.residuals.map(r => ({ x: r.pred, y: r.res }));
+        
+        new Chart(resCtx, {
+            type: 'scatter',
+            data: {
+                datasets: [{
+                    label: 'Residuals',
+                    data: resData,
+                    backgroundColor: 'rgba(0, 80, 203, 0.4)',
+                    borderColor: '#0050cb',
+                    borderWidth: 1,
+                    pointRadius: 4
+                }]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: {
+                        title: { display: true, text: 'Predicted Value (MW)' },
+                        grid: { color: '#e0e3e5' }
+                    },
+                    y: {
+                        title: { display: true, text: 'Residual (MW)' },
+                        grid: { color: '#e0e3e5' },
+                        suggestedMin: -5,
+                        suggestedMax: 5
+                    }
+                }
+            }
+        });
+
+        // 2. 24-Hour Forecast Breakdown
+        const labels = rawData.labels.map(ts => {
+            const date = new Date(ts);
+            return date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        });
+        
+        const fcCtx = document.getElementById('forecastChart').getContext('2d');
+        new Chart(fcCtx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Actual Load (MW)',
+                        data: rawData.actual,
+                        borderColor: '#727687',
+                        borderDash: [5, 5],
+                        borderWidth: 2,
+                        tension: 0.4,
+                        pointRadius: 0
+                    },
+                    {
+                        label: 'XGBoost Predicted (MW)',
+                        data: rawData.prediction,
+                        borderColor: '#0050cb',
+                        backgroundColor: 'rgba(0, 80, 203, 0.1)',
+                        fill: true,
+                        borderWidth: 2,
+                        tension: 0.4,
+                        pointRadius: 0
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: {
+                    mode: 'index',
+                    intersect: false,
+                },
+                plugins: { legend: { display: false } },
+                scales: {
+                    x: { grid: { display: false } },
+                    y: {
+                        grid: { color: '#e0e3e5' },
+                        suggestedMin: 20,
+                        suggestedMax: 40
+                    }
+                }
+            }
+        });
+        
+        // Handle Export Diagrams
+        document.getElementById('exportBtn').addEventListener('click', function() {
+            var canvas = document.getElementById('forecastChart');
+            if(canvas) {
+                var a = document.createElement('a');
+                a.href = canvas.toDataURL('image/png');
+                a.download = 'xgboost_forecast_diagram.png';
+                a.click();
+            }
+        });
+
+        // Handle Retrain Model
+        document.getElementById('retrainBtn').addEventListener('click', function() {
+            var btn = this;
+            var icon = document.getElementById('retrainIcon');
+            var text = document.getElementById('retrainText');
+            
+            // Set loading state
+            btn.disabled = true;
+            btn.classList.add('opacity-70', 'cursor-not-allowed');
+            icon.textContent = 'sync';
+            icon.classList.add('animate-spin');
+            text.textContent = 'Retraining...';
+            
+            fetch('/api/retrain', { method: 'POST' })
+            .then(res => res.json())
+            .then(data => {
+                setTimeout(() => {
+                    btn.disabled = false;
+                    btn.classList.remove('opacity-70', 'cursor-not-allowed');
+                    icon.classList.remove('animate-spin');
+                    icon.textContent = 'check_circle';
+                    text.textContent = 'Model Updated';
+                    
+                    setTimeout(() => {
+                        icon.textContent = 'model_training';
+                        text.textContent = 'Retrain Model';
+                        window.location.reload();
+                    }, 2000);
+                }, 500); // Simulate brief network delay
+            })
+            .catch(err => {
+                btn.disabled = false;
+                btn.classList.remove('opacity-70', 'cursor-not-allowed');
+                icon.classList.remove('animate-spin');
+                icon.textContent = 'error';
+                text.textContent = 'Retrain Failed';
+            });
+        });
+    });
+</script>
+{% endblock %}

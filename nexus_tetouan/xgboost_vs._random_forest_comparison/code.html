@@ -1,0 +1,448 @@
+<!DOCTYPE html><html lang="en" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Model Comparison - Nexus Tetouan Smart City</title>
+<!-- Fonts -->
+<link href="https://fonts.googleapis.com" rel="preconnect">
+<link crossorigin="" href="https://fonts.gstatic.com" rel="preconnect">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<!-- Material Symbols -->
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<!-- Tailwind CSS -->
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<!-- Tailwind Config -->
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "tertiary": "#4b5a70",
+                      "primary": "#0050cb",
+                      "secondary-container": "#5cfd80",
+                      "on-secondary": "#ffffff",
+                      "on-surface": "#191c1e",
+                      "on-secondary-fixed-variant": "#00531e",
+                      "error": "#ba1a1a",
+                      "secondary-fixed": "#69ff87",
+                      "on-error-container": "#93000a",
+                      "on-primary-container": "#f8f7ff",
+                      "background": "#f7f9fb",
+                      "inverse-on-surface": "#eff1f3",
+                      "outline": "#727687",
+                      "primary-fixed": "#dae1ff",
+                      "on-primary-fixed-variant": "#003fa4",
+                      "on-primary-fixed": "#001849",
+                      "tertiary-container": "#63738a",
+                      "on-tertiary-fixed-variant": "#38485d",
+                      "inverse-surface": "#2d3133",
+                      "on-tertiary-container": "#f6f8ff",
+                      "on-secondary-fixed": "#002108",
+                      "surface-tint": "#0054d6",
+                      "on-error": "#ffffff",
+                      "outline-variant": "#c2c6d8",
+                      "primary-container": "#0066ff",
+                      "secondary-fixed-dim": "#3ce36a",
+                      "on-tertiary-fixed": "#0b1c30",
+                      "on-tertiary": "#ffffff",
+                      "surface-variant": "#e0e3e5",
+                      "surface-container-high": "#e6e8ea",
+                      "surface-container": "#eceef0",
+                      "surface-container-lowest": "#ffffff",
+                      "on-background": "#191c1e",
+                      "surface-dim": "#d8dadc",
+                      "surface-bright": "#f7f9fb",
+                      "primary-fixed-dim": "#b3c5ff",
+                      "secondary": "#006e2a",
+                      "on-primary": "#ffffff",
+                      "inverse-primary": "#b3c5ff",
+                      "on-secondary-container": "#00732c",
+                      "surface-container-highest": "#e0e3e5",
+                      "on-surface-variant": "#424656",
+                      "surface-container-low": "#f2f4f6",
+                      "surface": "#f7f9fb",
+                      "error-container": "#ffdad6",
+                      "tertiary-fixed-dim": "#b7c8e1",
+                      "tertiary-fixed": "#d3e4fe"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "margin-mobile": "16px",
+                      "lg": "24px",
+                      "xl": "40px",
+                      "xs": "4px",
+                      "md": "16px",
+                      "sm": "8px",
+                      "gutter": "24px",
+                      "unit": "4px",
+                      "container-max": "1280px"
+              },
+              "fontFamily": {
+                      "label-sm": ["Inter"],
+                      "headline-xl": ["Inter"],
+                      "body-sm": ["Inter"],
+                      "body-lg": ["Inter"],
+                      "label-md": ["Inter"],
+                      "headline-lg": ["Inter"],
+                      "headline-lg-mobile": ["Inter"],
+                      "body-md": ["Inter"],
+                      "headline-md": ["Inter"]
+              },
+              "fontSize": {
+                      "label-sm": ["12px", {"lineHeight": "16px", "fontWeight": "500"}],
+                      "headline-xl": ["48px", {"lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700"}],
+                      "body-sm": ["14px", {"lineHeight": "20px", "fontWeight": "400"}],
+                      "body-lg": ["18px", {"lineHeight": "28px", "fontWeight": "400"}],
+                      "label-md": ["14px", {"lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "600"}],
+                      "headline-lg": ["32px", {"lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600"}],
+                      "headline-lg-mobile": ["24px", {"lineHeight": "32px", "fontWeight": "600"}],
+                      "body-md": ["16px", {"lineHeight": "24px", "fontWeight": "400"}],
+                      "headline-md": ["20px", {"lineHeight": "28px", "fontWeight": "600"}]
+              }
+            }
+          }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        /* Custom scrollbar for a cleaner look */
+        ::-webkit-scrollbar {
+            width: 6px;
+            height: 6px;
+        }
+        ::-webkit-scrollbar-track {
+            background: transparent;
+        }
+        ::-webkit-scrollbar-thumb {
+            background-color: #c2c6d8;
+            border-radius: 20px;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-surface font-body-md antialiased overflow-hidden flex h-screen">
+<!-- SideNavBar (Shared Component) -->
+<!-- Applying exact style keys from JSON -->
+<nav class="hidden md:flex h-screen w-64 flex-col bg-surface-container-lowest border-r border-outline-variant p-md gap-sm shadow-md z-20 flex-shrink-0">
+<!-- Header -->
+<div class="px-md py-lg border-b border-outline-variant/30 mb-md flex items-center gap-md">
+<div class="w-10 h-10 rounded-lg bg-primary-container flex items-center justify-center text-on-primary-container overflow-hidden">
+
+</div>
+<div>
+<h1 class="font-headline-md text-headline-md font-bold text-primary">Nexus Tetouan</h1>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Energy Management</p>
+</div>
+</div>
+<!-- Navigation Links -->
+<div class="flex-1 flex flex-col gap-xs">
+<!-- Inactive -->
+<a class="text-on-surface-variant px-md py-sm flex items-center gap-md hover:bg-surface-container-high transition-all duration-200 cursor-pointer transform-gpu active:scale-98 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<!-- Active (Semantic match: Model Comparison) -->
+<a class="bg-primary-fixed text-on-primary-fixed font-bold rounded-lg px-md py-sm flex items-center gap-md cursor-pointer transform-gpu active:scale-98 transition-all duration-200" href="#">
+<span class="material-symbols-outlined" data-icon="compare_arrows" style="font-variation-settings: 'FILL' 1;">compare_arrows</span>
+<span class="font-label-md text-label-md">Model Comparison</span>
+</a>
+<!-- Inactive -->
+<a class="text-on-surface-variant px-md py-sm flex items-center gap-md hover:bg-surface-container-high transition-all duration-200 cursor-pointer transform-gpu active:scale-98 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+<span class="font-label-md text-label-md">Historical Data</span>
+</a>
+<!-- Inactive -->
+<a class="text-on-surface-variant px-md py-sm flex items-center gap-md hover:bg-surface-container-high transition-all duration-200 cursor-pointer transform-gpu active:scale-98 rounded-lg" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</div>
+<!-- CTA -->
+<div class="mt-auto pt-md border-t border-outline-variant/30">
+<button class="w-full bg-primary text-on-primary font-label-md text-label-md py-sm px-md rounded-lg shadow-sm hover:bg-surface-tint transition-colors duration-200 flex items-center justify-center gap-sm">
+<span class="material-symbols-outlined text-[18px]">add</span>
+                New Analysis
+            </button>
+</div>
+</nav>
+<!-- Main Content Wrapper -->
+<div class="flex-1 flex flex-col min-w-0 h-screen overflow-hidden bg-background">
+<!-- TopNavBar (Shared Component) -->
+<!-- Applying exact style keys from JSON -->
+<header class="w-full h-16 bg-surface-container-lowest shadow-sm flex justify-between items-center px-lg max-w-container-max mx-auto z-10 flex-shrink-0">
+<!-- Brand / Search Area -->
+<div class="flex items-center gap-lg">
+<!-- Mobile Menu Button (Visible only on small screens) -->
+<button class="md:hidden text-on-surface-variant">
+<span class="material-symbols-outlined">menu</span>
+</button>
+<div class="font-headline-md text-headline-md font-bold text-primary">CivicEnergy</div>
+<div class="hidden lg:flex items-center bg-surface-container-low rounded-full px-md py-xs border border-outline-variant/50 focus-within:border-primary transition-colors">
+<span class="material-symbols-outlined text-on-surface-variant text-[20px]">search</span>
+<input class="bg-transparent border-none focus:ring-0 text-body-sm font-body-sm text-on-surface w-64 placeholder:text-on-surface-variant/70" placeholder="Search parameters..." type="text">
+</div>
+</div>
+<!-- Trailing Actions -->
+<div class="flex items-center gap-md">
+<button class="text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200 rounded-full p-2 cursor-pointer active:scale-95 flex items-center justify-center">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+</button>
+<button class="text-on-surface-variant hover:bg-surface-container-low transition-colors duration-200 rounded-full p-2 cursor-pointer active:scale-95 flex items-center justify-center relative">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+<span class="absolute top-1 right-1 w-2 h-2 bg-error rounded-full"></span>
+</button>
+<div class="w-8 h-8 rounded-full bg-primary-fixed text-on-primary-fixed flex items-center justify-center font-label-md text-label-md ml-sm border border-outline-variant overflow-hidden">
+<img alt="User profile" class="w-full h-full object-cover" data-alt="A professional corporate headshot of a female infrastructure engineer in her 30s. She is smiling confidently, wearing a crisp white collared shirt. The background is a clean, softly blurred modern office environment with bright, neutral lighting. The overall aesthetic is polished, high-tech, and corporate." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCri7T6HsMJReMQ5LXur-_QoM6rY2XmmCwE0Tf66Nomyas3i562Zy_9Ao2Bn_aqULcfUTERE520DJv_9YzF9nU1tfm-Z0OXa5JFWQIZwUHB4X4BPEKkM_oF0whxnJpwc0J1uESCvFmadEIBAsBQCadAavBj8KTs_L4Dfi6gFCn8_Hb4rRjxBEBqdQyiTKyq8P22ut-sAJ3WHFrYtb1faSrsnN2XFnFT9IT8tWIsmqTlS0jgWSJpW4Y83BeIRduJxtQpsxaxxZ9Yo7Qw">
+</div>
+</div>
+</header>
+<!-- Scrollable Main Content Canvas -->
+<main class="flex-1 overflow-y-auto p-md md:p-lg lg:p-xl scroll-smooth">
+<div class="max-w-container-max mx-auto space-y-lg">
+<!-- Page Header & Metrics Row -->
+<section class="space-y-md">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Algorithm Comparison: XGBoost vs. Random Forest</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">Evaluating predictive load modeling for Nexus Tetouan Grid.</p>
+</div>
+<!-- 4-Column Metric Row -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-md">
+<!-- Metric 1 -->
+<div class="bg-surface-container-lowest rounded-xl p-lg shadow-sm border border-outline-variant/20 flex flex-col justify-between">
+<div class="flex justify-between items-start mb-sm">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Total Observations</span>
+<span class="material-symbols-outlined text-primary text-[20px]">database</span>
+</div>
+<span class="font-headline-md text-headline-md text-on-surface font-semibold">52,416</span>
+</div>
+<!-- Metric 2 -->
+<div class="bg-surface-container-lowest rounded-xl p-lg shadow-sm border border-outline-variant/20 flex flex-col justify-between">
+<div class="flex justify-between items-start mb-sm">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Hourly Aggregations</span>
+<span class="material-symbols-outlined text-primary text-[20px]">schedule</span>
+</div>
+<span class="font-headline-md text-headline-md text-on-surface font-semibold">8,760</span>
+</div>
+<!-- Metric 3 -->
+<div class="bg-surface-container-lowest rounded-xl p-lg shadow-sm border border-outline-variant/20 flex flex-col justify-between">
+<div class="flex justify-between items-start mb-sm">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Dataset Start</span>
+<span class="material-symbols-outlined text-primary text-[20px]">calendar_today</span>
+</div>
+<span class="font-headline-md text-headline-md text-on-surface font-semibold">01/01/2017</span>
+</div>
+<!-- Metric 4 -->
+<div class="bg-surface-container-lowest rounded-xl p-lg shadow-sm border border-outline-variant/20 flex flex-col justify-between">
+<div class="flex justify-between items-start mb-sm">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Dataset End</span>
+<span class="material-symbols-outlined text-primary text-[20px]">event_available</span>
+</div>
+<span class="font-headline-md text-headline-md text-on-surface font-semibold">12/31/2022</span>
+</div>
+</div>
+</section>
+<!-- Peak Risk Intelligence Module -->
+<section class="grid grid-cols-1 lg:grid-cols-2 gap-md">
+<!-- XGBoost Card (Alert) -->
+<div class="bg-error-container rounded-xl p-lg border border-error/20 flex items-center justify-between shadow-sm relative overflow-hidden">
+<div class="absolute -right-10 -top-10 opacity-10">
+<span class="material-symbols-outlined text-[120px] text-error" style="font-variation-settings: 'FILL' 1;">warning</span>
+</div>
+<div class="z-10">
+<div class="flex items-center gap-xs mb-sm">
+<span class="material-symbols-outlined text-on-error-container text-[20px]" style="font-variation-settings: 'FILL' 1;">warning</span>
+<span class="font-label-sm text-label-sm text-on-error-container uppercase tracking-wider font-bold">XGBoost Forecast</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-error-container font-semibold">Alert: Peak Load Expected</h3>
+<p class="font-body-sm text-body-sm text-on-error-container/80 mt-xs">Projected: <span class="font-bold">38.5 MW</span>. Monitor load closely.</p>
+</div>
+<div class="z-10 bg-surface-container-lowest/50 backdrop-blur-sm rounded-lg p-sm border border-error/10">
+<span class="material-symbols-outlined text-error text-[32px]">trending_up</span>
+</div>
+</div>
+<!-- Random Forest Card (Normal) -->
+<div class="bg-secondary-container/30 rounded-xl p-lg border border-secondary/20 flex items-center justify-between shadow-sm relative overflow-hidden">
+<div class="absolute -right-10 -top-10 opacity-10">
+<span class="material-symbols-outlined text-[120px] text-secondary" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div class="z-10">
+<div class="flex items-center gap-xs mb-sm">
+<span class="material-symbols-outlined text-on-secondary-container text-[20px]" style="font-variation-settings: 'FILL' 1;">eco</span>
+<span class="font-label-sm text-label-sm text-on-secondary-container uppercase tracking-wider font-bold">Random Forest Forecast</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-secondary-container font-semibold">Normal: Load Expected</h3>
+<p class="font-body-sm text-body-sm text-on-secondary-container/80 mt-xs">Projected: <span class="font-bold">34.2 MW</span>. Within standard operational bounds.</p>
+</div>
+<div class="z-10 bg-surface-container-lowest/50 backdrop-blur-sm rounded-lg p-sm border border-secondary/10">
+<span class="material-symbols-outlined text-secondary text-[32px]">trending_flat</span>
+</div>
+</div>
+</section>
+<!-- Primary Visualizer: Forecast Accuracy -->
+<section class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant/20 overflow-hidden">
+<div class="p-lg border-b border-outline-variant/20 flex justify-between items-center">
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface font-semibold">Forecast Accuracy (Last 72 Hours)</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Comparing model predictions against actual telemetry data.</p>
+</div>
+<div class="flex gap-md font-label-sm text-label-sm">
+<div class="flex items-center gap-xs"><div class="w-3 h-3 rounded-full bg-outline"></div> Actual Load</div>
+<div class="flex items-center gap-xs"><div class="w-3 h-3 rounded-full bg-primary"></div> XGBoost</div>
+<div class="flex items-center gap-xs"><div class="w-3 h-3 rounded-full bg-[#8b5cf6]"></div> Random Forest</div>
+</div>
+</div>
+<!-- Chart Placeholder Area -->
+<div class="p-lg w-full h-[400px] relative bg-surface-bright flex items-end justify-between overflow-hidden">
+<!-- Simulated Grid Lines -->
+<div class="absolute inset-0 flex flex-col justify-between p-lg pointer-events-none">
+<div class="w-full h-px bg-outline-variant/30"></div>
+<div class="w-full h-px bg-outline-variant/30"></div>
+<div class="w-full h-px bg-outline-variant/30"></div>
+<div class="w-full h-px bg-outline-variant/30"></div>
+<div class="w-full h-px bg-outline-variant/30"></div>
+</div>
+<!-- Embedded Image Placeholder for complex chart -->
+<div class="absolute inset-0 w-full h-full p-lg pb-xl pl-xl">
+<div class="w-full h-full relative" data-alt="A highly detailed data visualization line chart displaying three distinct lines intersecting over a 72-hour timeline axis. The chart is rendered in a clean, modern corporate style on a pure white background. The lines represent 'Actual' (solid grey), 'XGBoost' (vibrant tech-blue), and 'Random Forest' (deep purple). The chart features subtle gridlines, sleek tooltips, and a professional, high-fidelity aesthetic suitable for an enterprise dashboard." style="background-image: url('https://lh3.googleusercontent.com/aida-public/AB6AXuAh42PraLTGTY02EALfl8oyjE7VktgDq7dXpnn4SmSQLREN7t-xxhOIj5ZGVspWYrGr0PaBfsExerm93-5ByG5wtFtfBHIG8pss8-buAsoh63xj2zTeey9BCQmXn0MOIFqLzbqYJO23JYE-KCkppwrsllZAcPQmZH3LihSauSGfyRu764wmcIOq0nr7lwN9A4S6hLiZrR8kqv7HeFs59nV3bOhHBuwfwt0Wq_wRzrQsnEWkRUoeIxbP6Bp9jiq5fZ2vLgKRnwXjZMeU')"></div>
+</div>
+<!-- Simulated X-Axis Labels -->
+<div class="absolute bottom-4 left-0 w-full flex justify-around px-xl font-label-sm text-label-sm text-on-surface-variant">
+<span class="">-72h</span>
+<span class="">-48h</span>
+<span class="">-24h</span>
+<span class="">Now</span>
+</div>
+<!-- Simulated Y-Axis Labels -->
+<div class="absolute left-4 top-0 h-full flex flex-col justify-between py-lg font-label-sm text-label-sm text-on-surface-variant">
+<span class="">40 MW</span>
+<span class="">30 MW</span>
+<span class="">20 MW</span>
+<span class="">10 MW</span>
+<span class="">0 MW</span>
+</div>
+</div>
+</section>
+<!-- Evaluation Table & Bottom Row (Bento Grid Style) -->
+<section class="grid grid-cols-1 xl:grid-cols-3 gap-lg">
+<!-- Evaluation Table (Spans 2 columns on extra large) -->
+<div class="xl:col-span-2 bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant/20 overflow-hidden flex flex-col">
+<div class="p-lg border-b border-outline-variant/20">
+<h3 class="font-headline-md text-headline-md text-on-surface font-semibold">Evaluation Metrics</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Global performance indicators across the full dataset.</p>
+</div>
+<div class="overflow-x-auto p-md flex-1">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="font-label-sm text-label-sm text-on-surface-variant bg-surface-container-low/50">
+<th class="p-md font-medium rounded-tl-lg">Metric</th>
+<th class="p-md font-medium">Definition</th>
+<th class="p-md font-medium">XGBoost</th>
+<th class="p-md font-medium rounded-tr-lg">Random Forest</th>
+</tr>
+</thead>
+<tbody class="font-body-sm text-body-sm text-on-surface">
+<tr class="border-b border-surface-container-high hover:bg-surface-bright transition-colors">
+<td class="p-md font-semibold">MAE</td>
+<td class="p-md text-on-surface-variant">Mean Absolute Error</td>
+<td class="p-md font-mono bg-secondary-fixed/20 text-on-secondary-fixed font-semibold rounded-l-sm border-l-4 border-secondary">1.24 MW</td>
+<td class="p-md font-mono">1.45 MW</td>
+</tr>
+<tr class="border-b border-surface-container-high hover:bg-surface-bright transition-colors">
+<td class="p-md font-semibold">RMSE</td>
+<td class="p-md text-on-surface-variant">Root Mean Square Error</td>
+<td class="p-md font-mono bg-secondary-fixed/20 text-on-secondary-fixed font-semibold rounded-l-sm border-l-4 border-secondary">1.89 MW</td>
+<td class="p-md font-mono">2.12 MW</td>
+</tr>
+<tr class="hover:bg-surface-bright transition-colors">
+<td class="p-md font-semibold">MAPE</td>
+<td class="p-md text-on-surface-variant">Mean Absolute Percentage Error</td>
+<td class="p-md font-mono">4.1%</td>
+<td class="p-md font-mono bg-secondary-fixed/20 text-on-secondary-fixed font-semibold rounded-r-sm border-r-4 border-secondary">3.8%</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Side Insights Stack -->
+<div class="xl:col-span-1 flex flex-col gap-lg">
+<!-- Zone Load Breakdown -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant/20 p-lg flex-1">
+<div class="flex justify-between items-center mb-md">
+<h3 class="font-label-md text-label-md text-on-surface font-semibold uppercase tracking-wider">Zone Load Breakdown</h3>
+<span class="material-symbols-outlined text-outline">pie_chart</span>
+</div>
+<div class="space-y-md">
+<!-- Zone 1 -->
+<div>
+<div class="flex justify-between font-body-sm text-body-sm mb-xs">
+<span class="">Zone 1 (Industrial)</span>
+<span class="font-semibold">45%</span>
+</div>
+<div class="w-full bg-surface-container-high rounded-full h-2">
+<div class="bg-primary h-2 rounded-full" style="width: 45%"></div>
+</div>
+</div>
+<!-- Zone 2 -->
+<div>
+<div class="flex justify-between font-body-sm text-body-sm mb-xs">
+<span class="">Zone 2 (Residential)</span>
+<span class="font-semibold">35%</span>
+</div>
+<div class="w-full bg-surface-container-high rounded-full h-2">
+<div class="bg-tertiary h-2 rounded-full" style="width: 35%"></div>
+</div>
+</div>
+<!-- Zone 3 -->
+<div>
+<div class="flex justify-between font-body-sm text-body-sm mb-xs">
+<span class="">Zone 3 (Commercial)</span>
+<span class="font-semibold">20%</span>
+</div>
+<div class="w-full bg-surface-container-high rounded-full h-2">
+<div class="bg-outline h-2 rounded-full" style="width: 20%"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Meteorological Influence -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant/20 p-lg flex-1">
+<div class="flex justify-between items-center mb-md">
+<h3 class="font-label-md text-label-md text-on-surface font-semibold uppercase tracking-wider">Met. Influence</h3>
+<span class="material-symbols-outlined text-outline">air</span>
+</div>
+<!-- Mock Correlation Visualization -->
+<div class="flex items-center justify-center h-32 relative">
+<!-- Base circles -->
+<div class="w-24 h-24 rounded-full border-2 border-primary/20 absolute flex items-center justify-center">
+<span class="font-label-sm text-label-sm text-primary absolute -top-5">Temp</span>
+</div>
+<div class="w-20 h-20 rounded-full border-2 border-[#8b5cf6]/20 absolute translate-x-4 translate-y-4 flex items-center justify-center">
+<span class="font-label-sm text-label-sm text-[#8b5cf6] absolute -bottom-5">Humidity</span>
+</div>
+<div class="w-16 h-16 rounded-full border-2 border-secondary/20 absolute -translate-x-4 translate-y-2 flex items-center justify-center">
+<span class="font-label-sm text-label-sm text-secondary absolute -left-8">Wind</span>
+</div>
+<!-- Center nexus -->
+<div class="w-4 h-4 bg-on-surface rounded-full z-10 shadow-md"></div>
+<!-- connecting lines -->
+<div class="absolute w-12 h-px bg-outline-variant rotate-45 translate-x-6 translate-y-6"></div>
+<div class="absolute w-10 h-px bg-outline-variant -rotate-12 -translate-x-5 translate-y-2"></div>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant text-center mt-sm">High correlation with ambient temperature observed.</p>
+</div>
+</div>
+</section>
+<div class="h-lg"></div> <!-- Bottom padding -->
+</div>
+</main>
+</div>
+
+
+</body></html>

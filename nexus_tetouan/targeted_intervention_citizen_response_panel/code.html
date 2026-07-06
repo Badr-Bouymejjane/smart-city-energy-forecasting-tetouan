@@ -1,0 +1,284 @@
+<!DOCTYPE html><html lang="en" style=""><head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Targeted Intervention &amp; Citizen Response - Nexus Tetouan</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-error": "#ffffff",
+                        "surface-container-high": "#e6e8ea",
+                        "on-tertiary-fixed": "#0b1c30",
+                        "on-error-container": "#93000a",
+                        "secondary-fixed-dim": "#3ce36a",
+                        "on-primary-container": "#f8f7ff",
+                        "surface": "#f7f9fb",
+                        "secondary-container": "#5cfd80",
+                        "on-surface": "#191c1e",
+                        "inverse-surface": "#2d3133",
+                        "inverse-primary": "#b3c5ff",
+                        "on-primary-fixed-variant": "#003fa4",
+                        "on-tertiary": "#ffffff",
+                        "secondary-fixed": "#69ff87",
+                        "on-tertiary-container": "#f6f8ff",
+                        "tertiary-fixed-dim": "#b7c8e1",
+                        "surface-bright": "#f7f9fb",
+                        "error": "#ba1a1a",
+                        "on-secondary-fixed": "#002108",
+                        "secondary": "#006e2a",
+                        "on-tertiary-fixed-variant": "#38485d",
+                        "tertiary-container": "#63738a",
+                        "surface-container": "#eceef0",
+                        "on-secondary-fixed-variant": "#00531e",
+                        "on-secondary-container": "#00732c",
+                        "on-secondary": "#ffffff",
+                        "on-surface-variant": "#424656",
+                        "inverse-on-surface": "#eff1f3",
+                        "background": "#f7f9fb",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary-fixed": "#001849",
+                        "error-container": "#ffdad6",
+                        "tertiary-fixed": "#d3e4fe",
+                        "primary-fixed-dim": "#b3c5ff",
+                        "on-background": "#191c1e",
+                        "tertiary": "#4b5a70",
+                        "surface-container-highest": "#e0e3e5",
+                        "on-primary": "#ffffff",
+                        "surface-variant": "#e0e3e5",
+                        "outline-variant": "#c2c6d8",
+                        "primary": "#0050cb",
+                        "outline": "#727687",
+                        "primary-fixed": "#dae1ff",
+                        "primary-container": "#0066ff",
+                        "surface-container-low": "#f2f4f6",
+                        "surface-tint": "#0054d6",
+                        "surface-dim": "#d8dadc"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "container-max": "1280px",
+                        "xs": "4px",
+                        "gutter": "24px",
+                        "xl": "40px",
+                        "sm": "8px",
+                        "lg": "24px",
+                        "unit": "4px",
+                        "margin-mobile": "16px",
+                        "md": "16px"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["Inter"],
+                        "label-md": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "headline-xl": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "500" }],
+                        "label-md": ["14px", { "lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "headline-xl": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .pulse-green { animation: pulseGreen 2s infinite; }
+        .pulse-red { animation: pulseRed 1.5s infinite; }
+        @keyframes pulseGreen {
+            0% { box-shadow: 0 0 0 0 rgba(0, 110, 42, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(0, 110, 42, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 110, 42, 0); }
+        }
+        @keyframes pulseRed {
+            0% { box-shadow: 0 0 0 0 rgba(186, 26, 26, 0.4); }
+            70% { box-shadow: 0 0 0 12px rgba(186, 26, 26, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(186, 26, 26, 0); }
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex">
+<!-- SideNavBar -->
+<aside class="hidden md:flex flex-col h-screen w-64 fixed left-0 top-0 bg-surface-container-low dark:bg-surface-dim border-r border-outline-variant dark:border-outline p-md z-50">
+<div class="flex items-center gap-sm mb-xl px-sm">
+
+<div>
+<h1 class="font-headline-md text-headline-md font-bold text-primary"><h1 class="font-headline-md text-headline-md font-bold text-primary" style="--tw-border-spacing-y: 0; --tw-translate-x: 0; --tw-translate-y: 0; --tw-rotate: 0; --tw-skew-x: 0; --tw-skew-y: 0; --tw-scale-x: 1; --tw-scale-y: 1; --tw-pan-x: ; --tw-pan-y: ; --tw-pinch-zoom: ; --tw-scroll-snap-strictness: proximity; --tw-gradient-from-position: ; --tw-gradient-via-position: ; --tw-gradient-to-position: ; --tw-ordinal: ; --tw-slashed-zero: ; --tw-numeric-figure: ; --tw-numeric-spacing: ; --tw-numeric-fraction: ; --tw-ring-inset: ; --tw-ring-offset-width: 0px; --tw-ring-offset-color: #fff; --tw-ring-color: rgb(59 130 246 / 0.5); --tw-ring-offset-shadow: 0 0 #0000; --tw-ring-shadow: 0 0 #0000; --tw-shadow: 0 0 #0000; --tw-shadow-colored: 0 0 #0000; --tw-blur: ; --tw-brightness: ; --tw-contrast: ; --tw-grayscale: ; --tw-hue-rotate: ; --tw-invert: ; --tw-saturate: ; --tw-sepia: ; --tw-drop-shadow: ; --tw-backdrop-blur: ; --tw-backdrop-brightness: ; --tw-backdrop-contrast: ; --tw-backdrop-grayscale: ; --tw-backdrop-hue-rotate: ; --tw-backdrop-invert: ; --tw-backdrop-opacity: ; --tw-backdrop-saturate: ; --tw-backdrop-sepia: ; --tw-contain-size: ; --tw-contain-layout: ; --tw-contain-paint: ; --tw-contain-style: ; --tw-text-opacity: 1; color: rgb(0, 80, 203); background-color: rgb(247, 249, 251); outline: none !important; box-shadow: none !important;">Nexus Tetouan</h1></h1>
+<p class="font-label-sm text-label-sm text-on-surface-variant"><span style="color: rgb(75, 90, 112); background-color: rgb(247, 249, 251);" class="">Energy Management</span></p>
+</div>
+</div>
+<nav class="flex-1 flex flex-col gap-xs">
+<!-- Dashboard (Active Semantic Fallback for Intervention) -->
+<a class="flex items-center gap-md px-md py-sm rounded-lg mb-xs text-primary dark:text-primary-fixed font-bold bg-surface-container-highest dark:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg mb-xs text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-primary-fixed-dim hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">compare_arrows</span>
+<span class="font-label-md text-label-md">Model Comparison</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg mb-xs text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-primary-fixed-dim hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">history</span>
+<span class="font-label-md text-label-md">Historical Data</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg mb-xs text-on-surface-variant dark:text-outline-variant hover:text-primary dark:hover:text-primary-fixed-dim hover:bg-surface-container-high transition-all" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 0;">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</nav>
+<button class="w-full bg-surface-container-high text-primary font-label-md text-label-md py-sm rounded-lg mt-auto hover:bg-surface-container-highest transition-colors flex items-center justify-center gap-sm">
+<span class="material-symbols-outlined text-sm">download</span>
+            Export Report
+        </button>
+</aside>
+<!-- Main Content Canvas -->
+<div class="flex-1 md:ml-64 flex flex-col min-h-screen">
+<!-- TopNavBar (Mobile visibility mainly, but keeping as header anchor for desktop context if needed per prompt, though SideNav implies web layout) -->
+<header class="flex justify-between items-center px-lg w-full h-12 sticky top-0 z-40 bg-surface-container-lowest dark:bg-inverse-surface shadow-sm dark:shadow-none md:hidden">
+<div class="font-headline-md text-headline-md font-bold text-primary dark:text-primary-fixed">CivicEnergy AI</div>
+<div class="flex items-center gap-sm">
+<button class="text-on-surface-variant dark:text-outline-variant hover:bg-surface-container-low dark:hover:bg-surface-container-high transition-colors p-sm rounded-full cursor-pointer active:opacity-80">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="text-on-surface-variant dark:text-outline-variant hover:bg-surface-container-low dark:hover:bg-surface-container-high transition-colors p-sm rounded-full cursor-pointer active:opacity-80">
+<span class="material-symbols-outlined">help</span>
+</button>
+</div>
+</header>
+<main class="p-gutter md:p-xl flex-1 flex flex-col gap-lg max-w-[1440px] mx-auto w-full">
+<div class="mb-sm">
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Targeted Intervention &amp; Citizen Response</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-xs">Tetouan Smart Grid Live Management</p>
+</div>
+<div class="grid grid-cols-1 lg:grid-cols-5 gap-gutter items-start">
+<!-- Left Column (2/5) -->
+<div class="lg:col-span-2 flex flex-col gap-md">
+<h3 class="font-headline-md text-headline-md text-on-surface mb-xs">Live Grid Status by Zone</h3>
+<!-- Zone 1 -->
+<div class="bg-surface-container-lowest border border-secondary p-lg rounded-lg shadow-[0_4px_6px_-1px_rgba(0,0,0,0.05)] flex items-center justify-between">
+<div>
+<div class="font-label-md text-label-md text-on-surface-variant">Zone 1</div>
+<div class="font-headline-md text-headline-md text-on-surface mt-xs">Quarters Nord</div>
+<div class="font-body-sm text-body-sm text-secondary mt-xs flex items-center gap-xs">
+<span class="w-2 h-2 rounded-full bg-secondary pulse-green block"></span>
+                                Load: 32 MW (Stable)
+                            </div>
+</div>
+<span class="material-symbols-outlined text-secondary text-3xl" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<!-- Zone 2 (CRITICAL) -->
+<div class="bg-error-container border border-error p-lg rounded-lg shadow-[0_4px_6px_-1px_rgba(0,0,0,0.05)] flex items-center justify-between relative overflow-hidden">
+<div class="absolute top-0 left-0 w-1 h-full bg-error"></div>
+<div>
+<div class="font-label-md text-label-md text-error">Zone 2</div>
+<div class="font-headline-md text-headline-md text-on-error-container font-bold mt-xs">Centre Ville</div>
+<div class="font-label-md text-label-md text-error mt-xs flex items-center gap-xs font-bold">
+<span class="w-3 h-3 rounded-full bg-error pulse-red block"></span>
+                                Load: 45 MW (CRITICAL - 98% Capacity)
+                            </div>
+</div>
+<span class="material-symbols-outlined text-error text-4xl" style="font-variation-settings: 'FILL' 1;">warning</span>
+</div>
+<!-- Zone 3 -->
+<div class="bg-surface-container-lowest border border-outline-variant p-lg rounded-lg shadow-[0_4px_6px_-1px_rgba(0,0,0,0.05)] flex items-center justify-between">
+<div>
+<div class="font-label-md text-label-md text-on-surface-variant">Zone 3</div>
+<div class="font-headline-md text-headline-md text-on-surface mt-xs">Zone Industrielle</div>
+<div class="font-body-sm text-body-sm text-secondary mt-xs flex items-center gap-xs">
+<span class="w-2 h-2 rounded-full bg-secondary pulse-green block"></span>
+                                Load: 28 MW (Stable)
+                            </div>
+</div>
+<span class="material-symbols-outlined text-secondary text-3xl" style="font-variation-settings: 'FILL' 1;">check_circle</span>
+</div>
+<div class="mt-sm p-md bg-surface-container-low rounded-lg border border-outline-variant flex gap-sm items-start">
+<span class="material-symbols-outlined text-primary mt-xs">info</span>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+<strong>Surgical precision enabled:</strong> Grid failure isolated to Zone 2. Zones 1 and 3 require no load shedding.
+                        </p>
+</div>
+</div>
+<!-- Right Column (3/5) -->
+<div class="lg:col-span-3 flex flex-col gap-lg">
+<h3 class="font-headline-md text-headline-md text-on-surface">Initiate Citizen Demand Response</h3>
+<div class="bg-surface-container-lowest rounded-xl shadow-[0_4px_6px_-1px_rgba(0,0,0,0.05),0_2px_4px_-2px_rgba(0,0,0,0.03)] border border-outline-variant p-xl flex flex-col gap-lg">
+<div class="flex flex-col gap-sm">
+<label class="font-label-md text-label-md text-on-surface-variant">Message Preview</label>
+<div class="bg-surface-container-low border border-outline-variant rounded-lg p-md relative">
+<div class="absolute -left-3 top-4 w-3 h-3 bg-surface-container-low border-t border-l border-outline-variant transform -rotate-45"></div>
+<div class="flex items-start gap-sm">
+<span class="material-symbols-outlined text-error" style="font-variation-settings: 'FILL' 1;">campaign</span>
+<p class="font-body-md text-body-md text-on-surface">
+                                        ⚠️ <strong>Tetouan City Alert:</strong> Peak energy demand expected in Zone 2 in 30 mins! Reduce your AC by 2 degrees for 1 hour and earn a 5% discount on your next bill.
+                                    </p>
+</div>
+</div>
+</div>
+<div class="flex flex-col gap-sm">
+<label class="font-label-md text-label-md text-on-surface-variant">Target Demographic</label>
+<div class="relative w-full md:w-2/3">
+<select class="w-full appearance-none bg-surface-container-lowest border border-outline-variant text-on-surface font-body-md rounded-lg pl-md pr-xl py-sm focus:border-primary focus:ring-1 focus:ring-primary outline-none">
+<option value="zone2">Target: Zone 2 Residents Only</option>
+<option value="all">City-Wide Broadcast</option>
+</select>
+<span class="material-symbols-outlined absolute right-md top-1/2 transform -translate-y-1/2 text-outline pointer-events-none">expand_more</span>
+</div>
+</div>
+<button class="mt-sm bg-primary text-on-primary font-label-md text-label-md py-md px-lg rounded-lg shadow-md hover:bg-surface-tint hover:shadow-lg transition-all flex items-center justify-center gap-sm w-full md:w-max group">
+<span class="material-symbols-outlined group-hover:scale-110 transition-transform">rocket_launch</span>
+                            Launch Citizen Challenge Campaign
+                        </button>
+</div>
+<!-- Live Impact Tracker -->
+<div class="bg-surface-container-lowest rounded-xl shadow-[0_4px_6px_-1px_rgba(0,0,0,0.05)] border border-outline-variant p-lg flex flex-col gap-md">
+<div class="flex justify-between items-end">
+<div>
+<h4 class="font-label-md text-label-md text-on-surface-variant uppercase tracking-wider">Live Impact Tracker</h4>
+<div class="font-headline-md text-headline-md text-on-surface mt-xs flex items-center gap-sm">
+                                    Campaign Active: 2,405 Citizens Responding
+                                    <span class="material-symbols-outlined text-primary text-sm animate-pulse">sensors</span>
+</div>
+</div>
+<div class="text-right">
+<div class="font-headline-lg text-headline-lg text-primary font-bold">3.2 MW <span class="text-2xl">↓</span></div>
+<div class="font-label-sm text-label-sm text-on-surface-variant">Estimated Load Reduced</div>
+</div>
+</div>
+<div class="w-full bg-surface-container-highest rounded-full h-4 mt-sm overflow-hidden">
+<div class="bg-primary h-4 rounded-full relative" style="width: 45%;">
+<div class="absolute inset-0 bg-white/20 w-full h-full animate-[shimmer_2s_infinite]" style="background-image: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent); transform: skewX(-20deg);"></div>
+</div>
+</div>
+<div class="flex justify-between font-label-sm text-label-sm text-on-surface-variant">
+<span class="">0 MW</span>
+<span class="">Target: 5.0 MW Reduction</span>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+
+
+</body></html>

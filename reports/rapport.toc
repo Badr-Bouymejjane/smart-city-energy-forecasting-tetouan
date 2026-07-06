@@ -1,0 +1,28 @@
+\babel@toc {english}{}\relax 
+\babel@toc {french}{}\relax 
+\babel@toc {english}{}\relax 
+\babel@toc {french}{}\relax 
+\contentsline {section}{\numberline {1}Introduction}{4}{section.1}%
+\contentsline {subsection}{\numberline {1.1}Contexte général}{4}{subsection.1.1}%
+\contentsline {subsection}{\numberline {1.2}Problématique}{4}{subsection.1.2}%
+\contentsline {subsection}{\numberline {1.3}Motivation et objectifs}{4}{subsection.1.3}%
+\contentsline {subsection}{\numberline {1.4}Organisation du rapport}{5}{subsection.1.4}%
+\contentsline {section}{\numberline {2}État de l'art}{5}{section.2}%
+\contentsline {subsection}{\numberline {2.1}Prévision de la charge énergétique : approches classiques}{5}{subsection.2.1}%
+\contentsline {subsection}{\numberline {2.2}Approches fondées sur l'apprentissage automatique}{6}{subsection.2.2}%
+\contentsline {subsection}{\numberline {2.3}Approches fondées sur l'apprentissage profond}{6}{subsection.2.3}%
+\contentsline {subsection}{\numberline {2.4}Explicabilité des modèles}{6}{subsection.2.4}%
+\contentsline {subsection}{\numberline {2.5}Synthèse comparative des approches}{6}{subsection.2.5}%
+\contentsline {section}{\numberline {3}Méthodologie}{7}{section.3}%
+\contentsline {subsection}{\numberline {3.1}Formulation du problème}{7}{subsection.3.1}%
+\contentsline {subsection}{\numberline {3.2}Jeu de données}{7}{subsection.3.2}%
+\contentsline {subsubsection}{\numberline {3.2.1}Caractéristiques statistiques principales (données horaires)}{7}{subsubsection.3.2.1}%
+\contentsline {subsection}{\numberline {3.3}Processus KDD}{7}{subsection.3.3}%
+\contentsline {subsection}{\numberline {3.4}Prétraitement et Ingénierie des caractéristiques}{8}{subsection.3.4}%
+\contentsline {subsection}{\numberline {3.5}Partitionnement chronologique des données}{8}{subsection.3.5}%
+\contentsline {subsection}{\numberline {3.6}Métriques d'évaluation}{8}{subsection.3.6}%
+\contentsline {section}{\numberline {4}Implémentation}{8}{section.4}%
+\contentsline {section}{\numberline {5}Résultats et évaluation}{9}{section.5}%
+\contentsline {subsection}{\numberline {5.1}Résultats globaux}{9}{subsection.5.1}%
+\contentsline {subsection}{\numberline {5.2}Importance des variables et explicabilité}{9}{subsection.5.2}%
+\contentsline {section}{\numberline {6}Discussion et Conclusion}{9}{section.6}%

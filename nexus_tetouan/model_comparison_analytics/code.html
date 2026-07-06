@@ -1,0 +1,436 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Model Comparison &amp; Analytics - Nexus Tetouan</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "tertiary": "#4b5a70",
+                        "outline-variant": "#c2c6d8",
+                        "surface-dim": "#d8dadc",
+                        "on-surface-variant": "#424656",
+                        "primary-container": "#0066ff",
+                        "on-primary-fixed": "#001849",
+                        "on-tertiary-fixed-variant": "#38485d",
+                        "error": "#ba1a1a",
+                        "on-error-container": "#93000a",
+                        "tertiary-container": "#63738a",
+                        "on-primary": "#ffffff",
+                        "on-secondary": "#ffffff",
+                        "on-tertiary-fixed": "#0b1c30",
+                        "surface-container-lowest": "#ffffff",
+                        "outline": "#727687",
+                        "on-primary-container": "#f8f7ff",
+                        "secondary-fixed": "#69ff87",
+                        "on-primary-fixed-variant": "#003fa4",
+                        "on-background": "#191c1e",
+                        "on-secondary-fixed-variant": "#00531e",
+                        "on-tertiary-container": "#f6f8ff",
+                        "background": "#f7f9fb",
+                        "error-container": "#ffdad6",
+                        "surface-container-highest": "#e0e3e5",
+                        "on-tertiary": "#ffffff",
+                        "surface-container-high": "#e6e8ea",
+                        "primary-fixed-dim": "#b3c5ff",
+                        "tertiary-fixed-dim": "#b7c8e1",
+                        "secondary-container": "#5cfd80",
+                        "primary-fixed": "#dae1ff",
+                        "surface-variant": "#e0e3e5",
+                        "surface-container-low": "#f2f4f6",
+                        "on-secondary-fixed": "#002108",
+                        "inverse-surface": "#2d3133",
+                        "secondary-fixed-dim": "#3ce36a",
+                        "surface-tint": "#0054d6",
+                        "on-surface": "#191c1e",
+                        "on-secondary-container": "#00732c",
+                        "primary": "#0050cb",
+                        "surface": "#f7f9fb",
+                        "on-error": "#ffffff",
+                        "inverse-primary": "#b3c5ff",
+                        "secondary": "#006e2a",
+                        "surface-container": "#eceef0",
+                        "surface-bright": "#f7f9fb",
+                        "inverse-on-surface": "#eff1f3",
+                        "tertiary-fixed": "#d3e4fe"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "margin-mobile": "16px",
+                        "container-max": "1280px",
+                        "unit": "4px",
+                        "xl": "40px",
+                        "sm": "8px",
+                        "md": "16px",
+                        "xs": "4px",
+                        "gutter": "24px",
+                        "lg": "24px"
+                    },
+                    "fontFamily": {
+                        "body-sm": ["Inter"],
+                        "label-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "headline-xl": ["Inter"],
+                        "body-md": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "label-sm": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "headline-lg-mobile": ["Inter"]
+                    },
+                    "fontSize": {
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "label-md": ["14px", { "lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "headline-xl": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "500" }],
+                        "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        .icon-fill {
+            font-variation-settings: 'FILL' 1, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+        }
+        /* Custom Ambient Shadows */
+        .shadow-l1 {
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.05), 0 2px 4px -2px rgba(0, 0, 0, 0.03);
+        }
+        .shadow-l2 {
+            box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+        }
+        .glow-success {
+            box-shadow: 0 0 15px rgba(92, 253, 128, 0.4);
+            border: 1px solid #5cfd80;
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md antialiased min-h-screen flex">
+<!-- SideNavBar (Shared Component) -->
+<nav class="bg-surface dark:bg-inverse-surface shadow-sm h-screen w-64 fixed left-0 top-0 flex flex-col h-full py-md px-sm z-50 hidden md:flex">
+<div class="mb-xl px-md">
+<h1 class="font-headline-md text-headline-md font-bold text-primary dark:text-inverse-primary">Nexus Tetouan</h1>
+<p class="font-label-sm text-label-sm text-on-surface-variant mt-xs">Energy Management</p>
+</div>
+<div class="flex-1 space-y-sm">
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-tertiary dark:text-tertiary-fixed-dim hover:bg-surface-container-low dark:hover:bg-surface-container-highest transition-colors active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="dashboard">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-primary dark:text-inverse-primary font-bold border-r-4 border-primary hover:bg-surface-container-low dark:hover:bg-surface-container-highest transition-colors active:scale-95 duration-150 bg-primary/5" href="#">
+<span class="material-symbols-outlined icon-fill" data-icon="compare_arrows">compare_arrows</span>
+<span class="font-label-md text-label-md">Model Comparison</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-tertiary dark:text-tertiary-fixed-dim hover:bg-surface-container-low dark:hover:bg-surface-container-highest transition-colors active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="history">history</span>
+<span class="font-label-md text-label-md">Historical Data</span>
+</a>
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-tertiary dark:text-tertiary-fixed-dim hover:bg-surface-container-low dark:hover:bg-surface-container-highest transition-colors active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined" data-icon="settings">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</div>
+<div class="mt-auto px-md pt-lg border-t border-outline-variant/30 flex items-center gap-md">
+<img alt="User profile photo" class="w-10 h-10 rounded-full object-cover" data-alt="A professional headshot of a corporate administrator in a modern office environment, wearing a dark navy blazer. The lighting is soft and bright, reflecting a clean, corporate modern aesthetic. The background is slightly blurred with subtle hints of glass partitions." src="https://lh3.googleusercontent.com/aida-public/AB6AXuCyQaM6VV0JwyS8OJNrvhZfM_HIy3wiN28v-_5BeEBg_RajtRPmGWxqpvNMnAM5bTfEfZ4KK8zPRzm9-QWyRkRX0Zyriv-FbA3DBeOETiuV9Etyu3TR5PSxsXyoBb5x4Vx5FWdjskjCQui7v1RhHA_AOYboekyxX-vdgQTobLdfHJU7FVyEaQRTQzHDBglbnnLRaLyVAFmVyC4Cm_dbkTVP4Xt7mrS17kQGUweqPIp-knJlbMRwmTai1tFnEiBsp4T6QAG6074itoAs"/>
+<div>
+<p class="font-label-md text-label-md text-on-surface">Admin User</p>
+<p class="font-label-sm text-label-sm text-on-surface-variant">System Admin</p>
+</div>
+</div>
+</nav>
+<!-- Main Content Area -->
+<div class="flex-1 flex flex-col md:ml-64 min-h-screen">
+<!-- TopAppBar (Shared Component) -->
+<header class="bg-surface-bright dark:bg-surface-dim docked full-width top-0 sticky z-40 bg-surface dark:bg-inverse-surface shadow-sm flex justify-between items-center h-16 px-lg">
+<div class="flex items-center gap-md">
+<h2 class="font-headline-md text-headline-md font-extrabold text-primary dark:text-inverse-primary hidden md:block">Model Comparison &amp; Analytics</h2>
+<h2 class="font-headline-lg-mobile text-headline-lg-mobile font-extrabold text-primary dark:text-inverse-primary block md:hidden">Model Comparison</h2>
+</div>
+<div class="flex items-center gap-md">
+<div class="relative hidden sm:block">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline">search</span>
+<input class="pl-10 pr-4 py-2 bg-surface-container-lowest border border-outline-variant rounded-full font-body-sm text-body-sm focus:outline-none focus:border-primary focus:ring-1 focus:ring-primary w-64 transition-all" placeholder="Search metrics..." type="text"/>
+</div>
+<button class="p-2 text-on-surface-variant dark:text-outline-variant hover:text-primary-container dark:hover:text-primary-fixed transition-all active:opacity-80 rounded-full hover:bg-surface-container-low">
+<span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+</button>
+<button class="p-2 text-on-surface-variant dark:text-outline-variant hover:text-primary-container dark:hover:text-primary-fixed transition-all active:opacity-80 rounded-full hover:bg-surface-container-low">
+<span class="material-symbols-outlined" data-icon="help">help</span>
+</button>
+<img alt="Administrator Avatar" class="w-8 h-8 rounded-full object-cover block md:hidden" data-alt="A professional headshot of a corporate administrator in a modern office environment, wearing a dark navy blazer. The lighting is soft and bright, reflecting a clean, corporate modern aesthetic. The background is slightly blurred with subtle hints of glass partitions." src="https://lh3.googleusercontent.com/aida-public/AB6AXuDFay2BWmOVtcZdB7Agzxe1vTdPT-Ko8fQUgatUqlmmoBpOk_WAGaHvR7H8Sw3SomD75HZdNs-3L6W1e96IObYzQtKzHE3F36aur_Ga3ggp39zIiREwDU9AFKdSF9FP5aTTh90B-Myxk-5I9P_XbdQU6EK7nDPbtt__LGo1xuf7aBhjuLBiBFT4kG-x_EvQ43YFst_p-gXtda0-eON8uKYIIupfGB1XSD-X6E-IfJlmhCM-l6FLiH8AROwlCw7HKPvScuIK9SpYfLi9"/>
+</div>
+</header>
+<!-- Page Canvas -->
+<main class="flex-1 p-margin-mobile md:p-xl bg-background overflow-y-auto">
+<!-- Tabs -->
+<div class="mb-lg border-b border-outline-variant/50">
+<nav aria-label="Tabs" class="-mb-px flex space-x-8">
+<a aria-current="page" class="border-primary text-primary whitespace-nowrap py-4 px-1 border-b-2 font-label-md text-label-md" href="#">
+                        Live Accuracy
+                    </a>
+<a class="border-transparent text-on-surface-variant hover:text-tertiary hover:border-outline-variant whitespace-nowrap py-4 px-1 border-b-2 font-label-md text-label-md transition-colors" href="#">
+                        Training Metrics
+                    </a>
+</nav>
+</div>
+<!-- Dashboard Content -->
+<div class="max-w-container-max mx-auto space-y-lg">
+<!-- Models Grid -->
+<div class="grid grid-cols-1 md:grid-cols-2 gap-gutter">
+<!-- XGBoost Card (Highlighted) -->
+<div class="bg-surface-container-lowest rounded-xl p-lg shadow-l1 glow-success relative flex flex-col">
+<div class="absolute top-4 right-4 bg-secondary-container text-on-secondary-container px-3 py-1 rounded-full font-label-sm text-label-sm flex items-center gap-1">
+<span class="material-symbols-outlined text-[16px]">stars</span> Best Performing
+                        </div>
+<div class="flex items-center gap-3 mb-md">
+<div class="w-10 h-10 rounded-lg bg-primary/10 flex items-center justify-center text-primary">
+<span class="material-symbols-outlined">account_tree</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface">XGBoost</h3>
+</div>
+<div class="grid grid-cols-3 gap-4 mb-4 flex-1">
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant mb-1">MAE</p>
+<p class="font-headline-lg text-headline-lg text-on-surface">2.4<span class="text-body-sm text-on-surface-variant ml-1">kWh</span></p>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant mb-1">RMSE</p>
+<p class="font-headline-lg text-headline-lg text-on-surface">3.1<span class="text-body-sm text-on-surface-variant ml-1">kWh</span></p>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant mb-1">MAPE</p>
+<p class="font-headline-lg text-headline-lg text-secondary">4.2%</p>
+</div>
+</div>
+<div class="w-full h-1 bg-surface-container rounded-full overflow-hidden mt-auto">
+<div class="bg-secondary h-full rounded-full" style="width: 95%"></div>
+</div>
+</div>
+<!-- GRU Card -->
+<div class="bg-surface-container-lowest rounded-xl p-lg shadow-l1 flex flex-col border border-transparent hover:border-outline-variant transition-colors">
+<div class="flex items-center gap-3 mb-md">
+<div class="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined">memory</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface">GRU</h3>
+</div>
+<div class="grid grid-cols-3 gap-4 mb-4 flex-1">
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant mb-1">MAE</p>
+<p class="font-headline-md text-headline-md text-on-surface">3.8<span class="text-body-sm text-on-surface-variant ml-1">kWh</span></p>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant mb-1">RMSE</p>
+<p class="font-headline-md text-headline-md text-on-surface">4.5<span class="text-body-sm text-on-surface-variant ml-1">kWh</span></p>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant mb-1">MAPE</p>
+<p class="font-headline-md text-headline-md text-on-surface-variant">6.1%</p>
+</div>
+</div>
+</div>
+<!-- SARIMA Card -->
+<div class="bg-surface-container-lowest rounded-xl p-lg shadow-l1 flex flex-col border border-transparent hover:border-outline-variant transition-colors">
+<div class="flex items-center gap-3 mb-md">
+<div class="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined">trending_up</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface">SARIMA</h3>
+</div>
+<div class="grid grid-cols-3 gap-4 mb-4 flex-1">
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant mb-1">MAE</p>
+<p class="font-headline-md text-headline-md text-on-surface">5.2<span class="text-body-sm text-on-surface-variant ml-1">kWh</span></p>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant mb-1">RMSE</p>
+<p class="font-headline-md text-headline-md text-on-surface">6.7<span class="text-body-sm text-on-surface-variant ml-1">kWh</span></p>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant mb-1">MAPE</p>
+<p class="font-headline-md text-headline-md text-error">8.5%</p>
+</div>
+</div>
+</div>
+<!-- Prophet Card -->
+<div class="bg-surface-container-lowest rounded-xl p-lg shadow-l1 flex flex-col border border-transparent hover:border-outline-variant transition-colors">
+<div class="flex items-center gap-3 mb-md">
+<div class="w-10 h-10 rounded-lg bg-surface-container flex items-center justify-center text-tertiary">
+<span class="material-symbols-outlined">show_chart</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-surface">Prophet</h3>
+</div>
+<div class="grid grid-cols-3 gap-4 mb-4 flex-1">
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant mb-1">MAE</p>
+<p class="font-headline-md text-headline-md text-on-surface">4.1<span class="text-body-sm text-on-surface-variant ml-1">kWh</span></p>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant mb-1">RMSE</p>
+<p class="font-headline-md text-headline-md text-on-surface">5.3<span class="text-body-sm text-on-surface-variant ml-1">kWh</span></p>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant mb-1">MAPE</p>
+<p class="font-headline-md text-headline-md text-on-surface-variant">7.0%</p>
+</div>
+</div>
+</div>
+</div>
+<!-- Main Chart Card -->
+<div class="bg-surface-container-lowest rounded-xl p-lg shadow-l1">
+<div class="flex justify-between items-center mb-md">
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface">7-Day Consumption vs Forecast</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Hourly prediction accuracy across all models</p>
+</div>
+<button class="px-4 py-2 bg-surface-container-low text-primary rounded-lg font-label-md text-label-md hover:bg-surface-container transition-colors flex items-center gap-2">
+<span class="material-symbols-outlined text-[18px]">download</span> Export Data
+                        </button>
+</div>
+<div class="h-80 w-full relative">
+<canvas id="comparisonChart"></canvas>
+</div>
+</div>
+</div>
+</main>
+</div>
+<script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const ctx = document.getElementById('comparisonChart').getContext('2d');
+            
+            // Mock data for 7 days (simplified for visual representation)
+            const labels = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+            const actual = [120, 132, 145, 128, 140, 110, 105];
+            const xgboost = [118, 130, 143, 130, 138, 112, 107];
+            const gru = [125, 128, 150, 120, 145, 115, 100];
+            const sarima = [110, 140, 135, 140, 130, 120, 115];
+            const prophet = [115, 135, 140, 125, 142, 108, 110];
+
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: labels,
+                    datasets: [
+                        {
+                            label: 'Actual Consumption',
+                            data: actual,
+                            borderColor: '#191c1e', // on-surface
+                            backgroundColor: 'rgba(25, 28, 30, 0.1)',
+                            borderWidth: 3,
+                            borderDash: [5, 5],
+                            tension: 0.4,
+                            fill: true,
+                            pointRadius: 0
+                        },
+                        {
+                            label: 'XGBoost',
+                            data: xgboost,
+                            borderColor: '#006e2a', // secondary (green)
+                            borderWidth: 2,
+                            tension: 0.4,
+                            pointBackgroundColor: '#006e2a',
+                            pointRadius: 4
+                        },
+                        {
+                            label: 'GRU',
+                            data: gru,
+                            borderColor: '#0050cb', // primary (blue)
+                            borderWidth: 2,
+                            tension: 0.4,
+                            pointRadius: 0
+                        },
+                        {
+                            label: 'SARIMA',
+                            data: sarima,
+                            borderColor: '#ba1a1a', // error (red for contrast)
+                            borderWidth: 1.5,
+                            tension: 0.4,
+                            pointRadius: 0
+                        },
+                        {
+                            label: 'Prophet',
+                            data: prophet,
+                            borderColor: '#727687', // outline (gray)
+                            borderWidth: 1.5,
+                            tension: 0.4,
+                            pointRadius: 0
+                        }
+                    ]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    interaction: {
+                        mode: 'index',
+                        intersect: false,
+                    },
+                    plugins: {
+                        legend: {
+                            position: 'bottom',
+                            labels: {
+                                usePointStyle: true,
+                                padding: 20,
+                                font: {
+                                    family: 'Inter',
+                                    size: 12
+                                }
+                            }
+                        },
+                        tooltip: {
+                            backgroundColor: 'rgba(25, 28, 30, 0.9)',
+                            titleFont: { family: 'Inter', size: 14 },
+                            bodyFont: { family: 'Inter', size: 13 },
+                            padding: 12,
+                            cornerRadius: 8,
+                            displayColors: true
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: false,
+                            grid: {
+                                color: '#f2f4f6', // surface-container-low
+                                drawBorder: false,
+                            },
+                            ticks: {
+                                font: { family: 'Inter', size: 12 },
+                                color: '#727687'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false,
+                                drawBorder: false,
+                            },
+                            ticks: {
+                                font: { family: 'Inter', size: 12 },
+                                color: '#727687'
+                            }
+                        }
+                    }
+                }
+            });
+        });
+    </script>
+</body></html>

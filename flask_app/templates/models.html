@@ -1,0 +1,461 @@
+{% extends "base.html" %}
+
+{% block breadcrumb %}
+<span class="font-label-md text-label-md">Nexus Tetouan</span><span class="material-symbols-outlined mx-1" style="font-size: 16px;">chevron_right</span><span class="font-label-md text-label-md text-primary">Model Comparison</span>
+{% endblock %}
+
+{% block content %}
+<!-- Scrollable Main Content Canvas -->
+<main class="flex-1 overflow-y-auto p-md md:p-lg lg:p-xl scroll-smooth">
+<div class="max-w-container-max mx-auto space-y-lg">
+<!-- Page Header & Metrics Row -->
+<section class="space-y-md">
+<div>
+<h2 class="font-headline-lg text-headline-lg text-on-surface">Algorithm Comparison: XGBoost vs. Random Forest</h2>
+<p class="font-body-md text-body-md text-on-surface-variant mt-1">Evaluating predictive load modeling for Nexus Tetouan Grid.</p>
+</div>
+<!-- 4-Column Metric Row -->
+<div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-md">
+<!-- Metric 1 -->
+<div class="bg-surface-container-lowest rounded-xl p-lg shadow-sm border border-outline-variant/20 flex flex-col justify-between">
+<div class="flex justify-between items-start mb-sm">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Total Observations</span>
+<span class="material-symbols-outlined text-primary text-[20px]">database</span>
+</div>
+<span class="font-headline-md text-headline-md text-on-surface font-semibold">{{ total_obs }}</span>
+</div>
+<!-- Metric 2 -->
+<div class="bg-surface-container-lowest rounded-xl p-lg shadow-sm border border-outline-variant/20 flex flex-col justify-between">
+<div class="flex justify-between items-start mb-sm">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Hourly Aggregations</span>
+<span class="material-symbols-outlined text-primary text-[20px]">schedule</span>
+</div>
+<span class="font-headline-md text-headline-md text-on-surface font-semibold">{{ hourly_aggs }}</span>
+</div>
+<!-- Metric 3 -->
+<div class="bg-surface-container-lowest rounded-xl p-lg shadow-sm border border-outline-variant/20 flex flex-col justify-between">
+<div class="flex justify-between items-start mb-sm">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Dataset Start</span>
+<span class="material-symbols-outlined text-primary text-[20px]">calendar_today</span>
+</div>
+<span class="font-headline-md text-headline-md text-on-surface font-semibold">{{ start_date }}</span>
+</div>
+<!-- Metric 4 -->
+<div class="bg-surface-container-lowest rounded-xl p-lg shadow-sm border border-outline-variant/20 flex flex-col justify-between">
+<div class="flex justify-between items-start mb-sm">
+<span class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider">Dataset End</span>
+<span class="material-symbols-outlined text-primary text-[20px]">event_available</span>
+</div>
+<span class="font-headline-md text-headline-md text-on-surface font-semibold">{{ end_date }}</span>
+</div>
+</div>
+</section>
+<!-- Peak Risk Intelligence Module -->
+<section class="grid grid-cols-1 lg:grid-cols-2 gap-md">
+<!-- XGBoost Card (Alert) -->
+<div class="bg-secondary-container/30 rounded-xl p-lg border border-secondary/20 flex items-center justify-between shadow-sm relative overflow-hidden">
+<div class="absolute -right-10 -top-10 opacity-10">
+<span class="material-symbols-outlined text-[120px] text-secondary" style="font-variation-settings: 'FILL' 1;">eco</span>
+</div>
+<div class="z-10">
+<div class="flex items-center gap-xs mb-sm">
+<span class="material-symbols-outlined text-on-secondary-container text-[20px]" style="font-variation-settings: 'FILL' 1;">eco</span>
+<span class="font-label-sm text-label-sm text-on-secondary-container uppercase tracking-wider font-bold">XGBoost Forecast (Primary)</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-secondary-container font-semibold">{{ xgb_alert }}</h3>
+<p class="font-body-sm text-body-sm text-on-secondary-container/80 mt-xs">Projected: <span class="font-bold">{{ xgb_forecast }} MW</span>.</p>
+<a href="/models/xgboost" class="mt-4 inline-flex items-center gap-2 text-on-secondary-container font-label-md text-label-md hover:underline decoration-2 underline-offset-4">
+    <span class="material-symbols-outlined text-[18px]">read_more</span> View Full Details
+</a>
+</div>
+<div class="z-10 bg-surface-container-lowest/50 backdrop-blur-sm rounded-lg p-sm border border-secondary/10">
+<span class="material-symbols-outlined text-secondary text-[32px]">check_circle</span>
+</div>
+</div>
+<!-- Random Forest Card (Normal) -->
+<div class="bg-error-container rounded-xl p-lg border border-error/20 flex items-center justify-between shadow-sm relative overflow-hidden">
+<div class="absolute -right-10 -top-10 opacity-10">
+<span class="material-symbols-outlined text-[120px] text-error" style="font-variation-settings: 'FILL' 1;">warning</span>
+</div>
+<div class="z-10">
+<div class="flex items-center gap-xs mb-sm">
+<span class="material-symbols-outlined text-on-error-container text-[20px]" style="font-variation-settings: 'FILL' 1;">warning</span>
+<span class="font-label-sm text-label-sm text-on-error-container uppercase tracking-wider font-bold">Random Forest Forecast (Fallback)</span>
+</div>
+<h3 class="font-headline-md text-headline-md text-on-error-container font-semibold">{{ rf_alert }}</h3>
+<p class="font-body-sm text-body-sm text-on-error-container/80 mt-xs">Projected: <span class="font-bold">{{ rf_forecast }} MW</span>.</p>
+<a href="/models/random_forest" class="mt-4 inline-flex items-center gap-2 text-on-error-container font-label-md text-label-md hover:underline decoration-2 underline-offset-4">
+    <span class="material-symbols-outlined text-[18px]">read_more</span> View Full Details
+</a>
+</div>
+<div class="z-10 bg-surface-container-lowest/50 backdrop-blur-sm rounded-lg p-sm border border-error/10">
+<span class="material-symbols-outlined text-error text-[32px]">trending_up</span>
+</div>
+</div>
+</section>
+<!-- Primary Visualizer: Forecast Accuracy -->
+<section class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant/20 overflow-hidden">
+<div class="p-lg border-b border-outline-variant/20 flex justify-between items-center">
+<div>
+<h3 class="font-headline-md text-headline-md text-on-surface font-semibold">Forecast Accuracy (Last 72 Hours)</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Comparing model predictions against actual telemetry data.</p>
+</div>
+<div class="flex gap-md font-label-sm text-label-sm">
+<div class="flex items-center gap-xs"><div class="w-3 h-3 rounded-full bg-outline"></div> Actual Load</div>
+<div class="flex items-center gap-xs"><div class="w-3 h-3 rounded-full bg-primary"></div> XGBoost</div>
+<div class="flex items-center gap-xs"><div class="w-3 h-3 rounded-full bg-[#8b5cf6]"></div> Random Forest</div>
+</div>
+</div>
+
+<!-- Chart Area -->
+<div class="p-lg w-full h-[400px] relative bg-surface-bright flex items-center justify-center overflow-hidden">
+    <canvas id="forecastChart" class="w-full h-full"></canvas>
+</div>
+
+</section>
+<!-- Evaluation Table & Bottom Row (Bento Grid Style) -->
+<section class="grid grid-cols-1 xl:grid-cols-3 gap-lg">
+<!-- Evaluation Table (Spans 2 columns on extra large) -->
+<div class="xl:col-span-2 bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant/20 overflow-hidden flex flex-col">
+<div class="p-lg border-b border-outline-variant/20">
+<h3 class="font-headline-md text-headline-md text-on-surface font-semibold">Evaluation Metrics</h3>
+<p class="font-body-sm text-body-sm text-on-surface-variant">Global performance indicators across the full dataset.</p>
+</div>
+<div class="overflow-x-auto p-md flex-1">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="font-label-sm text-label-sm text-on-surface-variant bg-surface-container-low/50">
+<th class="p-md font-medium rounded-tl-lg">Metric</th>
+<th class="p-md font-medium">Definition</th>
+<th class="p-md font-medium">XGBoost</th>
+<th class="p-md font-medium rounded-tr-lg">Random Forest</th>
+</tr>
+</thead>
+<tbody class="font-body-sm text-body-sm text-on-surface">
+<tr class="border-b border-surface-container-high hover:bg-surface-bright transition-colors">
+<td class="p-md font-semibold">MAE</td>
+<td class="p-md text-on-surface-variant">Mean Absolute Error</td>
+<td class="p-md font-mono bg-secondary-fixed/20 text-on-secondary-fixed font-semibold rounded-l-sm border-l-4 border-secondary">{{ xgb_mae }} MW</td>
+<td class="p-md font-mono">{{ rf_mae }} MW</td>
+</tr>
+<tr class="border-b border-surface-container-high hover:bg-surface-bright transition-colors">
+<td class="p-md font-semibold">RMSE</td>
+<td class="p-md text-on-surface-variant">Root Mean Square Error</td>
+<td class="p-md font-mono bg-secondary-fixed/20 text-on-secondary-fixed font-semibold rounded-l-sm border-l-4 border-secondary">{{ xgb_rmse }} MW</td>
+<td class="p-md font-mono">{{ rf_rmse }} MW</td>
+</tr>
+<tr class="hover:bg-surface-bright transition-colors">
+<td class="p-md font-semibold">MAPE</td>
+<td class="p-md text-on-surface-variant">Mean Absolute Percentage Error</td>
+<td class="p-md font-mono">{{ xgb_mape }}%</td>
+<td class="p-md font-mono bg-secondary-fixed/20 text-on-secondary-fixed font-semibold rounded-r-sm border-r-4 border-secondary">{{ rf_mape }}%</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<!-- Side Insights Stack -->
+<div class="xl:col-span-1 flex flex-col gap-lg">
+<!-- Zone Load Breakdown -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant/20 p-lg flex-1">
+<div class="flex justify-between items-center mb-md">
+<h3 class="font-label-md text-label-md text-on-surface font-semibold uppercase tracking-wider">Zone Load Breakdown</h3>
+<span class="material-symbols-outlined text-outline">pie_chart</span>
+</div>
+<div class="space-y-md">
+<!-- Zone 1 -->
+<div>
+<div class="flex justify-between font-body-sm text-body-sm mb-xs">
+<span class="">Zone 1 (Industrial)</span>
+<span class="font-semibold">{{ zone1_pct }}%</span>
+</div>
+<div class="w-full bg-surface-container-high rounded-full h-2">
+<div class="bg-primary h-2 rounded-full" style="width: {{ zone1_pct }}%"></div>
+</div>
+</div>
+<!-- Zone 2 -->
+<div>
+<div class="flex justify-between font-body-sm text-body-sm mb-xs">
+<span class="">Zone 2 (Residential)</span>
+<span class="font-semibold">{{ zone2_pct }}%</span>
+</div>
+<div class="w-full bg-surface-container-high rounded-full h-2">
+<div class="bg-tertiary h-2 rounded-full" style="width: {{ zone2_pct }}%"></div>
+</div>
+</div>
+<!-- Zone 3 -->
+<div>
+<div class="flex justify-between font-body-sm text-body-sm mb-xs">
+<span class="">Zone 3 (Commercial)</span>
+<span class="font-semibold">{{ zone3_pct }}%</span>
+</div>
+<div class="w-full bg-surface-container-high rounded-full h-2">
+<div class="bg-outline h-2 rounded-full" style="width: {{ zone3_pct }}%"></div>
+</div>
+</div>
+</div>
+</div>
+<!-- Meteorological Influence -->
+<div class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant/20 p-lg flex-1">
+<div class="flex justify-between items-center mb-md">
+<h3 class="font-label-md text-label-md text-on-surface font-semibold uppercase tracking-wider">Met. Influence</h3>
+<span class="material-symbols-outlined text-outline">air</span>
+</div>
+<!-- Correlation Visualization -->
+<div class="flex items-center justify-center h-32 relative">
+<!-- Base circles -->
+<div class="w-24 h-24 rounded-full border-2 border-primary/20 absolute flex items-center justify-center">
+<span class="font-label-sm text-label-sm text-primary absolute -top-5">Temp</span>
+</div>
+<div class="w-20 h-20 rounded-full border-2 border-[#8b5cf6]/20 absolute translate-x-4 translate-y-4 flex items-center justify-center">
+<span class="font-label-sm text-label-sm text-[#8b5cf6] absolute -bottom-5">Humidity</span>
+</div>
+<div class="w-16 h-16 rounded-full border-2 border-secondary/20 absolute -translate-x-4 translate-y-2 flex items-center justify-center">
+<span class="font-label-sm text-label-sm text-secondary absolute -left-8">Wind</span>
+</div>
+<!-- Center nexus -->
+<div class="w-4 h-4 bg-on-surface rounded-full z-10 shadow-md"></div>
+<!-- connecting lines -->
+<div class="absolute w-12 h-px bg-outline-variant rotate-45 translate-x-6 translate-y-6"></div>
+<div class="absolute w-10 h-px bg-outline-variant -rotate-12 -translate-x-5 translate-y-2"></div>
+</div>
+<p class="font-body-sm text-body-sm text-on-surface-variant text-center mt-sm">High correlation ({{ top_corr_val }}) with {{ top_corr_var }} observed across dataset.</p>
+</div>
+</div>
+</section>
+
+<!-- Interactive What-If Scenario Simulator -->
+<section class="bg-surface-container-lowest rounded-xl shadow-sm border border-outline-variant/20 overflow-hidden mt-lg mb-lg">
+    <div class="p-lg border-b border-outline-variant/20 flex justify-between items-center bg-gradient-to-r from-primary/5 to-transparent">
+        <div>
+            <h3 class="font-headline-md text-headline-md text-on-surface font-semibold flex items-center gap-xs"><span class="material-symbols-outlined text-primary">science</span> Interactive What-If Simulator</h3>
+            <p class="font-body-sm text-body-sm text-on-surface-variant">Adjust meteorological variables to see how extreme weather impacts the predicted energy load in real-time.</p>
+        </div>
+    </div>
+    <div class="p-lg grid grid-cols-1 md:grid-cols-2 gap-xl items-center">
+        <!-- Sliders -->
+        <div class="space-y-lg">
+            <div>
+                <div class="flex justify-between items-center mb-xs">
+                    <label class="font-label-md text-label-md text-on-surface flex items-center gap-xs"><span class="material-symbols-outlined text-[18px] text-error">device_thermostat</span> Temperature (°C)</label>
+                    <span id="simTempDisplay" class="font-mono text-primary font-bold">20.0</span>
+                </div>
+                <input type="range" id="simTemp" min="0" max="50" step="0.5" value="20" class="w-full h-2 bg-surface-container-highest rounded-lg appearance-none cursor-pointer">
+            </div>
+            <div>
+                <div class="flex justify-between items-center mb-xs">
+                    <label class="font-label-md text-label-md text-on-surface flex items-center gap-xs"><span class="material-symbols-outlined text-[18px] text-[#8b5cf6]">water_drop</span> Humidity (%)</label>
+                    <span id="simHumDisplay" class="font-mono text-[#8b5cf6] font-bold">50.0</span>
+                </div>
+                <input type="range" id="simHum" min="0" max="100" step="1" value="50" class="w-full h-2 bg-surface-container-highest rounded-lg appearance-none cursor-pointer">
+            </div>
+            <div>
+                <div class="flex justify-between items-center mb-xs">
+                    <label class="font-label-md text-label-md text-on-surface flex items-center gap-xs"><span class="material-symbols-outlined text-[18px] text-secondary">air</span> Wind Speed (m/s)</label>
+                    <span id="simWindDisplay" class="font-mono text-secondary font-bold">5.0</span>
+                </div>
+                <input type="range" id="simWind" min="0" max="20" step="0.5" value="5" class="w-full h-2 bg-surface-container-highest rounded-lg appearance-none cursor-pointer">
+            </div>
+        </div>
+        
+        <!-- Result Readout -->
+        <div class="bg-surface-container-low rounded-xl p-xl flex flex-col items-center justify-center border border-outline-variant/30 text-center relative overflow-hidden transition-colors duration-300" id="simResultBox">
+            <div class="z-10">
+                <p class="font-label-sm text-label-sm text-on-surface-variant uppercase tracking-wider mb-sm">Predicted Grid Load</p>
+                <div class="flex items-end justify-center gap-xs">
+                    <span id="simMwResult" class="font-headline-lg text-headline-lg text-on-surface font-bold text-[48px] leading-none transition-all">30.0</span>
+                    <span class="font-label-lg text-label-lg text-on-surface-variant mb-1">MW</span>
+                </div>
+                <div id="simStatusBadge" class="mt-md inline-flex items-center px-3 py-1 rounded-full bg-secondary-container/20 text-on-secondary-container font-label-sm transition-colors">
+                    Stable
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<div class="h-lg"></div> <!-- Bottom padding -->
+</div>
+</main>
+</div>
+
+
+
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const chartData = {{ chart_data|safe }};
+        
+        // Format the labels (datetime strings) to shorter time
+        const labels = chartData.labels.map(ts => {
+            const date = new Date(ts);
+            return date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        });
+        
+        const ctx = document.getElementById('forecastChart').getContext('2d');
+        new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Actual Load',
+                        data: chartData.actual,
+                        borderColor: '#727687', // outline color
+                        backgroundColor: 'transparent',
+                        borderWidth: 2,
+                        pointRadius: 0,
+                        tension: 0.4
+                    },
+                    {
+                        label: 'XGBoost',
+                        data: chartData.xgboost,
+                        borderColor: '#0050cb', // primary color
+                        backgroundColor: 'transparent',
+                        borderWidth: 2,
+                        pointRadius: 0,
+                        tension: 0.4
+                    },
+                    {
+                        label: 'Random Forest',
+                        data: chartData.random_forest,
+                        borderColor: '#8b5cf6', // purple color
+                        backgroundColor: 'transparent',
+                        borderWidth: 2,
+                        pointRadius: 0,
+                        tension: 0.4
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: {
+                    mode: 'index',
+                    intersect: false,
+                },
+                plugins: {
+                    legend: {
+                        display: false // We use the custom HTML legend above the chart
+                    },
+                    tooltip: {
+                        backgroundColor: '#2d3133',
+                        titleFont: { family: 'Inter', size: 14 },
+                        bodyFont: { family: 'Inter', size: 14 },
+                        padding: 12
+                    }
+                },
+                scales: {
+                    x: {
+                        grid: { display: false },
+                        ticks: {
+                            maxTicksLimit: 8,
+                            font: { family: 'Inter', size: 12 },
+                            color: '#424656'
+                        }
+                    },
+                    y: {
+                        grid: { color: '#e0e3e5' },
+                        border: { dash: [4, 4] },
+                        ticks: {
+                            font: { family: 'Inter', size: 12 },
+                            color: '#424656',
+                            callback: function(value) { return value + ' MW'; }
+                        }
+                    }
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const btn = document.getElementById("newAnalysisBtn");
+        if (btn) {
+            btn.addEventListener("click", function() {
+                const originalHtml = btn.innerHTML;
+                btn.innerHTML = `<span class="material-symbols-outlined text-[18px] animate-spin">sync</span> Initializing Pipeline...`;
+                btn.classList.add("opacity-80");
+                
+                setTimeout(() => {
+                    btn.innerHTML = `<span class="material-symbols-outlined text-[18px]">model_training</span> Training XGBoost...`;
+                    
+                    setTimeout(() => {
+                        btn.innerHTML = `<span class="material-symbols-outlined text-[18px]">check_circle</span> Analysis Complete`;
+                        btn.classList.remove("bg-primary");
+                        btn.classList.add("bg-secondary");
+                        
+                        setTimeout(() => {
+                            btn.innerHTML = originalHtml;
+                            btn.classList.remove("bg-secondary", "opacity-80");
+                            btn.classList.add("bg-primary");
+                        }, 3000);
+                        
+                    }, 2000);
+                }, 1500);
+            });
+        }
+        
+        // Interactive What-If Simulator Logic
+        const simTemp = document.getElementById('simTemp');
+        const simTempDisplay = document.getElementById('simTempDisplay');
+        const simHum = document.getElementById('simHum');
+        const simHumDisplay = document.getElementById('simHumDisplay');
+        const simWind = document.getElementById('simWind');
+        const simWindDisplay = document.getElementById('simWindDisplay');
+        const simMwResult = document.getElementById('simMwResult');
+        const simStatusBadge = document.getElementById('simStatusBadge');
+        const simResultBox = document.getElementById('simResultBox');
+        
+        let debounceTimer;
+        
+        function runSimulation() {
+            const temp = parseFloat(simTemp.value);
+            const hum = parseFloat(simHum.value);
+            const wind = parseFloat(simWind.value);
+            
+            simTempDisplay.innerText = temp.toFixed(1);
+            simHumDisplay.innerText = hum.toFixed(1);
+            simWindDisplay.innerText = wind.toFixed(1);
+            
+            clearTimeout(debounceTimer);
+            debounceTimer = setTimeout(() => {
+                fetch('/api/predict_scenario', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ temp: temp, hum: hum, wind: wind })
+                })
+                .then(res => res.json())
+                .then(data => {
+                    if(data.success) {
+                        simMwResult.innerText = data.predicted_mw.toFixed(1);
+                        if(data.status === 'CRITICAL') {
+                            simStatusBadge.innerText = 'CRITICAL ALERT';
+                            simStatusBadge.className = 'mt-md inline-flex items-center px-3 py-1 rounded-full bg-error-container text-on-error-container font-label-sm font-bold animate-pulse';
+                            simResultBox.classList.add('bg-error-container/20', 'border-error/50');
+                            simMwResult.classList.add('text-error');
+                        } else {
+                            simStatusBadge.innerText = 'Stable';
+                            simStatusBadge.className = 'mt-md inline-flex items-center px-3 py-1 rounded-full bg-secondary-container/20 text-on-secondary-container font-label-sm transition-colors';
+                            simResultBox.classList.remove('bg-error-container/20', 'border-error/50');
+                            simMwResult.classList.remove('text-error');
+                        }
+                    }
+                })
+                .catch(err => console.error("Simulation error:", err));
+            }, 50); // Small debounce for smooth slider feel
+        }
+        
+        if(simTemp && simHum && simWind) {
+            simTemp.addEventListener('input', runSimulation);
+            simHum.addEventListener('input', runSimulation);
+            simWind.addEventListener('input', runSimulation);
+            // Run initial prediction
+            runSimulation();
+        }
+        
+    });
+</script>
+{% endblock %}

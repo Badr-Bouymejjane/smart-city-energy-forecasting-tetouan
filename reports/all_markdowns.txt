@@ -1,0 +1,1029 @@
+
+
+# c:/Users/jarro/OneDrive/Desktop/smart-city-energy-forecasting-tetouan/notebooks\01_data_audit.ipynb
+
+# 01 — Data Audit du dataset Tetouan
+
+## Projet : Smart City Energy Forecasting — Tetouan
+
+**Objectif :** Charger le dataset brut *Power Consumption of Tetouan City*, vérifier sa structure, contrôler la qualité des données, produire un premier aperçu visuel et préparer les variables cibles.
+
+**Correspondance méthodologique :** Ce notebook couvre les étapes **7 (Présentation du dataset)** et **8.1–8.2 (Sélection et Exploration initiale des données)** de la méthodologie KDD.
+
+---
+
+### Étapes de ce notebook
+
+1. Chargement et préparation initiale via `src.data_loader`
+2. Audit global : dimensions, période, fréquence, valeurs manquantes, doublons
+3. Audit par colonne : types, statistiques descriptives
+4. Vérification de la régularité temporelle
+5. Visualisations d'audit : séries temporelles, distributions, boxplots
+6. Sauvegarde du dataset audité
+
+## 1. Importation des bibliothèques
+
+## 2. Chargement et préparation du dataset
+
+Le chargement est entièrement géré par `src.data_loader.load_tetouan_data()` qui réalise :
+
+1. Lecture du CSV brut
+2. Normalisation des espaces multiples dans les noms de colonnes (ex : `Zone 2  Power Consumption` → `Zone 2 Power Consumption`)
+3. Vérification des colonnes attendues
+4. Renommage technique (cf. tableau ci-dessous)
+5. Conversion de la date au format `datetime`
+6. Conversion numérique avec détection d'erreurs
+7. Tri chronologique
+8. Suppression des doublons temporels
+9. Création de `target = zone1_power` et `total_load = zone1_power + zone2_power + zone3_power`
+10. Indexation temporelle
+
+### Renommage des colonnes
+
+| Colonne originale | Nom technique |
+|---|---|
+| `DateTime` | `datetime` |
+| `Temperature` | `temperature` |
+| `Humidity` | `humidity` |
+| `Wind Speed` | `wind_speed` |
+| `general diffuse flows` | `general_diffuse_flows` |
+| `diffuse flows` | `diffuse_flows` |
+| `Zone 1 Power Consumption` | `zone1_power` |
+| `Zone 2 Power Consumption` | `zone2_power` |
+| `Zone 3 Power Consumption` | `zone3_power` |
+
+### Aperçu des premières et dernières lignes
+
+## 3. Audit global du dataset
+
+Le résumé global vérifie les indicateurs principaux de qualité : dimensions, période couverte, fréquence temporelle, valeurs manquantes et doublons.
+
+## 4. Audit par colonne — Types, valeurs manquantes et statistiques
+
+Le tableau ci-dessous détaille, pour chaque colonne :
+- le type de données
+- le nombre et taux de valeurs manquantes
+- les statistiques descriptives (min, moyenne, médiane, max, écart-type)
+
+### Interprétation
+
+- **Zéro valeur manquante** sur les 52 416 observations : le dataset est complet.
+- **Zéro doublon temporel** : chaque instant est unique.
+- Toutes les colonnes numériques sont de type `float64`, ce qui est correct.
+- `target` est identique à `zone1_power` (copie de la cible principale).
+- `total_load` est la somme des trois zones.
+
+## 5. Statistiques descriptives détaillées
+
+### Interprétation des statistiques
+
+- **Temperature** : varie de 3.2°C à 40.0°C → climat méditerranéen typique de Tétouan.
+- **Humidity** : varie de 11.3% à 94.8%, médiane ~70% → humidité élevée en général.
+- **Wind Speed** : médiane très basse (0.09 m/s) mais max à 6.5 → distribution très asymétrique.
+- **Flux diffus** (general & diffuse) : médianes proches de zéro → valeurs nocturnes à 0, forts pics diurnes.
+- **Zone 1** : consommation moyenne ~32 345 kW, la plus élevée des trois zones.
+- **Zone 2** : consommation moyenne ~21 043 kW.
+- **Zone 3** : consommation moyenne ~17 835 kW, mais le max (~47 598) est très élevé → forte volatilité.
+- Le **CV% (coefficient de variation)** de `zone3_power` est le plus élevé, indiquant la zone la plus volatile.
+
+## 6. Vérification de la régularité temporelle
+
+Un pas régulier de 10 minutes est attendu. Toute discontinuité (gap) pourrait poser problème pour le resampling et les modèles temporels.
+
+## 7. Aperçu visuel des séries temporelles
+
+Visualisation de l'évolution temporelle des trois zones de consommation sur toute l'année 2017. Cet aperçu permet de :
+- détecter visuellement les tendances et saisonnalités ;
+- repérer d'éventuelles anomalies grossières ;
+- comparer les niveaux de consommation entre zones.
+
+## 8. Distribution des variables
+
+Les histogrammes et courbes de densité permettent de comprendre la forme de chaque distribution (symétrie, asymétrie, pics).
+
+## 9. Boxplots — Détection visuelle des valeurs extrêmes
+
+Les boxplots permettent de repérer les outliers potentiels dans chaque variable. Les points au-delà des moustaches (1.5 × IQR) sont des candidats à l'analyse.
+
+## 10. Matrice de corrélation initiale
+
+Un premier aperçu des corrélations linéaires entre les variables du dataset.
+
+## 11. Comptage des outliers par méthode IQR
+
+Comptage des valeurs au-delà de 1.5 × IQR pour chaque variable. Cela permet de quantifier ce que les boxplots montrent visuellement.
+
+### Interprétation
+
+- Les variables de **flux diffus** présentent de nombreux « outliers » selon l'IQR car leur distribution est très asymétrique (valeurs nocturnes = 0, pics diurnes élevés). Ce ne sont **pas** des anomalies mais des valeurs normales de rayonnement solaire.
+- Les **zones de consommation** peuvent avoir des pics liés à des événements réels (canicule, jours fériés). Ces pics doivent être **conservés** pour la modélisation.
+- Le traitement des outliers sera approfondi dans le notebook **03 — Prétraitement**.
+
+## 12. Résumé et conclusions de l'audit
+
+### ✅ Points positifs
+
+| Critère | Résultat |
+|---|---|
+| Valeurs manquantes | **0** — dataset complet |
+| Doublons temporels | **0** — index unique |
+| Fréquence temporelle | **10 min** — régulière, aucun gap |
+| Types de données | Tous `float64` (numériques) |
+| Couverture temporelle | 1 an complet (2017-01-01 → 2017-12-30) |
+| Volume | 52 416 observations — suffisant pour ML/DL |
+
+### 📝 Points d'attention pour la suite
+
+- **Wind speed et flux diffus** : distributions très asymétriques → pas de normalité.
+- **Zone 3** : variance plus élevée que les zones 1 et 2.
+- Les outliers identifiés par IQR ne sont **pas** des erreurs mais des phénomènes physiques (rayonnement, pics de consommation).
+- Le rééchantillonnage horaire sera nécessaire pour SARIMA et Prophet.
+
+### 🔜 Prochaine étape
+
+Le notebook **02 — EDA** approfondira l'analyse avec des visualisations détaillées : heatmaps heure×jour, décomposition STL, ACF/PACF, relations météo-consommation.
+
+## 13. Sauvegarde du dataset audité
+
+
+
+# c:/Users/jarro/OneDrive/Desktop/smart-city-energy-forecasting-tetouan/notebooks\02_eda.ipynb
+
+# 02 — Analyse exploratoire des données — EDA
+
+## Projet : Smart City Energy Forecasting — Tetouan
+
+**Correspondance méthodologique :** Ce notebook couvre l'étape **9 (Analyse exploratoire des données)** de la méthodologie KDD.
+
+
+## Importation des bibliothèques et configuration visuelle
+
+## Chargement des données auditées
+
+Nous chargeons les données brutes via `src.data_loader` qui s'assure du renommage des colonnes et du parsing des dates, ou bien directement le fichier audité généré à l'étape précédente. Ici nous chargeons le fichier audité.
+
+## 9.1 Dimensions du dataset
+
+**Pourquoi :** vérifier le volume de données et la faisabilité des modèles.
+
+**Interprétation :** le fichier contient 52,416 observations, ce qui est suffisant pour des modèles temporels et ML.
+
+**Impact :** les modèles peuvent être entraînés sur un historique significatif ; le GRU est possible après resampling ou optimisation.
+
+## 9.2 Types des variables
+
+**Pourquoi :** détecter les colonnes mal typées.
+
+**Interprétation :** `DateTime` doit être convertie en datetime ; les autres colonnes sont numériques.
+
+**Impact :** sans conversion correcte, le resampling, les lags et les features calendaires ne fonctionneront pas.
+
+## 9.3 Valeurs manquantes
+
+**Pourquoi :** identifier les trous dans les mesures.
+
+**Interprétation :** dans le fichier fourni, aucune valeur manquante n'a été détectée.
+
+**Impact :** le pipeline doit quand même contenir une fonction d'imputation pour être robuste.
+
+## 9.4 Doublons temporels
+
+**Pourquoi :** une même date ne doit pas apparaître plusieurs fois pour la même série.
+
+**Interprétation :** aucun doublon temporel n'a été détecté.
+
+**Impact :** l'index temporel peut être construit directement.
+
+## 9.5 Régularité de `DateTime`
+
+**Pourquoi :** les modèles de séries temporelles supposent souvent un pas régulier.
+
+**Interprétation :** la fréquence inférée est de 10 minutes.
+
+**Impact :** le dataset est compatible avec SARIMA, Prophet, XGBoost, Random Forest et GRU.
+
+## 9.6 Statistiques descriptives
+
+**Pourquoi :** comprendre les ordres de grandeur, la dispersion et les valeurs extrêmes.
+
+**Interprétation :** comparer moyenne, médiane, min, max, écart-type et percentiles des trois zones.
+
+**Impact :** les fortes dispersions ou valeurs extrêmes influenceront RMSE et robustesse.
+
+## 9.7 Évolution temporelle de Zone 1, Zone 2 et Zone 3
+
+**Pourquoi :** visualiser les cycles, tendances et pics.
+
+**Interprétation :** les trois zones peuvent présenter des niveaux et saisonnalités différents.
+
+**Impact :** si les zones ont des dynamiques différentes, il vaut mieux garder `zone1_power` comme cible principale et utiliser les autres en robustesse.
+
+## 9.8 Comparaison entre les zones
+
+**Pourquoi :** identifier si une zone est plus volatile ou plus consommante.
+
+**Interprétation :** un plot des trois zones montre les similarités et divergences.
+
+**Impact :** les zones 2 et 3 peuvent servir à valider la transférabilité des features.
+
+## 9.9 Distribution de la consommation
+
+**Pourquoi :** connaître la forme de la cible.
+
+**Interprétation :** une distribution asymétrique indique des pics rares.
+
+**Impact :** RMSE sera sensible aux pics ; MAPE donnera une lecture relative.
+
+## Rééchantillonnage horaire pour les analyses calendaires et séries temporelles
+
+Afin de mieux visualiser les cycles journaliers et pour la modélisation (SARIMA, etc.), nous allons rééchantillonner les données à une fréquence horaire en utilisant la fonction `resample_hourly` du module `src.preprocessing`.
+
+## 9.10 Heatmap heure × jour
+
+**Pourquoi :** visualiser les cycles d'activité humaine.
+
+**Interprétation :** les couleurs fortes indiquent les périodes de pointe.
+
+**Impact :** justifie les features `hour`, `dayofweek`, `is_weekend`, `is_peak_hour`.
+
+## 9.11 Consommation moyenne par heure
+
+**Pourquoi :** identifier les heures de pointe journalières.
+
+**Interprétation :** un pic du soir peut refléter l'activité résidentielle ou commerciale.
+
+**Impact :** création des variables heures de pointe et heures creuses.
+
+## 9.12 Consommation moyenne par jour de semaine
+
+**Pourquoi :** comparer semaine et week-end.
+
+**Interprétation :** les jours ouvrés peuvent avoir une dynamique différente.
+
+**Impact :** création de `is_weekend` et encodage cyclique du jour.
+
+## 9.13 Consommation moyenne par mois
+
+**Pourquoi :** analyser la saisonnalité annuelle.
+
+**Interprétation :** certains mois peuvent correspondre à une demande plus élevée.
+
+**Impact :** création de `month`, `season`, `HDD`, `CDD`.
+
+## 9.14 Relation température-consommation
+
+**Pourquoi :** tester l'impact météo.
+
+**Interprétation :** une relation non linéaire peut apparaître selon les besoins de chauffage ou climatisation.
+
+**Impact :** justifie HDD, CDD et interactions météo.
+
+## 9.15 Corrélations météo-consommation
+
+**Pourquoi :** mesurer l'association entre météo et charge.
+
+**Interprétation :** température, humidité et flux diffus peuvent influencer la consommation.
+
+**Impact :** les variables météo seront utilisées dans SARIMAX, Prophet et ML.
+
+## 9.16 Décomposition STL
+
+**Pourquoi :** séparer tendance, saisonnalité et résidu.
+
+**Interprétation :** une forte saisonnalité montre que la charge suit des cycles.
+
+**Impact :** guide SARIMA/SARIMAX et choix des lags.
+
+## 9.17 ACF / PACF
+
+**Pourquoi :** analyser la mémoire de la série.
+
+**Interprétation :** des pics aux lags 24h ou 168h confirment les cycles journaliers ou hebdomadaires après resampling horaire.
+
+**Impact :** guide la création des lags et les paramètres SARIMA.
+
+## 9.18 Détection des anomalies
+
+**Pourquoi :** repérer les points extrêmes.
+
+**Interprétation :** les anomalies peuvent être techniques ou métier.
+
+**Impact :** les anomalies techniques peuvent être corrigées ; les pics réels doivent être conservés.
+
+
+
+# c:/Users/jarro/OneDrive/Desktop/smart-city-energy-forecasting-tetouan/notebooks\03_preprocessing.ipynb
+
+# 03 — Prétraitement des données
+
+## Projet : Smart City Energy Forecasting — Tetouan
+
+**Correspondance méthodologique :** Ce notebook couvre l'étape **10 (Prétraitement des données)** de la méthodologie KDD.
+
+
+## Importation des bibliothèques et configuration
+
+## 10.1 Chargement CSV
+
+**Pourquoi :** Charger les données brutes.
+**Interprétation :** Le fichier est chargé avec `pandas.read_csv`. Les noms de colonnes sont ensuite standardisés pour éviter les erreurs dues aux espaces.
+
+
+## 10.2 Conversion `DateTime`
+
+**Pourquoi :** Permettre les opérations temporelles.
+**Interprétation :** La colonne `datetime` est convertie au format `datetime64`. Toute valeur non convertible est identifiée.
+
+## 10.3 Tri chronologique
+
+**Pourquoi :** Le tri garantit que les lags et splits temporels sont corrects.
+
+## 10.4 Indexation temporelle
+
+**Pourquoi :** Permet d'utiliser `resample`, `rolling`, `shift` et les features calendaires.
+
+## 10.5 Vérification de la fréquence 10 minutes
+
+**Pourquoi :** Garantir que les mesures sont régulières.
+**Interprétation :** La fréquence doit être inférée ou reconstruite. Dans le fichier fourni, elle est régulière à 10 minutes.
+
+## 10.6 Vérification des valeurs manquantes
+
+**Pourquoi :** Identifier les trous dans les mesures.
+**Interprétation :** Même si aucune valeur n'est détectée dans le fichier fourni, le code doit pouvoir gérer des valeurs absentes.
+
+## 10.7 Traitement des doublons
+
+**Pourquoi :** Assurer l'unicité de chaque timestamp.
+**Interprétation :** Les doublons temporels sont supprimés en conservant la première occurrence.
+
+## 10.10 Création de `target` et `total_load`
+
+**Pourquoi :** Faciliter l'accès aux cibles métier.
+**Remarque :** Ces variables sont calculées avant le resampling.
+
+## 10.8 Traitement des outliers
+
+**Pourquoi :** Détecter et gérer les points extrêmes.
+**Interprétation :** Les outliers sont détectés par Z-score glissant. Les pics réels (métier) sont conservés et annotés pour les modèles de robustesse.
+
+## 10.9 Resampling horaire
+
+**Pourquoi :** Réduit le bruit et rend les modèles plus rapides.
+**Interprétation :** Agrégation par moyenne sur une fréquence de 1 heure.
+
+## 10.11 Split train / validation / test chronologique
+
+**Pourquoi :** Préparer l'évaluation des modèles sans triche.
+**Interprétation :** Le split respecte l'ordre temporel (70% train, 15% validation, 15% test). Aucun shuffle n'est utilisé.
+
+## 10.12 Normalisation sans data leakage
+
+**Pourquoi :** Mettre les variables à la même échelle pour le ML.
+**Interprétation :** Les scalers sont ajustés **uniquement sur le train**, puis appliqués à validation et test. Cette règle est essentielle pour éviter la fuite d'information du futur.
+
+## Sauvegarde des datasets préparés et des scalers
+
+Sauvegarde des résultats pour l'étape suivante de modélisation (Feature Engineering et ML).
+
+
+
+# c:/Users/jarro/OneDrive/Desktop/smart-city-energy-forecasting-tetouan/notebooks\04_feature_engineering.ipynb
+
+# 04 — Feature Engineering
+
+## Projet : Smart City Energy Forecasting — Tetouan
+
+**Correspondance méthodologique :** Ce notebook couvre l'étape **11 (Feature Engineering / Transformation)** de la méthodologie KDD.
+
+### Objectifs
+
+- Charger le dataset horaire propre issu du notebook `03_preprocessing.ipynb` ;
+- Créer les features temporelles, cycliques, calendaires, météo, lags et rolling ;
+- Vérifier la cohérence des features et l'absence de fuite de données ;
+- Sauvegarder `data/processed/tetouan_features.csv` ;
+- Calculer les baselines naïves : heure précédente, jour précédent, semaine précédente.
+
+### Pipeline de features
+
+| Étape | Section | Description |
+|-------|---------|-------------|
+| 11.1 | Features temporelles | heure, jour de semaine, mois, trimestre, jour de l'année |
+| 11.2 | Encodage cyclique sin/cos | Proximité entre 23h et 0h |
+| 11.3 | Week-end | Changement d'activité humaine |
+| 11.4 | Heures de pointe | Matin 07h–09h, soir 18h–21h |
+| 11.5 | Heures creuses | 00h–05h |
+| 11.6 | Saison | Effets climatiques saisonniers |
+| 11.7 | Jours fériés marocains | Fichier externe ou liste indicative |
+| 11.8 | Lag features | 1h → 168h |
+| 11.9 | Rolling features | Moyenne, écart-type, min, max sur 3h → 168h |
+| 11.10 | HDD / CDD | Besoins de chauffage / climatisation |
+| 11.11 | Interactions météo | Température × humidité, CDD × peak, etc. |
+| 11.12 | Variables de robustesse | is_high_temperature, is_high_load, etc. |
+| 11.13 | Point méthodologique | Proxys temporels pour l'activité humaine |
+
+
+## 1. Imports et configuration
+
+Le notebook utilise les fonctions modulaires définies dans :
+
+- `src/features.py` ;
+- `src/models_baseline.py`.
+
+Le code est conçu pour être exécuté depuis le dossier `notebooks/` ou depuis la racine du projet.
+
+## 2. Chargement du dataset horaire propre
+
+La source recommandée est le fichier horaire propre produit par le prétraitement.
+
+Le notebook cherche dans cet ordre :
+
+1. `data/processed/tetouan_hourly_clean.csv`
+2. `data/processed/tetouan_hourly.csv`
+
+Si aucun de ces fichiers n'existe, le notebook reconstruit une version horaire depuis le CSV brut `data/raw/Tetuan City power consumption.csv`.
+
+Cette reconstruction de secours permet d'exécuter le notebook même si le fichier horaire n'a pas encore été sauvegardé par le notebook 03.
+
+## 3. Configuration du Feature Engineering
+
+Les paramètres du pipeline sont centralisés dans `FeatureConfig`.
+
+### Lags retenus
+
+| Lag | Rôle |
+|-----|------|
+| 1h, 2h, 3h | Inertie immédiate |
+| 6h, 12h | Dynamique intra-journalière |
+| 24h, 48h, 72h | Même heure les jours précédents |
+| 168h | Même heure la semaine précédente |
+
+### Rolling features
+
+Les rolling features sont calculées à partir de la cible décalée avec `shift(1)`, donc elles n'utilisent **jamais** la valeur actuelle à prédire.
+
+Le seuil de forte charge est calculé **uniquement sur la partie train** afin d'éviter toute fuite d'information depuis le futur.
+
+---
+## 11.1 Features temporelles
+
+**Pourquoi :** Les cycles d'activité humaine suivent des patterns temporels réguliers : heures de travail, jours ouvrables, saisons.
+
+**Variables créées :**
+
+- `hour` : heure (0–23)
+- `dayofweek` : jour de semaine (0=lundi, 6=dimanche)
+- `dayofmonth` : jour du mois
+- `dayofyear` : jour de l'année (1–365)
+- `weekofyear` : semaine ISO
+- `month` : mois (1–12)
+- `quarter` : trimestre (1–4)
+
+**Interprétation :** Ces variables sont des proxys pour l'activité humaine, car le dataset Tetouan ne contient pas d'observations directes de l'activité urbaine.
+
+## 11.2 Encodage cyclique sin/cos
+
+**Pourquoi :** L'heure 23 et l'heure 0 sont proches dans le cycle journalier. Un encodage numérique simple ne capture pas cette proximité.
+
+**Formule :**
+
+```python
+hour_sin = sin(2 * pi * hour / 24)
+hour_cos = cos(2 * pi * hour / 24)
+```
+
+Même logique pour le jour de semaine, le mois et le jour de l'année.
+
+**Interprétation :** Sur le cercle unitaire, les heures 23 et 0 sont voisines, ce qui est mathématiquement correct pour un modèle de régression.
+
+## 11.3 Week-end
+
+**Formule :**
+
+```python
+is_weekend = 1 si samedi ou dimanche, sinon 0
+```
+
+**Pourquoi :** Cette variable représente un changement d'activité humaine. Les week-ends présentent typiquement des profils de consommation différents (moins d'activité industrielle et commerciale).
+
+**Interprétation :** On s'attend à une consommation plus faible le week-end, particulièrement en heures ouvrables.
+
+## 11.4 Heures de pointe
+
+Les heures de pointe sont définies par hypothèse métier :
+
+- **Matin :** 07h–09h (`is_morning_peak`)
+- **Soir :** 18h–21h (`is_evening_peak`)
+- **Combiné :** `is_peak_hour` = matin OU soir
+
+**Pourquoi :** Les pics de consommation correspondent aux heures de démarrage de l'activité (matin) et de retour au domicile (soir). Ces bornes pourront être ajustées après l'EDA.
+
+**Variable supplémentaire :** `is_business_hour` = 08h–18h en semaine.
+
+## 11.5 Heures creuses
+
+Les heures creuses sont définies entre **00h et 05h** (`is_off_peak`).
+
+**Pourquoi :** Cette variable est utile pour comparer l'erreur de prédiction en période basse et en période haute.
+
+**Variable supplémentaire :** `is_night` = 23h à 05h (inclut la transition fin/début de journée).
+
+## 11.6 Saison
+
+La saison permet de représenter les effets climatiques :
+
+| Mois | Saison |
+|------|--------|
+| Déc, Jan, Fév | Hiver |
+| Mar, Avr, Mai | Printemps |
+| Jun, Jul, Aoû | Été |
+| Sep, Oct, Nov | Automne |
+
+**Variables créées :**
+
+- `season` (catégorielle)
+- `season_code` (numérique : 0–3)
+- `season_winter`, `season_spring`, `season_summer`, `season_autumn` (one-hot)
+
+**Interprétation :** L'été à Tétouan implique une forte demande de climatisation (CDD), tandis que l'hiver implique un besoin de chauffage (HDD).
+
+## 11.7 Jours fériés marocains
+
+Les jours fériés peuvent être ajoutés sous forme de fichier externe `data/external/holidays_morocco.csv`.
+
+Si le fichier n'est pas disponible, une **liste indicative pour 2017** est utilisée, intégrée dans `src/features.py`.
+
+**Variables créées :**
+
+- `is_holiday` : 1 si jour férié, 0 sinon
+- `is_day_before_holiday` : veille de jour férié
+- `is_day_after_holiday` : lendemain de jour férié
+- `days_to_nearest_holiday` : distance au jour férié le plus proche (max 7)
+
+**⚠️ Point méthodologique :** Les dates des fêtes religieuses musulmanes dépendent de l'observation lunaire. Cette approximation doit être mentionnée dans le rapport final.
+
+## 11.8 Lag features
+
+Les lags recommandés après resampling horaire :
+
+| Lag | Rôle |
+|-----|------|
+| 1h, 2h, 3h | Inertie immédiate |
+| 6h | Demi-journée |
+| 12h | Cycle AM/PM |
+| 24h | Même heure hier |
+| 48h | Même heure avant-hier |
+| 72h | Même heure il y a 3 jours |
+| 168h | Même heure la semaine précédente |
+
+**Pourquoi :** Ces lags capturent l'inertie immédiate, le cycle journalier et le cycle hebdomadaire de la consommation.
+
+**Remarque :** Le lag 168h (1 semaine) est le plus long. Il introduira des NaN en début de série, qui seront supprimés lors du dropna final.
+
+## 11.9 Rolling features
+
+Pour chaque fenêtre, on crée :
+
+- **Moyenne glissante** (`_mean`)
+- **Écart-type glissant** (`_std`)
+- **Minimum glissant** (`_min`)
+- **Maximum glissant** (`_max`)
+
+**Fenêtres recommandées :** 3h, 6h, 12h, 24h, 48h, 168h
+
+### Anti-data leakage
+
+Les rolling features sont calculées sur `target.shift(1)`, ce qui signifie que la valeur cible à l'instant `t` n'entre **jamais** dans ses propres variables explicatives.
+
+```python
+shifted_target = target.shift(1)
+rolling_mean_24h = shifted_target.rolling(24).mean()
+```
+
+Cette règle est vérifiée formellement dans la section de contrôle.
+
+## 11.10 HDD et CDD
+
+Les variables **HDD** (Heating Degree Days) et **CDD** (Cooling Degree Days) modélisent les besoins de chauffage et de climatisation autour d'une température de base, par exemple **18°C** :
+
+```python
+HDD = max(18 - temperature, 0)
+CDD = max(temperature - 18, 0)
+```
+
+**Interprétation :**
+
+- **HDD > 0** : il fait plus froid que 18°C → besoin de chauffage → consommation accrue.
+- **CDD > 0** : il fait plus chaud que 18°C → besoin de climatisation → consommation accrue.
+
+Le seuil de 18°C est une convention classique en génie climatique.
+
+## 11.11 Interactions météo
+
+Les interactions météo capturent des effets combinés :
+
+| Variable | Formule | Rôle |
+|----------|---------|------|
+| `temperature_humidity_interaction` | température × humidité | Inconfort thermique ressenti |
+| `temperature_peak_interaction` | température × heure de pointe | Effet amplifié en pointe |
+| `CDD_peak_interaction` | CDD × heure de pointe | Climatisation en pointe |
+| `HDD_peak_interaction` | HDD × heure de pointe | Chauffage en pointe |
+| `general_diffuse_month_interaction` | flux diffus × mois | Saisonnalité solaire |
+| `diffuse_month_interaction` | flux diffus × mois | Saisonnalité solaire |
+
+**Lags météo :** L'effet thermique peut être retardé. Des lags de 1h, 2h, 3h, 6h et 12h sont ajoutés pour la température, l'humidité, HDD et CDD.
+
+**Interprétation :** Ces variables permettent au modèle de capturer des effets non-linéaires entre la météo et l'heure de la journée.
+
+## 11.12 Variables de robustesse
+
+Variables utiles pour les tests de robustesse :
+
+| Variable | Description |
+|----------|-------------|
+| `is_high_temperature` | 1 si température ≥ 30°C |
+| `eval_is_high_load` | 1 si charge ≥ quantile 95% (train) |
+| `is_heatwave_simulated` | Indicateur de vague de chaleur simulée (réservé) |
+
+**⚠️ Attention :** `eval_is_high_load` est dérivée de la cible. Elle sert **uniquement** à découper l'évaluation et **ne doit pas** être utilisée comme feature modèle.
+
+## 11.13 Point méthodologique important
+
+> **Les variables d'activité humaine ne sont pas des observations directes dans le dataset Tetouan.**
+>
+> Elles sont représentées par des **proxys temporels et calendaires** :
+>
+> - heure, jour de semaine, week-end
+> - saison, mois, trimestre
+> - jours fériés marocains
+> - heures de pointe et heures creuses
+> - lags journaliers et hebdomadaires
+>
+> Cette décision doit être **explicitement mentionnée** dans le rapport final et la soutenance.
+
+Les cycles d'activité humaine (heures de travail, heures de repos, habitudes de consommation) ne sont pas mesurés directement par les capteurs. Le Feature Engineering crée des approximations raisonnables à partir de l'horodatage.
+
+---
+## 12. Construction du dataset final via le pipeline complet
+
+Le pipeline `build_feature_dataset` de `src/features.py` exécute toutes les étapes ci-dessus en une seule fonction.
+
+Le résultat est un dataset supervisé prêt pour la modélisation, avec suppression automatique des lignes NaN introduites par les lags et rolling features.
+
+**Colonnes exclues des features modèle :**
+
+- `zone1_power`, `zone2_power`, `zone3_power`, `total_load` (fuite de cible)
+- `target` (variable à prédire)
+- `eval_is_high_load`, `is_heatwave_simulated` (réservées à l'évaluation)
+- `season` (catégorielle, remplacée par les dummies)
+- Colonnes de diagnostic issues du prétraitement
+
+## 13. Contrôles de cohérence
+
+### 13.1 Validation générale
+
+Le module `validate_feature_dataset` vérifie :
+
+- DatetimeIndex ;
+- Ordre chronologique ;
+- Absence de doublons ;
+- Présence de la cible ;
+- Absence de NaN ;
+- Absence de valeurs infinies.
+
+### 13.2 Vérification anti-data leakage
+
+On vérifie formellement que les rolling means sont calculées avec `target.shift(1)` :
+
+```python
+expected = target.shift(1).rolling(window).mean()
+actual = target_rolling_{window}h_mean
+assert allclose(expected, actual)
+```
+
+## 14. Aperçu des features créées
+
+Résumé complet des features disponibles pour la modélisation.
+
+## 15. Sauvegarde du dataset features
+
+Le fichier sauvegardé sera utilisé par les notebooks suivants :
+
+- `05_modeling_sarima_prophet.ipynb`
+- `06_modeling_ml_xgboost.ipynb`
+- `07_modeling_gru.ipynb`
+
+La liste des features modèles est sauvegardée dans `data/processed/feature_columns.txt`.
+
+---
+## 16. Baselines naïves
+
+Les baselines naïves servent de **minimum de performance**.
+
+| Baseline | Lag | Description |
+|----------|-----|-------------|
+| `naive_previous_hour` | 1h | Prédit target(t-1) |
+| `naive_previous_day` | 24h | Prédit target(t-24) |
+| `naive_previous_week` | 168h | Prédit target(t-168) |
+
+**Règle :** Un modèle avancé qui ne dépasse pas ces baselines n'apporte pas de valeur métier suffisante.
+
+## 17. Visualisation : première semaine de test
+
+Cette figure permet de vérifier visuellement si les baselines suivent correctement la saisonnalité de la cible.
+
+On affiche la première semaine du test set.
+
+## 18. Analyse des résultats baseline
+
+---
+## 19. Synthèse pour le rapport final
+
+### Résumé du Feature Engineering
+
+Le feature engineering transforme la série horaire propre en dataset supervisé. Les variables calendaires et cycliques représentent les cycles d'activité humaine absents du dataset brut. Les lags et rolling features capturent la mémoire de la consommation, tandis que HDD/CDD modélisent la sensibilité thermique autour d'une température de confort de 18°C.
+
+### Anti-data leakage
+
+Les rolling statistics sont calculées avec `shift(1)`, ce qui empêche la valeur cible actuelle d'entrer dans ses propres variables explicatives.
+
+### Baselines
+
+Les baselines naïves fournissent un seuil minimal de performance que les modèles SARIMAX, Prophet, Random Forest/XGBoost et GRU devront dépasser.
+
+### Point méthodologique
+
+Les variables d'activité humaine ne sont pas directement observées dans le dataset Tetouan. Elles sont approximées par des proxys temporels et calendaires : heure, jour de semaine, week-end, saison, jours fériés, heures de pointe, heures creuses, lags journaliers et hebdomadaires.
+
+### Prochaines étapes
+
+- `05_modeling_sarima_prophet.ipynb` : Modèles statistiques
+- `06_modeling_ml_xgboost.ipynb` : Machine Learning tabulaire
+- `07_modeling_gru.ipynb` : Deep Learning (GRU)
+
+
+
+# c:/Users/jarro/OneDrive/Desktop/smart-city-energy-forecasting-tetouan/notebooks\05_modeling_sarima_prophet.ipynb
+
+# 05 — Modélisation : Statistiques et Prophet
+
+## Projet : Smart City Energy Forecasting — Tetouan
+
+**Correspondance méthodologique :** Ce notebook couvre l'étape **12.1 à 12.3** de la méthodologie KDD (Data Mining / Modeling).
+
+### Objectifs
+
+- Évaluer une Baseline Naïve (Modèle 0).
+- Entraîner et évaluer un modèle SARIMA univarié et un modèle SARIMAX multivarié (Modèle 1).
+- Entraîner et évaluer un modèle Prophet (Modèle 2).
+- Comparer les performances de ces modèles classiques pour établir une base solide avant le Machine Learning.
+
+## 1. Imports et configuration
+
+Nous utilisons les modules de notre architecture logicielle dans `src/`.
+
+## 2. Chargement des données
+
+Nous chargeons les features générées à l'étape précédente.
+
+## 12.1 Modèle 0 — Naive Forecast
+
+La baseline naïve sert de **minimum de performance**. Un modèle complexe qui ne dépasse pas cette baseline n'a pas d'intérêt métier.
+
+## 12.2 Modèle 1 — SARIMA et SARIMAX
+
+SARIMA modélise la série temporelle par autocorrélation, différenciation et moyenne mobile, avec une composante saisonnière.
+SARIMAX ajoute des variables exogènes météo ou calendaires.
+
+**Attention :** SARIMAX est coûteux en temps de calcul sur de longues séries. Nous utiliserons le paramètre `max_train_size` (ex: 2000 points, env. 3 mois) pour l'entraînement.
+
+## 12.3 Modèle 2 — Prophet
+
+Prophet modélise une série comme la somme d'une tendance, de saisonnalités et d'effets événementiels.
+Il gère très bien les jours spéciaux (jours fériés).
+
+## 12.4 Comparaison des performances
+
+Regroupons les résultats de la Baseline, SARIMA(X) et Prophet pour évaluer quelle approche fournit la meilleure précision.
+
+## Conclusion de la modélisation statistique
+
+- **Baseline hebdomadaire** : Souvent extrêmement robuste sur des séries saisonnières fortement répétitives.
+- **SARIMAX / Prophet** : Si le MAPE n'est pas significativement meilleur (ou est même moins bon) que la baseline, cela indique que la complexité des modèles n'est pas compensée par les features linéaires et les saisonnalités. 
+- L'étape suivante consistera à exploiter toute la puissance du **Feature Engineering non-linéaire** via des modèles de Machine Learning (XGBoost) et Deep Learning (GRU) pour tenter d'écraser la baseline.
+
+
+
+# c:/Users/jarro/OneDrive/Desktop/smart-city-energy-forecasting-tetouan/notebooks\06_modeling_ml_xgboost.ipynb
+
+# 06 — Modélisation : Machine Learning (Random Forest & XGBoost)
+
+## Projet : Smart City Energy Forecasting — Tetouan
+
+**Correspondance méthodologique :** Ce notebook couvre l'étape **12.4** de la méthodologie KDD (Data Mining / Modeling).
+
+### Objectifs
+
+- Reformuler le problème de séries temporelles en problème supervisé tabulaire grâce aux features (lags, rolling, météo).
+- Entraîner et évaluer un modèle Random Forest (Modèle 3a).
+- Entraîner et évaluer un modèle XGBoost (Modèle 3b), avec Early Stopping.
+- Analyser les performances globales, par heure et par jour.
+- Utiliser l'Explainable AI (SHAP) pour comprendre les décisions de XGBoost.
+
+## 1. Imports et configuration
+
+Nous utilisons les modules de notre architecture logicielle dans `src/`.
+
+## 2. Préparation des données supervisées
+
+Contrairement à SARIMA, XGBoost n'a pas la notion temporelle intégrée de base, mais il exploitera massivement les 98 colonnes générées au feature engineering (lags, rolling, encodage cyclique).
+
+## 3. Modèle 3a — Random Forest
+
+Random Forest sert de baseline Machine Learning très robuste qui nécessite peu de paramétrage (contrairement à XGBoost) et qui ne surapprend presque jamais si le nombre d'arbres est suffisant.
+
+## 4. Modèle 3b — XGBoost
+
+XGBoost est le modèle star pour les séries temporelles tabulaires riches en features. Il utilise la régularisation L1/L2 et l'early stopping sur le set de validation pour éviter le surapprentissage.
+
+## 5. Analyse des Performances XGBoost
+
+Comparons les performances globales de l'étape statistique avec le Machine Learning, et faisons un zoom sur les heures de pointe.
+
+## 6. Explicabilité (SHAP)
+
+Le Machine Learning est souvent perçu comme une 'boîte noire'. Nous utilisons la librairie SHAP (SHapley Additive exPlanations), issue de la théorie des jeux, pour calculer l'impact marginal exact de chaque variable sur les prédictions du modèle XGBoost.
+
+
+
+# c:/Users/jarro/OneDrive/Desktop/smart-city-energy-forecasting-tetouan/notebooks\07_modeling_gru.ipynb
+
+# 07 — Modélisation : Deep Learning (GRU)
+
+## Projet : Smart City Energy Forecasting — Tetouan
+
+**Correspondance méthodologique :** Ce notebook couvre l'étape **12.5** de la méthodologie KDD (Data Mining / Modeling).
+
+### Objectifs
+
+- Évaluer si une approche de réseau de neurones récurrents (GRU), spécialisée dans le traitement des séquences, peut surpasser l'approche tabulaire (XGBoost).
+- Mettre à l'échelle les données (MinMaxScaler).
+- Transformer les données tabulaires en séquences temporelles 3D `(batch, time_steps, features)`.
+- Entraîner et évaluer le modèle GRU.
+
+## 1. Imports et configuration
+
+Nous utilisons les modules `models_gru.py` et `models_ml.py` de notre architecture logicielle dans `src/`.
+
+## 2. Préparation des données supervisées (Scaling et Séquences)
+
+Les réseaux de neurones sont extrêmement sensibles à l'échelle des données. Nous devons utiliser un `MinMaxScaler` ajusté **uniquement sur le set d'entraînement**.
+Ensuite, nous allons créer des fenêtres glissantes (séquences) de taille `SEQUENCE_LENGTH = 24` heures.
+
+## 3. Entraînement du Modèle GRU
+
+Nous allons construire une architecture GRU (Gated Recurrent Unit) standard avec Dropout pour la régularisation, et un Early Stopping sur la Validation Loss pour éviter l'overfitting.
+
+## 4. Prédiction et Évaluation
+
+Nous allons inverser le scaling des prédictions pour pouvoir comparer les métriques (MAE, RMSE, MAPE) en unités réelles avec nos précédents modèles (XGBoost et Baseline).
+
+## Conclusion Finale
+
+Généralement, pour des données tabulaires riches (où le Feature Engineering a déjà créé des *Lags* parfaits comme t-168h), XGBoost est extrêmement dur à battre. Le GRU apporte une approche différente qui excelle dans l'apprentissage de séquences brutes sans Feature Engineering poussé, mais reste souvent équivalent ou légèrement inférieur à un modèle XGBoost bien tuné sur ces cas d'usage.
+
+
+
+# c:/Users/jarro/OneDrive/Desktop/smart-city-energy-forecasting-tetouan/notebooks\08_xai_shap_lime.ipynb
+
+# 08 — Évaluation Avancée, XAI et Robustesse
+
+## Projet : Smart City Energy Forecasting — Tetouan
+
+**Objectifs de ce notebook :**
+- Évaluer en détail les performances du modèle champion (XGBoost).
+- Expliquer les prédictions globalement et localement avec SHAP (Explainable AI).
+- Tester la robustesse du modèle face à des conditions extrêmes (vague de chaleur, pics).
+
+## 1. Imports et Configuration
+
+## 2. Chargement des Données et du Modèle Champion
+Nous rechargeons les features et recréons le set de test pour être en condition réelle d'évaluation.
+
+## 3. Évaluation Avancée (Section 13)
+Analyse visuelle et granulaire des erreurs du modèle.
+
+## 4. Explicabilité avec SHAP (Section 14)
+Nous allons comprendre **pourquoi** le modèle prédit ces valeurs, d'abord au niveau global, puis pour un pic spécifique.
+
+## 5. Tests de Robustesse (Section 15)
+Comment le modèle se comporte-t-il lors d'une canicule ou pendant des pics extrêmes ?
+
+### Fin de l'évaluation du modèle
+XGBoost s'avère non seulement performant, mais aussi hautement interprétable (SHAP) et robuste (comme le montre le tableau de dégradation ci-dessus).
+
+
+
+# c:/Users/jarro/OneDrive/Desktop/smart-city-energy-forecasting-tetouan/notebooks\09_results_and_recommendations.ipynb
+
+# 09 — Résultats et Recommandations (Valorisation Métier)
+
+## Projet : Smart City Energy Forecasting — Tetouan
+
+**Correspondance méthodologique :** Ce notebook couvre les étapes **16 (Résultats attendus)** et **17 (Valorisation métier)** de la méthodologie KDD définies dans le guide.
+
+L'objectif final de ce projet n'est pas seulement d'obtenir un bon R², mais de transformer ces prédictions en **décisions métier pour le réseau électrique (Smart Grid) de la ville de Tétouan**.
+
+
+---
+# 16. Résultats attendus
+
+## 16.1 Figures attendues
+
+Au cours des notebooks précédents, nous avons généré de nombreuses visualisations permettant de comprendre les dynamiques de la consommation énergétique.
+Voici un récapitulatif visuel des étapes majeures du projet.
+
+
+## 16.2 et 16.3 Tableaux et Métriques attendues
+
+Les métriques ont été sauvegardées lors des différentes phases de modélisation (Naïve, Statistiques, ML, DL).
+Nous allons charger ces métriques pour identifier le meilleur modèle.
+
+
+## 16.4 Modèle probablement gagnant
+
+Comme on peut le constater dans le tableau ci-dessus, le **modèle tabulaire avancé XGBoost** (avec l'utilisation des lags temporels et rolling features) s'avère être le modèle champion.
+Il offre :
+1. **La meilleure performance brute** (plus faible MAPE et RMSE).
+2. **Une excellente robustesse** aux pics de consommation et à la dégradation temporelle.
+3. **Une explicabilité totale** grâce à la librairie SHAP (ce qui est crucial pour la confiance des opérateurs du réseau).
+
+Le GRU est très compétitif, mais la richesse de notre feature engineering (notamment les retards de 168 heures et les variables météorologiques) donne l'avantage à XGBoost.
+
+
+## 16.5 Limites attendues du projet
+
+Malgré ces excellents résultats, notre pipeline présente certaines limites inhérentes aux données :
+- **Absence de données directes d'activité humaine** : Nous avons dû utiliser des proxys temporels (heure, jour, week-end, jours fériés) pour pallier le manque de données sur la mobilité ou l'activité industrielle.
+- **Absence de capacité réseau réelle** : Nous prédisons la consommation, mais nous ne savons pas quelle est la capacité maximale d'alimentation du poste électrique de la zone.
+- **Profondeur temporelle** : Une seule année complète (2017) est disponible. Pour capturer des tendances macro-économiques (croissance de la ville) ou climatiques longues, il faudrait 3 à 5 ans d'historique.
+- **Zone spécifique** : L'absence de métadonnées géographiques détaillées sur la Zone 1 empêche une analyse ciblée (zone résidentielle vs industrielle).
+- **Jours fériés** : Les fêtes religieuses au Maroc dépendent de l'observation lunaire, ce qui nécessite une intégration manuelle prudente.
+
+
+---
+# 17. Valorisation métier (Smart Grid)
+
+L'objectif du Data Mining n'est pas seulement prédictif, mais **prescriptif**. Comment les gestionnaires de la Smart City de Tétouan peuvent-ils utiliser notre modèle XGBoost au quotidien ?
+
+
+## 17.1 Alerte de pic de consommation
+
+Si la charge prédite dépasse un seuil de criticité (ex: le 95e percentile de la consommation annuelle), le système déclenche une alerte au centre de contrôle.
+
+
+## 17.2 Load shedding préventif (Délestage)
+
+Une fois l'alerte de pic déclenchée (plusieurs heures à l'avance), l'opérateur peut effectuer un **délestage préventif** (réduire temporairement certaines charges non critiques) :
+- Réduire l'éclairage public dans des zones non critiques (ex: parcs) de 20%.
+- Décaler le démarrage des pompes de traitement des eaux municipales.
+- Envoyer un signal aux bâtiments publics pour réduire la climatisation de 1°C.
+- Éviter le démarrage simultané d'équipements énergivores.
+
+
+## 17.3 Recommandations de réduction pour les citoyens
+
+La ville intelligente implique ses citoyens. Grâce aux prévisions, la municipalité peut :
+- Envoyer une notification mobile : *"Pic de chaleur attendu demain à 14h. Pensez à décaler l'utilisation de vos machines à laver en heures creuses."*
+- Sensibiliser les habitants via des campagnes lors des périodes de très forte charge (ex: été, canicules).
+
+
+## 17.4 Identification des heures critiques
+
+Les analyses EDA et XGBoost ont montré que certaines plages horaires sont systématiquement problématiques.
+- **Pointe du soir (18h-21h)** : Généralement liée au retour au domicile (éclairage, chauffage/climatisation, cuisine). 
+Les actions de maintenance réseau ne doivent absolument pas avoir lieu durant ces heures, sous peine de déclencher des pannes critiques.
+
+
+## 17.5 Planification énergétique et Maintenance
+
+Grâce aux prédictions précises à 24/48h, le gestionnaire de réseau peut :
+- **Optimiser l'achat d'énergie** sur le marché de gros (acheter à l'avance coûte moins cher qu'acheter en urgence au moment du pic).
+- **Dimensionner les réserves** (stockage par batteries si disponibles).
+- **Planifier la maintenance** des transformateurs de quartier pendant les *heures creuses* (00h-05h).
+- **Mieux intégrer les renouvelables** : Si une baisse de production solaire est prévue le lendemain, on peut anticiper en augmentant la part d'énergie classique.
+
+
+## 17.6 Aide à la décision Smart Grid (Dashboard)
+
+Le résultat final de ce projet est destiné à alimenter un **Dashboard de contrôle en temps réel**.
+Ce tableau de bord présentera :
+- La consommation actuelle en direct.
+- La prévision sur les 24 prochaines heures (courbe Rouge/Bleue).
+- Le **niveau de risque** actuel (Normal, Avertissement, Alerte).
+- Les **facteurs explicatifs** via SHAP (ex: *"Alerte causée par : Température élevée + Lag 24h élevé"*).
+- Les actions recommandées pour compenser le pic.
+
+*C'est la conclusion de notre méthodologie KDD : transformer des gigaoctets de logs électriques en décisions éclairées pour une gestion plus intelligente, plus verte et plus économique de la ville.*
+
+

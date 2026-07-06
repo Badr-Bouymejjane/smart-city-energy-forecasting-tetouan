@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html lang="{{ session.get('language', 'en') }}">
+<head>
+<meta charset="utf-8">
+<meta content="width=device-width, initial-scale=1.0" name="viewport">
+<title>Targeted Intervention &amp; Citizen Response - Nexus Tetouan</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&amp;display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet">
+<script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "on-error": "#ffffff",
+                        "surface-container-high": "#e6e8ea",
+                        "on-tertiary-fixed": "#0b1c30",
+                        "on-error-container": "#93000a",
+                        "secondary-fixed-dim": "#3ce36a",
+                        "on-primary-container": "#f8f7ff",
+                        "surface": "#f7f9fb",
+                        "secondary-container": "#5cfd80",
+                        "on-surface": "#191c1e",
+                        "inverse-surface": "#2d3133",
+                        "inverse-primary": "#b3c5ff",
+                        "on-primary-fixed-variant": "#003fa4",
+                        "on-tertiary": "#ffffff",
+                        "secondary-fixed": "#69ff87",
+                        "on-tertiary-container": "#f6f8ff",
+                        "tertiary-fixed-dim": "#b7c8e1",
+                        "surface-bright": "#f7f9fb",
+                        "error": "#ba1a1a",
+                        "on-secondary-fixed": "#002108",
+                        "secondary": "#006e2a",
+                        "on-tertiary-fixed-variant": "#38485d",
+                        "tertiary-container": "#63738a",
+                        "surface-container": "#eceef0",
+                        "on-secondary-fixed-variant": "#00531e",
+                        "on-secondary-container": "#00732c",
+                        "on-secondary": "#ffffff",
+                        "on-surface-variant": "#424656",
+                        "inverse-on-surface": "#eff1f3",
+                        "background": "#f7f9fb",
+                        "surface-container-lowest": "#ffffff",
+                        "on-primary-fixed": "#001849",
+                        "error-container": "#ffdad6",
+                        "tertiary-fixed": "#d3e4fe",
+                        "primary-fixed-dim": "#b3c5ff",
+                        "on-background": "#191c1e",
+                        "tertiary": "#4b5a70",
+                        "surface-container-highest": "#e0e3e5",
+                        "on-primary": "#ffffff",
+                        "surface-variant": "#e0e3e5",
+                        "outline-variant": "#c2c6d8",
+                        "primary": "#0050cb",
+                        "outline": "#727687",
+                        "primary-fixed": "#dae1ff",
+                        "primary-container": "#0066ff",
+                        "surface-container-low": "#f2f4f6",
+                        "surface-tint": "#0054d6",
+                        "surface-dim": "#d8dadc"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "container-max": "1280px",
+                        "xs": "4px",
+                        "gutter": "24px",
+                        "xl": "40px",
+                        "sm": "8px",
+                        "lg": "24px",
+                        "unit": "4px",
+                        "margin-mobile": "16px",
+                        "md": "16px"
+                    },
+                    "fontFamily": {
+                        "label-sm": ["Inter"],
+                        "label-md": ["Inter"],
+                        "headline-lg-mobile": ["Inter"],
+                        "headline-xl": ["Inter"],
+                        "headline-lg": ["Inter"],
+                        "body-sm": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "body-md": ["Inter"]
+                    },
+                    "fontSize": {
+                        "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "500" }],
+                        "label-md": ["14px", { "lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "600" }],
+                        "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }],
+                        "headline-xl": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                        "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                        "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                        "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                        "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                        "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }]
+                    }
+                }
+            }
+        }
+    </script>
+<style>
+        .pulse-green { animation: pulseGreen 2s infinite; }
+        .pulse-red { animation: pulseRed 1.5s infinite; }
+        @keyframes pulseGreen {
+            0% { box-shadow: 0 0 0 0 rgba(0, 110, 42, 0.4); }
+            70% { box-shadow: 0 0 0 10px rgba(0, 110, 42, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(0, 110, 42, 0); }
+        }
+        @keyframes pulseRed {
+            0% { box-shadow: 0 0 0 0 rgba(186, 26, 26, 0.4); }
+            70% { box-shadow: 0 0 0 12px rgba(186, 26, 26, 0); }
+            100% { box-shadow: 0 0 0 0 rgba(186, 26, 26, 0); }
+        }
+    </style>
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    {% block head %}{% endblock %}
+</head>
+<body class="bg-background text-on-surface font-body-md antialiased overflow-hidden flex h-screen">
+
+<!-- SideNavBar -->
+<aside class="hidden md:flex flex-col h-screen w-64 fixed left-0 top-0 bg-[#f4f6f8] dark:bg-surface-dim border-r border-outline-variant/30 dark:border-outline p-md z-50">
+    <div class="flex items-center gap-sm mb-xl px-sm">
+        <div>
+            <h1 class="font-headline-md text-headline-md font-bold text-primary">Nexus Tetouan</h1>
+            <p class="font-label-sm text-label-sm text-on-surface-variant">Energy Management</p>
+        </div>
+    </div>
+    <nav class="flex-1 flex flex-col gap-sm mt-md px-xs">
+        <a class="{ 'flex items-center gap-md px-md py-sm rounded-lg text-primary font-semibold bg-[#e2e8f0] transition-all' if request.path == '/' else 'flex items-center gap-md px-md py-sm rounded-lg text-[#2c3e50] font-medium hover:text-primary hover:bg-[#e2e8f0]/50 transition-all' }" href="/">
+            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' { '1' if request.path == '/' else '0' };">dashboard</span>
+            <span class="font-label-md text-[15px]">Dashboard</span>
+        </a>
+        <a class="{ 'flex items-center gap-md px-md py-sm rounded-lg text-primary font-semibold bg-[#e2e8f0] transition-all' if request.path == '/models' else 'flex items-center gap-md px-md py-sm rounded-lg text-[#2c3e50] font-medium hover:text-primary hover:bg-[#e2e8f0]/50 transition-all' }" href="/models">
+            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' { '1' if request.path == '/models' else '0' };">compare_arrows</span>
+            <span class="font-label-md text-[15px] leading-tight">Model Comparison</span>
+        </a>
+
+        <a class="{ 'flex items-center gap-md px-md py-sm rounded-lg text-primary font-semibold bg-[#e2e8f0] transition-all' if request.path == '/data' else 'flex items-center gap-md px-md py-sm rounded-lg text-[#2c3e50] font-medium hover:text-primary hover:bg-[#e2e8f0]/50 transition-all' }" href="/data">
+            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' { '1' if request.path == '/data' else '0' };">history</span>
+            <span class="font-label-md text-[15px]">Historical Data</span>
+        </a>
+        <a class="{ 'flex items-center gap-md px-md py-sm rounded-lg text-primary font-semibold bg-[#e2e8f0] transition-all' if request.path == '/correlations' else 'flex items-center gap-md px-md py-sm rounded-lg text-[#2c3e50] font-medium hover:text-primary hover:bg-[#e2e8f0]/50 transition-all' }" href="/correlations">
+            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' { '1' if request.path == '/correlations' else '0' };">ssid_chart</span>
+            <span class="font-label-md text-[15px]">Correlations</span>
+        </a>
+        <a class="{ 'flex items-center gap-md px-md py-sm rounded-lg text-primary font-semibold bg-[#e2e8f0] transition-all' if request.path == '/citizen' else 'flex items-center gap-md px-md py-sm rounded-lg text-[#2c3e50] font-medium hover:text-primary hover:bg-[#e2e8f0]/50 transition-all' }" href="/citizen">
+            <span class="material-symbols-outlined" style="font-variation-settings: 'FILL' { '1' if request.path == '/citizen' else '0' };">nature_people</span>
+            <span class="font-label-md text-[15px]">Citizen Hub</span>
+        </a>
+    </nav>
+    <button onclick="window.print()" class="w-full bg-[#e2e8f0] text-primary font-bold text-[15px] py-3 rounded-lg mt-auto hover:bg-[#cbd5e1] transition-colors flex items-center justify-center gap-sm shadow-sm">
+        <span class="material-symbols-outlined text-[20px]">download</span>
+        Export Report
+    </button>
+</aside>
+
+<!-- Main Layout Wrapper -->
+<div class="flex-1 md:ml-64 flex flex-col min-h-screen min-w-0 bg-background overflow-y-auto">
+    
+    <!-- Unified Top Header -->
+    <header class="w-full h-16 bg-surface-container-lowest shadow-sm flex justify-between items-center px-lg z-10 flex-shrink-0 sticky top-0">
+        <div class="flex items-center gap-lg">
+            <!-- Mobile Menu Toggle -->
+            <button class="md:hidden text-on-surface-variant">
+                <span class="material-symbols-outlined">menu</span>
+            </button>
+            
+            <!-- Breadcrumbs Area -->
+            <div class="hidden md:flex items-center text-sm text-on-surface-variant">
+                {% block breadcrumb %}
+                <span class="font-label-md text-label-md">Nexus Tetouan</span>
+                {% endblock %}
+            </div>
+        </div>
+        
+        <!-- Right side actions -->
+        <div class="flex items-center gap-sm relative">
+            <div class="relative">
+                <button id="notificationBtn" class="p-2 rounded-full text-on-surface-variant hover:text-primary hover:bg-surface-container transition-all relative cursor-pointer">
+                    <span class="material-symbols-outlined">notifications</span>
+                    <span id="notificationBadge" class="absolute top-1 right-1 w-2.5 h-2.5 bg-error rounded-full border border-surface-container-lowest {% if zone1_status == 'CRITICAL' %}block{% else %}hidden{% endif %}"></span>
+                </button>
+                
+                <!-- Notification Dropdown -->
+                <div id="notificationPanel" class="hidden absolute right-0 mt-2 w-80 bg-surface-container-lowest border border-outline-variant/30 shadow-lg rounded-xl z-50 overflow-hidden transform origin-top-right transition-all">
+                    <div class="p-md border-b border-outline-variant/30 bg-surface-container-low flex justify-between items-center">
+                        <h4 class="font-label-md font-bold text-on-surface">Notifications</h4>
+                        <span class="text-xs text-primary cursor-pointer hover:underline" onclick="document.getElementById('notificationList').innerHTML='<div class=\'p-md text-center text-sm text-on-surface-variant\'>No new notifications</div>'; document.getElementById('notificationBadge').classList.add('hidden');">Mark all read</span>
+                    </div>
+                    <div id="notificationList" class="max-h-64 overflow-y-auto">
+                        {% if zone1_status == 'CRITICAL' %}
+                        <div class="p-md border-b border-outline-variant/10 hover:bg-surface-container-low transition-colors flex gap-sm cursor-pointer">
+                            <div class="w-8 h-8 rounded-full bg-error-container text-on-error-container flex items-center justify-center flex-shrink-0">
+                                <span class="material-symbols-outlined text-[16px]">warning</span>
+                            </div>
+                            <div>
+                                <h5 class="font-label-sm font-bold text-error">Critical Load Limit Breached</h5>
+                                <p class="text-xs text-on-surface-variant mt-1">Zone 1 has exceeded 95th percentile threshold ({{ zone1_load }} MW). Auto-campaign triggered.</p>
+                                <span class="text-[10px] text-tertiary mt-1 block">Just now</span>
+                            </div>
+                        </div>
+                        {% else %}
+                        <div class="p-md text-center text-sm text-on-surface-variant">System Stable. No new alerts.</div>
+                        {% endif %}
+                    </div>
+                </div>
+            </div>
+            
+            <button class="p-2 rounded-full text-on-surface-variant hover:text-primary hover:bg-surface-container transition-all cursor-pointer">
+                <span class="material-symbols-outlined">help</span>
+            </button>
+        </div>
+    </header>
+    
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const notifBtn = document.getElementById('notificationBtn');
+            const notifPanel = document.getElementById('notificationPanel');
+            if(notifBtn && notifPanel) {
+                notifBtn.addEventListener('click', function(e) {
+                    e.stopPropagation();
+                    notifPanel.classList.toggle('hidden');
+                });
+                document.addEventListener('click', function(e) {
+                    if(!notifPanel.contains(e.target)) {
+                        notifPanel.classList.add('hidden');
+                    }
+                });
+            }
+        });
+    </script>
+
+    <!-- Page Content -->
+    {% block content %}
+    {% endblock %}
+
+</div>
+<!-- End Main Layout Wrapper -->
+
+<!-- Scripts -->
+{% block scripts %}
+{% endblock %}
+
+<!-- Global Translation Script -->
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const savedLang = localStorage.getItem('nexus_lang');
+        if (!savedLang) return;
+
+        function applyLanguage(lang) {
+            const isFrench = lang === 'French (FR)';
+            
+            const dictionary = {
+                'Dashboard': 'Tableau de bord',
+                'Model Comparison': 'Comparaison des Modèles',
+                'Historical Data': 'Données Historiques',
+                'Correlations': 'Corrélations',
+                'Citizen Hub': 'Espace Citoyen',
+                'Settings': 'Paramètres',
+                'General': 'Général',
+                'Alert Thresholds': 'Seuils d\\'Alerte',
+                'API Integrations': 'Intégrations API',
+                'User Access': 'Accès Utilisateur',
+                'General Settings': 'Paramètres Généraux',
+                'System Language': 'Langue du Système',
+                'Timezone': 'Fuseau Horaire',
+                'Cancel': 'Annuler',
+                'Save Changes': 'Enregistrer les Modifications',
+                'Export Report': 'Exporter le Rapport'
+            };
+            
+            const reverseDictionary = Object.fromEntries(Object.entries(dictionary).map(([k, v]) => [v, k]));
+
+            function translateNode(node) {
+                if (node.nodeType === 3) { // Text node
+                    let text = node.nodeValue.trim();
+                    if (text) {
+                        if (isFrench && dictionary[text]) {
+                            node.nodeValue = dictionary[text];
+                        } else if (!isFrench && reverseDictionary[text]) {
+                            node.nodeValue = reverseDictionary[text];
+                        }
+                    }
+                } else {
+                    node.childNodes.forEach(translateNode);
+                }
+            }
+
+            // Target elements we want to translate globally
+            const navs = document.querySelectorAll('aside, nav');
+            navs.forEach(nav => translateNode(nav));
+            
+            const headers = document.querySelectorAll('h2, h3, .font-headline-md');
+            headers.forEach(h => translateNode(h));
+            
+            const buttons = document.querySelectorAll('button');
+            buttons.forEach(btn => translateNode(btn));
+        }
+
+        applyLanguage(savedLang);
+
+        // Listen for save settings button if on settings page
+        const saveBtnElem = document.getElementById('saveSettingsBtn');
+        if (saveBtnElem) {
+            saveBtnElem.addEventListener('click', function() {
+                const selectedLang = document.getElementById('langSelect') ? document.getElementById('langSelect').value : null;
+                if (selectedLang) {
+                    setTimeout(() => applyLanguage(selectedLang), 100); 
+                }
+            });
+        }
+    });
+</script>
+</body>
+</html>

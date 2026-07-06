@@ -1,0 +1,193 @@
+{% extends "base.html" %}
+
+{% block breadcrumb %}
+<span class="font-label-md text-label-md">Nexus Tetouan</span><span class="material-symbols-outlined mx-1" style="font-size: 16px;">chevron_right</span><span class="font-label-md text-label-md text-primary">Environmental Correlations</span>
+{% endblock %}
+
+{% block content %}
+<div class="pt-[88px] px-md w-full">
+<main class="flex-1 pt-[88px] px-margin-mobile md:px-xl pb-xl max-w-container-max mx-auto w-full">
+<!-- Breadcrumbs / Context -->
+<div class="mb-lg flex items-center text-on-surface-variant font-label-sm text-label-sm">
+<span class="">City-Wide Ops</span>
+<span class="material-symbols-outlined text-[16px] mx-1">chevron_right</span>
+<span class="">Correlations</span>
+<span class="material-symbols-outlined text-[16px] mx-1">chevron_right</span>
+<span class="font-semibold text-primary">Environmental</span>
+</div>
+<!-- Main Card Wrapper -->
+<div class="bg-on-primary rounded-xl shadow-L1 p-lg md:p-xl w-full flex flex-col gap-xl">
+<!-- Header Section -->
+<div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-md border-b border-outline-variant/20 pb-md">
+<div>
+<h1 class="font-headline-lg-mobile md:font-headline-lg text-headline-lg-mobile md:text-headline-lg text-on-surface">Environmental Correlation Analysis</h1>
+<p class="font-body-sm text-body-sm text-on-surface-variant mt-1">Real-time overlay of weather conditions and grid strain.</p>
+</div>
+<!-- Toggle -->
+<div class="flex items-center gap-sm bg-surface-container-low px-sm py-2 rounded-lg border border-outline-variant/30 shadow-sm">
+<span class="font-label-md text-label-md text-on-surface">Overlay Energy Load</span>
+<div class="relative inline-block w-10 mr-2 align-middle select-none transition duration-200 ease-in">
+<input checked="" class="toggle-checkbox absolute block w-5 h-5 rounded-full bg-white border-4 appearance-none cursor-pointer transition-all duration-300 ease-in-out z-10 top-0.5 left-0 focus:outline-none" id="load-toggle" name="toggle" type="checkbox">
+<label class="toggle-label block overflow-hidden h-6 rounded-full bg-surface-variant cursor-pointer transition-colors duration-300 ease-in-out" for="load-toggle"></label>
+</div>
+</div>
+</div>
+<!-- Metrics Row -->
+<div class="grid grid-cols-1 md:grid-cols-3 gap-md">
+<!-- Metric 1: Temp -->
+<div class="bg-surface-bright border border-outline-variant/30 rounded-lg p-md flex items-center gap-md hover:border-orange-300 transition-colors cursor-default group">
+<div class="w-12 h-12 rounded-full bg-orange-50 text-orange-600 flex items-center justify-center group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined">thermostat</span>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Avg Temperature</p>
+<p class="font-headline-md text-headline-md text-on-surface">{{ avg_temp }}°C</p>
+</div>
+</div>
+<!-- Metric 2: Humidity -->
+<div class="bg-surface-bright border border-outline-variant/30 rounded-lg p-md flex items-center gap-md hover:border-blue-300 transition-colors cursor-default group">
+<div class="w-12 h-12 rounded-full bg-blue-50 text-blue-600 flex items-center justify-center group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined">humidity_percentage</span>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Avg Humidity</p>
+<p class="font-headline-md text-headline-md text-on-surface">{{ avg_hum }}%</p>
+</div>
+</div>
+<!-- Metric 3: Wind -->
+<div class="bg-surface-bright border border-outline-variant/30 rounded-lg p-md flex items-center gap-md hover:border-teal-300 transition-colors cursor-default group">
+<div class="w-12 h-12 rounded-full bg-teal-50 text-teal-600 flex items-center justify-center group-hover:scale-110 transition-transform">
+<span class="material-symbols-outlined">air</span>
+</div>
+<div>
+<p class="font-label-sm text-label-sm text-on-surface-variant">Wind Speed</p>
+<p class="font-headline-md text-headline-md text-on-surface">{{ avg_wind }} km/h</p>
+</div>
+</div>
+</div>
+<!-- Chart Area -->
+<div class="w-full flex flex-col gap-sm">
+<div class="flex justify-between items-center px-sm">
+<h3 class="font-label-md text-label-md text-on-surface">24-Hour Trend</h3>
+<div class="flex gap-4 font-label-sm text-label-sm">
+<div class="flex items-center gap-1"><div class="w-3 h-0.5 bg-gradient-to-r from-yellow-400 to-red-500 rounded"></div><span class="text-on-surface-variant">Temp</span></div>
+<div class="flex items-center gap-1"><div class="w-3 h-0.5 bg-blue-500 rounded"></div><span class="text-on-surface-variant">Humidity</span></div>
+<div class="flex items-center gap-1"><div class="w-3 h-0.5 bg-teal-500 rounded"></div><span class="text-on-surface-variant">Wind</span></div>
+<div class="flex items-center gap-1"><div class="w-3 h-0.5 border-t border-dashed border-secondary rounded"></div><span class="text-on-surface-variant">Energy Load</span></div>
+</div>
+</div>
+<!-- Chart Container -->
+<div class="relative w-full h-80 bg-white border border-outline-variant/20 rounded-lg p-md">
+    <canvas id="envChart"></canvas>
+</div>
+</div>
+<!-- Footer Insight -->
+<div class="bg-primary-fixed/30 border border-primary-fixed-dim/50 rounded-lg p-md flex items-start gap-md mt-sm">
+<span class="material-symbols-outlined text-primary mt-0.5">lightbulb</span>
+<div>
+<h4 class="font-label-md text-label-md text-on-primary-fixed">AI Insight</h4>
+<p class="font-body-sm text-body-sm text-on-primary-fixed-variant mt-1">Peak energy load yesterday occurred concurrently with a 4°C temperature spike at 14:00. Predictive modeling suggests a similar strain pattern tomorrow between 13:00 and 16:00.</p>
+</div>
+</div>
+</div>
+</main>
+</div>
+</div>
+{% endblock %}
+
+{% block scripts %}
+<script>
+    document.addEventListener("DOMContentLoaded", function() {
+        const rawData = {{ chart_data|safe }};
+        
+        const labels = rawData.labels.map(ts => {
+            const date = new Date(ts);
+            return date.toLocaleTimeString([], {hour: '2-digit', minute:'2-digit'});
+        });
+        
+        const ctx = document.getElementById('envChart').getContext('2d');
+        const envChart = new Chart(ctx, {
+            type: 'line',
+            data: {
+                labels: labels,
+                datasets: [
+                    {
+                        label: 'Energy Load (MW)',
+                        data: rawData.load,
+                        borderColor: '#006e2a',
+                        borderDash: [5, 5],
+                        yAxisID: 'y1',
+                        tension: 0.4,
+                        borderWidth: 2,
+                        pointRadius: 0
+                    },
+                    {
+                        label: 'Temperature (°C)',
+                        data: rawData.temp,
+                        borderColor: '#FACC15',
+                        yAxisID: 'y',
+                        tension: 0.4,
+                        borderWidth: 3,
+                        pointRadius: 0
+                    },
+                    {
+                        label: 'Humidity (%)',
+                        data: rawData.hum,
+                        borderColor: '#3B82F6',
+                        yAxisID: 'y',
+                        tension: 0.4,
+                        borderWidth: 2,
+                        pointRadius: 0
+                    },
+                    {
+                        label: 'Wind (km/h)',
+                        data: rawData.wind,
+                        borderColor: '#14B8A6',
+                        yAxisID: 'y',
+                        tension: 0.4,
+                        borderWidth: 2,
+                        pointRadius: 0
+                    }
+                ]
+            },
+            options: {
+                responsive: true,
+                maintainAspectRatio: false,
+                interaction: {
+                    mode: 'index',
+                    intersect: false,
+                },
+                plugins: {
+                    legend: { display: false }
+                },
+                scales: {
+                    x: { grid: { display: false } },
+                    y: {
+                        type: 'linear',
+                        display: true,
+                        position: 'left',
+                        title: { display: true, text: 'Weather (°C, %, km/h)' }
+                    },
+                    y1: {
+                        type: 'linear',
+                        display: true,
+                        position: 'right',
+                        title: { display: true, text: 'Energy Load (MW)' },
+                        grid: { drawOnChartArea: false }
+                    }
+                }
+            }
+        });
+        
+        // Handle Overlay Energy Load toggle
+        const loadToggle = document.getElementById('load-toggle');
+        if (loadToggle) {
+            loadToggle.addEventListener('change', function() {
+                // The Energy Load dataset is index 0
+                envChart.data.datasets[0].hidden = !this.checked;
+                envChart.update();
+            });
+        }
+    });
+</script>
+{% endblock %}

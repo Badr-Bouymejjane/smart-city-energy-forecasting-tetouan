@@ -1,0 +1,333 @@
+\documentclass[12pt,a4paper]{article}
+
+\usepackage[utf8]{inputenc}
+\usepackage[T1]{fontenc}
+\usepackage{lmodern}
+\usepackage[french,english]{babel}
+\usepackage{amsmath,amsfonts,amssymb}
+\usepackage{graphicx}
+\usepackage{booktabs}
+\usepackage{geometry}
+\usepackage{hyperref}
+\usepackage{tikz}
+\usepackage{xcolor}
+
+\geometry{a4paper, margin=2.5cm}
+
+\definecolor{UMblue}{HTML}{0066cc}
+
+\begin{document}
+
+\begin{titlepage}
+\newgeometry{left=2cm,right=2cm,top=2cm,bottom=2cm}
+
+% Background Blue Polygon and Lines
+\begin{tikzpicture}[remember picture,overlay]
+    \coordinate (NW) at (current page.north west);
+    
+    % "RAPPORT DE PROJET" text
+    \node[anchor=north west, inner sep=0pt, text=black] at ([xshift=2cm, yshift=-4.5cm]NW) {
+        \Huge \textsf{RAPPORT DE PROJET}
+    };
+    
+    % Right stripes (massive parallelogram on the right side)
+    \begin{scope}
+        \clip ([xshift=14cm, yshift=-5.8cm]NW) 
+              -- ([xshift=21cm, yshift=-7.2cm]NW) 
+              -- ([xshift=21cm, yshift=-29.2cm]NW) 
+              -- ([xshift=14cm, yshift=-27.8cm]NW) 
+              -- cycle;
+        \foreach \y in {5, 5.2, ..., 30} {
+            \draw[UMblue, line width=1.5pt] ([yshift=-\y cm]NW) -- ([xshift=21cm, yshift=-\y cm]NW);
+        }
+    \end{scope}
+
+    % Solid blue polygon on the left
+    \fill[UMblue] 
+        (NW |- 0, -7cm) 
+        -- ([xshift=14cm, yshift=-9.8cm]NW) 
+        -- ([xshift=14cm, yshift=-24.8cm]NW) 
+        -- (NW |- 0, -22cm) 
+        -- cycle;
+        
+    % White cutout (erases the middle of the stripes to form the gap)
+    \fill[white] 
+        ([xshift=14cm, yshift=-13.8cm]NW) 
+        -- ([xshift=21cm, yshift=-15.2cm]NW) 
+        -- ([xshift=21cm, yshift=-22.2cm]NW) 
+        -- ([xshift=14cm, yshift=-20.8cm]NW) 
+        -- cycle;
+
+    % Chevron symbol
+    \node[white, font=\Huge\bfseries] at ([xshift=2.5cm, yshift=-21cm]NW) {»};
+    
+    % Text inside blue shape
+    \node[anchor=north west, inner sep=0pt, text width=11cm] at ([xshift=2.5cm, yshift=-10.5cm]NW) {
+        \color{white}
+        \textsf{\Large \MakeUppercase{Université Moulay Ismaïl - Faculté des Sciences}} \\[0.5cm]
+        \textsf{Filière Intelligence Artificielle et Science des Données} \\[0.5cm]
+        \textsf{Par} \\[0.2cm]
+        {\huge \textsf{\textbf{« BOUYMEJJANE Badr \& JARROUD Oussama »}}} \\[1cm]
+        {\LARGE \textsf{\textbf{« Prévision de la Charge Énergétique et Optimisation de la Consommation Urbaine dans une Smart City »}}} \\[0.5cm]
+        {\Large \textsf{« Application à la Ville de Tétouan »}} \\[1cm]
+        \textsf{\textbf{Projet présenté en « Juillet 2026 »}} \\
+        \textsf{\textbf{Module : « Data Mining »}}
+    };
+\end{tikzpicture}
+
+% Top Logos and Headers
+\noindent
+\begin{minipage}[t]{0.45\textwidth}
+    \vspace{0pt}
+    \begin{tikzpicture}
+        % Row 1
+        \fill[black] (0.2, 0.8) -- (2.2, 0.8) -- (2.2, 0.1) -- (0, 0.1) -- cycle;
+        \node[white, right] at (0.1, 0.45) {\small\textsf{\textbf{MODULE}}};
+        \node[white, right, fill=UMblue, inner sep=3pt, minimum height=0.7cm] at (2.25, 0.45) {\small\textsf{\textbf{DATA MINING}}};
+        
+        % Row 2
+        \fill[black] (0, 0) -- (2.2, 0) -- (2.2, -0.7) -- (-0.2, -0.7) -- cycle;
+        \node[white, right] at (0, -0.35) {\small\textsf{\textbf{FILIÈRE}}};
+        \node[white, right, fill=UMblue, inner sep=3pt, minimum height=0.7cm] at (2.25, -0.35) {\small\textsf{\textbf{IA \& DATA SCIENCE}}};
+    \end{tikzpicture}
+\end{minipage}%
+\hfill
+\begin{minipage}[t]{0.5\textwidth}
+    \vspace{0pt}
+    \raggedleft
+    \IfFileExists{logo.png}{%
+        \includegraphics[height=2.5cm]{logo.png}%
+    }{%
+        \colorbox{gray!20}{\makebox[6cm]{\rule{0pt}{2.5cm}\textcolor{gray}{\textsf{Veuillez placer logo.png ici}}}}%
+    }
+\end{minipage}
+
+\vfill
+
+% Bottom Text
+\noindent{\Large \textsf{\textbf{Encadrement :}}}\\[0.3cm]
+\begin{tabular}{ll}
+\textsf{Encadrant :} & \textsf{M. HESSANE Abdelaaziz} \\
+\end{tabular}
+
+\restoregeometry
+\end{titlepage}
+
+\selectlanguage{french}
+\setcounter{page}{2}
+
+\begin{abstract}
+Ce rapport présente un projet de Data Mining dédié à la prévision de la consommation électrique dans la ville de Tétouan, dans le cadre du paradigme des villes intelligentes (\textit{Smart Cities}). La problématique centrale consiste à prédire de manière fiable et interprétable la charge énergétique horaire de la Zone 1 de Tétouan à partir de données temporelles, météorologiques et calendaires. Le jeu de données utilisé, issu du UCI Machine Learning Repository, contient 52 416 observations à une fréquence de 10 minutes couvrant l'année 2017. La méthodologie adoptée suit rigoureusement le processus KDD (\textit{Knowledge Discovery in Databases}), englobant l'audit qualité des données, l'analyse exploratoire, le prétraitement, l'ingénierie des caractéristiques, la modélisation comparative et l'explicabilité des modèles. Six familles de modèles ont été évaluées : des baselines naïves, des modèles statistiques (SARIMA, SARIMAX, Prophet), des modèles d'apprentissage automatique (Random Forest, XGBoost) et un modèle d'apprentissage profond (GRU). Le modèle XGBoost s'est imposé comme le plus performant avec une erreur relative (MAPE) de 2,06 \% et un coefficient de détermination R² de 0,982 sur le jeu de test. L'explicabilité du modèle a été assurée par SHAP et LIME, révélant le rôle prépondérant de l'inertie hebdomadaire de consommation et des variables météorologiques. Un tableau de bord interactif Streamlit a été développé pour opérationnaliser les résultats. Les limites de l'étude incluent la couverture temporelle restreinte à une seule année et l'absence de données socio-économiques directes.
+
+\textbf{Mots-clés :} prévision énergétique, Smart City, séries temporelles, XGBoost, SHAP, KDD, apprentissage automatique, Tétouan.
+\end{abstract}
+
+\selectlanguage{english}
+\begin{abstract}
+This report presents a Data Mining project dedicated to forecasting electrical power consumption in the city of Tetouan, within the Smart City paradigm. The core challenge is to reliably and interpretably predict the hourly energy load of Zone 1 in Tetouan using temporal, meteorological, and calendar data. The dataset, sourced from the UCI Machine Learning Repository, contains 52,416 observations at a 10-minute frequency covering the year 2017. The methodology rigorously follows the KDD (Knowledge Discovery in Databases) process, encompassing data quality auditing, exploratory data analysis, preprocessing, feature engineering, comparative modeling, and model explainability. Six model families were evaluated: naive baselines, statistical models (SARIMA, SARIMAX, Prophet), machine learning models (Random Forest, XGBoost), and a deep learning model (GRU). XGBoost emerged as the best-performing model, achieving a MAPE of 2.06\% and an R² of 0.982 on the test set. Model explainability was ensured through SHAP and LIME analyses, revealing the dominant role of weekly consumption inertia and meteorological variables. An interactive Streamlit dashboard was developed to operationalize the results. Study limitations include the restricted temporal coverage of a single year and the absence of direct socio-economic data.
+
+\textbf{Keywords:} energy forecasting, Smart City, time series, XGBoost, SHAP, KDD, machine learning, Tetouan.
+\end{abstract}
+
+\selectlanguage{french}
+\newpage
+\tableofcontents
+\newpage
+
+\section{Introduction}
+\subsection{Contexte général}
+La gestion énergétique constitue l'un des piliers fondamentaux du concept de ville intelligente (\textit{Smart City}). Dans un contexte mondial marqué par l'urbanisation croissante, la raréfaction des ressources fossiles et les impératifs de transition écologique, la capacité à anticiper la demande électrique représente un enjeu stratégique majeur pour les opérateurs de réseaux et les décideurs municipaux (Hernandez-Matheus et al., 2022). Selon l'Agence Internationale de l'Énergie, la consommation électrique mondiale a augmenté de 2,3 \% en 2018, principalement sous l'effet de l'urbanisation et des changements climatiques (IEA, 2019).
+
+La prévision de la charge énergétique (\textit{load forecasting}) permet d'optimiser la production d'énergie, de réduire les gaspillages, d'anticiper les pics de consommation susceptibles de provoquer des pannes, et de faciliter l'intégration des sources d'énergie renouvelables intermittentes telles que le solaire et l'éolien (Hong \& Fan, 2016). Dans ce contexte, les techniques de fouille de données (\textit{Data Mining}) et d'apprentissage automatique (\textit{Machine Learning}) offrent des outils puissants pour extraire des connaissances prédictives à partir de données historiques massives.
+
+\subsection{Problématique}
+La problématique de ce projet peut être formulée comme suit :
+\begin{quote}
+\textbf{Comment prédire de manière robuste et interprétable la consommation électrique horaire de la Zone 1 de Tétouan à partir de données temporelles, météorologiques et calendaires, en suivant le processus KDD complet ?}
+\end{quote}
+
+Cette problématique soulève plusieurs questions méthodologiques et techniques :
+\begin{itemize}
+    \item Quelle est la qualité intrinsèque des données disponibles et quel prétraitement est nécessaire ?
+    \item Quelles caractéristiques (\textit{features}) sont les plus pertinentes pour capturer les dynamiques de consommation ?
+    \item Quel type de modèle — statistique, apprentissage automatique ou apprentissage profond — offre le meilleur compromis entre performance prédictive, interprétabilité et complexité computationnelle ?
+    \item Comment garantir la transparence et la confiance dans les prédictions du modèle retenu ?
+\end{itemize}
+
+\subsection{Motivation et objectifs}
+La ville de Tétouan, située au nord du Maroc, présente un climat méditerranéen avec des étés chauds et des hivers modérés. Ce contexte climatique influence directement la consommation électrique via les besoins en climatisation et en chauffage. Le choix de ce territoire est motivé par la disponibilité d'un jeu de données public de haute qualité (Salam \& El Hibaoui, 2018) et par la pertinence du contexte marocain dans la dynamique des Smart Cities en Afrique du Nord.
+
+Les objectifs scientifiques et techniques du projet sont les suivants :
+\begin{enumerate}
+    \item \textbf{Appliquer le processus KDD complet}, de la sélection et l'audit des données jusqu'à l'interprétation des résultats et la formulation de recommandations opérationnelles.
+    \item \textbf{Construire un pipeline de prévision énergétique} intégrant l'ingénierie des caractéristiques, la modélisation multi-algorithmes et l'évaluation rigoureuse.
+    \item \textbf{Comparer systématiquement} les approches statistiques classiques (SARIMA, Prophet), les méthodes de Machine Learning (Random Forest, XGBoost) et le Deep Learning (GRU).
+    \item \textbf{Assurer l'explicabilité} du modèle retenu via des méthodes d'intelligence artificielle explicable (XAI) telles que SHAP et LIME.
+    \item \textbf{Développer un prototype opérationnel} sous forme de tableau de bord interactif Streamlit destiné aux gestionnaires du réseau électrique.
+\end{enumerate}
+
+\subsection{Organisation du rapport}
+Le rapport est structuré en neuf chapitres. Après cette introduction, le chapitre 2 présente l'état de l'art des méthodes de prévision de la charge énergétique. Le chapitre 3 détaille la méthodologie adoptée, incluant la formulation du problème, la description du jeu de données et le protocole expérimental. Le chapitre 4 décrit l'implémentation technique du pipeline. Le chapitre 5 expose les résultats obtenus et leur évaluation. Le chapitre 6 propose une discussion critique des résultats. Enfin, le chapitre 7 conclut le rapport en synthétisant les apports, les limites et les perspectives du projet.
+
+\section{État de l'art}
+\subsection{Prévision de la charge énergétique : approches classiques}
+La prévision de la charge énergétique a une longue tradition en ingénierie électrique. Les approches classiques reposent principalement sur des modèles statistiques linéaires et des méthodes de décomposition temporelle.
+
+Les modèles autorégressifs intégrés à moyenne mobile saisonnière (\textbf{SARIMA}), introduits par Box et Jenkins (1976), constituent la référence historique pour la modélisation de séries temporelles stationnaires et saisonnières. Le modèle SARIMA est défini par les ordres $(p, d, q)(P, D, Q)_s$, où $p$, $d$, $q$ désignent respectivement les ordres autorégressif, de différenciation et de moyenne mobile, et $P$, $D$, $Q$, $s$ leurs homologues saisonniers. L'extension SARIMAX intègre des variables exogènes telles que la température ou l'humidité.
+
+Le modèle \textbf{Prophet}, développé par Taylor et Letham (2018) chez Meta, adopte une approche additive décomposant la série en tendance, saisonnalité et effets de jours fériés. Il est conçu pour être robuste aux données manquantes et aux changements de tendance, mais son calibrage pour des données horaires à haute fréquence reste un défi connu.
+
+\subsection{Approches fondées sur l'apprentissage automatique}
+L'avènement du Machine Learning a transformé le paysage de la prévision énergétique. Les modèles ensemblistes à base d'arbres de décision se sont imposés comme des solutions performantes et robustes.
+
+Le \textbf{Random Forest} (Breiman, 2001) construit un ensemble d'arbres de décision non corrélés par échantillonnage bootstrap (\textit{bagging}) et calcule la moyenne de leurs prédictions. Sa robustesse aux valeurs aberrantes et sa capacité à gérer les interactions non linéaires entre variables en font un modèle de référence pour les données tabulaires.
+
+Le \textbf{Gradient Boosting}, dont \textbf{XGBoost} (Chen \& Guestrin, 2016) est l'implémentation la plus populaire, construit séquentiellement des arbres de décision, chaque arbre corrigeant les erreurs résiduelles des précédents. XGBoost a démontré des performances supérieures dans de nombreuses compétitions de science des données et applications industrielles, notamment en prévision de charge énergétique (Wang et al., 2019).
+
+\subsection{Approches fondées sur l'apprentissage profond}
+Les réseaux de neurones récurrents (\textbf{RNN}), et en particulier les architectures à portes telles que les \textbf{LSTM} (Hochreiter \& Schmidhuber, 1997) et les \textbf{GRU} (Cho et al., 2014), sont spécifiquement conçus pour traiter les données séquentielles. Le GRU (\textit{Gated Recurrent Unit}) simplifie l'architecture LSTM en fusionnant les portes d'oubli et d'entrée en une seule porte de mise à jour, réduisant ainsi le nombre de paramètres tout en conservant la capacité à capturer les dépendances à long terme.
+
+Les architectures basées sur les \textbf{Transformers} (Vaswani et al., 2017) et leurs dérivés pour les séries temporelles, tels que Temporal Fusion Transformers, représentent la frontière actuelle de la recherche, bien qu'ils nécessitent des volumes de données considérablement plus importants.
+
+\subsection{Explicabilité des modèles}
+L'explicabilité des modèles d'IA est devenue un enjeu central, en particulier dans les applications critiques comme la gestion de l'énergie. \textbf{SHAP} (\textit{SHapley Additive exPlanations}), proposé par Lundberg et Lee (2017), s'appuie sur la théorie des jeux coopératifs pour attribuer à chaque variable une contribution marginale à la prédiction. \textbf{LIME} (\textit{Local Interpretable Model-agnostic Explanations}) de Ribeiro et al. (2016) fournit des explications locales en approximant le modèle par un modèle linéaire dans le voisinage d'une observation.
+
+\subsection{Synthèse comparative des approches}
+
+\begin{table}[h]
+\centering
+\resizebox{\textwidth}{!}{
+\begin{tabular}{lllp{4cm}}
+\toprule
+\textbf{Approche} & \textbf{Avantages} & \textbf{Limites} & \textbf{Référence} \\
+\midrule
+SARIMA/SARIMAX & Fondement théorique solide, interprétabilité & Hypothèse de linéarité, dérive sur longs horizons & Box \& Jenkins (1976) \\
+Prophet & Robustesse aux anomalies, simplicité d'usage & Difficulté avec les données haute fréquence & Taylor \& Letham (2018) \\
+Random Forest & Robustesse, gestion des non-linéarités & Lissage des prédictions, pas d'extrapolation & Breiman (2001) \\
+XGBoost & Haute performance, régularisation intégrée & Risque de surapprentissage, boîte noire partielle & Chen \& Guestrin (2016) \\
+GRU/LSTM & Capture des dépendances séquentielles & Coût computationnel, besoin de scaling, interprétabilité faible & Cho et al. (2014) \\
+\bottomrule
+\end{tabular}}
+\caption{Synthèse comparative des approches}
+\end{table}
+
+\section{Méthodologie}
+\subsection{Formulation du problème}
+Le problème est formulé comme une tâche de \textbf{régression supervisée} sur une série temporelle univariée enrichie de variables exogènes. L'objectif est de prédire la variable cible $y_t$ (consommation électrique de la Zone 1 à l'heure $t$) en fonction d'un vecteur de caractéristiques $\mathbf{x}_t$ :
+\begin{equation}
+\hat{y}_t = f(\mathbf{x}_t) + \epsilon_t
+\end{equation}
+où $f$ est la fonction apprise par le modèle et $\epsilon_t$ représente le terme d'erreur. Le vecteur $\mathbf{x}_t$ est constitué de variables temporelles, météorologiques, calendaires, de retards (\textit{lags}) et de statistiques glissantes (\textit{rolling features}) calculées strictement à partir des observations passées pour éviter toute fuite de données.
+
+\subsection{Jeu de données}
+Le jeu de données utilisé est le \textbf{Power Consumption of Tetouan City}, disponible sur le UCI Machine Learning Repository (Salam \& El Hibaoui, 2018). Ce dataset public contient les mesures de consommation électrique de trois zones urbaines de Tétouan ainsi que des variables météorologiques, enregistrées à une fréquence de 10 minutes sur l'année complète 2017.
+
+\subsubsection{Caractéristiques statistiques principales (données horaires)}
+Les statistiques descriptives suivantes ont été calculées après rééchantillonnage horaire (8 736 observations) :
+
+\begin{table}[h]
+\centering
+\begin{tabular}{lrrrr}
+\toprule
+\textbf{Variable} & \textbf{Moyenne} & \textbf{Écart-type} & \textbf{Minimum} & \textbf{Maximum} \\
+\midrule
+\texttt{zone1\_power} (cible) & 32 345 kW & 7 069 kW & 14 329 kW & 51 844 kW \\
+\texttt{zone2\_power} & 21 043 kW & 5 165 kW & 8 686 kW & 36 255 kW \\
+\texttt{zone3\_power} & 17 835 kW & 6 591 kW & 6 191 kW & 47 224 kW \\
+\texttt{total\_load} & 71 223 kW & 17 018 kW & 37 408 kW & 133 130 kW \\
+\bottomrule
+\end{tabular}
+\caption{Statistiques descriptives (données horaires)}
+\end{table}
+
+\subsection{Processus KDD}
+Le projet suit les neuf étapes du processus KDD :
+\begin{enumerate}
+    \item \textbf{Sélection des données} : identification du dataset Tetouan et vérification de sa pertinence.
+    \item \textbf{Audit qualité} : vérification de la structure, des types, des valeurs manquantes, des doublons temporels et de la régularité de l'échantillonnage.
+    \item \textbf{Analyse exploratoire (EDA)} : visualisation des distributions, profils temporels, saisonnalités, corrélations et détection d'anomalies.
+    \item \textbf{Prétraitement} : rééchantillonnage horaire, gestion des valeurs manquantes par interpolation temporelle, annotation des anomalies sans suppression des pics réels.
+    \item \textbf{Ingénierie des caractéristiques} : création de 98 variables explicatives.
+    \item \textbf{Modélisation} : entraînement et comparaison de six familles de modèles.
+    \item \textbf{Évaluation} : mesure des performances sur le jeu de test.
+    \item \textbf{Explicabilité (XAI)} : interprétation des prédictions via SHAP et LIME.
+    \item \textbf{Recommandations} : formulation de recommandations opérationnelles.
+\end{enumerate}
+
+\subsection{Prétraitement et Ingénierie des caractéristiques}
+Les données brutes (10 minutes) ont été rééchantillonnées à une fréquence horaire.
+L'ingénierie des caractéristiques a produit 98 variables, réparties en :
+\begin{itemize}
+    \item \textbf{Variables temporelles et cycliques} : heure, jour, mois (encodage sinus/cosinus).
+    \item \textbf{Indicateurs d'activité humaine} : week-end, heures de pointe, jours fériés.
+    \item \textbf{Variables autorégressives} : retards (lags) de 1h à 168h (1 semaine) et statistiques glissantes, calculées avec \texttt{shift(1)} pour éviter la fuite de données.
+    \item \textbf{Variables climatiques et interactions} : Degrés Jours de Chauffage (HDD) et Climatisation (CDD), et interactions avec l'heure de pointe.
+\end{itemize}
+
+\subsection{Partitionnement chronologique des données}
+\begin{table}[h]
+\centering
+\begin{tabular}{lrrl}
+\toprule
+\textbf{Partition} & \textbf{Proportion} & \textbf{Observations} & \textbf{Période couverte} \\
+\midrule
+Entraînement (\textit{Train}) & 70 \% & 5 997 & Janvier – Septembre 2017 \\
+Validation (\textit{Val}) & 15 \% & 1 285 & Septembre – Novembre 2017 \\
+Test & 15 \% & 1 286 & Novembre – Décembre 2017 \\
+\bottomrule
+\end{tabular}
+\caption{Partitionnement temporel}
+\end{table}
+
+\subsection{Métriques d'évaluation}
+Les métriques principales sont le \textbf{MAPE} (Mean Absolute Percentage Error) pour l'erreur relative, le \textbf{MAE}, le \textbf{RMSE} et le \textbf{R²}.
+
+\section{Implémentation}
+Le projet a été développé en Python 3 avec \texttt{pandas}, \texttt{scikit-learn}, \texttt{xgboost}, \texttt{tensorflow} (pour GRU), \texttt{shap} et \texttt{streamlit}.
+L'architecture sépare les responsabilités entre les notebooks d'expérimentation et le code modulaire dans \texttt{src/}. 
+Un tableau de bord interactif \textbf{Streamlit} a été conçu pour l'exploration, la prédiction et l'explicabilité.
+
+\section{Résultats et évaluation}
+\subsection{Résultats globaux}
+\begin{table}[h]
+\centering
+\resizebox{\textwidth}{!}{
+\begin{tabular}{clrrrrrr}
+\toprule
+\textbf{Rang} & \textbf{Modèle} & \textbf{MAE (kW)} & \textbf{RMSE (kW)} & \textbf{MAPE (\%)} & \textbf{sMAPE (\%)} & \textbf{R²} & \textbf{Biais (kW)} \\
+\midrule
+\textbf{1} & \textbf{XGBoost} & \textbf{596} & \textbf{798} & \textbf{2,06} & \textbf{2,05} & \textbf{0,982} & \textbf{+183} \\
+2 & Naive Previous Week & 793 & 1 098 & 2,78 & — & 0,967 & — \\
+3 & Random Forest & 937 & 1 166 & 3,25 & 3,20 & 0,962 & +616 \\
+4 & Naive Previous Day & 935 & 1 435 & 3,27 & — & 0,943 & — \\
+5 & GRU & 1 407 & 1 941 & 4,98 & 4,93 & 0,896 & +172 \\
+6 & Naive Previous Hour & 1 745 & 2 300 & 6,02 & — & 0,853 & — \\
+7 & SARIMAX & 2 500 & 3 105 & 8,97 & — & 0,733 & — \\
+8 & SARIMA & 8 208 & 9 781 & 33,29 & — & -1,653 & — \\
+9 & Prophet & 33 774 & 38 232 & 121,31 & — & -39,54 & — \\
+\bottomrule
+\end{tabular}}
+\caption{Performances des modèles sur le jeu de test}
+\end{table}
+
+Le modèle \textbf{XGBoost} domine avec un MAPE de \textbf{2,06 \%}. Il est intéressant de noter que la baseline naïve de la semaine précédente (2,78 \%) offre des résultats remarquables, prouvant une forte régularité hebdomadaire.
+
+\subsection{Importance des variables et explicabilité}
+L'analyse SHAP révèle que les variables les plus influentes sont l'inertie journalière (\texttt{target\_lag\_24h}, 51,5 \%) et l'inertie hebdomadaire (\texttt{target\_lag\_168h}, 17,9 \%). Les conditions météorologiques agissent comme un modérateur lors des heures de pointe.
+
+\section{Discussion et Conclusion}
+Le pipeline développé présente des forces majeures : rigueur méthodologique, excellente performance (MAPE 2,06 \%), explicabilité via SHAP et déploiement via un tableau de bord.
+Les limites incluent la restriction à une seule année de données et l'absence de données socio-économiques.
+En conclusion, ce travail ouvre la voie à une gestion proactive de l'énergie urbaine, essentielle pour l'optimisation des Smart Cities.
+
+\section*{Références bibliographiques}
+\begin{itemize}
+    \item Box, G. E. P., \& Jenkins, G. M. (1976). \textit{Time Series Analysis: Forecasting and Control}. Holden-Day.
+    \item Breiman, L. (2001). Random Forests. \textit{Machine Learning}, 45(1), 5–32.
+    \item Chen, T., \& Guestrin, C. (2016). XGBoost: A Scalable Tree Boosting System. \textit{KDD '16}.
+    \item Cho, K. et al. (2014). Learning Phrase Representations using RNN Encoder–Decoder. \textit{EMNLP}.
+    \item Lundberg, S. M., \& Lee, S.-I. (2017). A Unified Approach to Interpreting Model Predictions. \textit{NeurIPS}.
+    \item Ribeiro, M. T. et al. (2016). "Why Should I Trust You?": Explaining the Predictions of Any Classifier. \textit{KDD '16}.
+\end{itemize}
+
+\end{document}

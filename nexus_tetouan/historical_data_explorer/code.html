@@ -1,0 +1,394 @@
+<!DOCTYPE html>
+
+<html class="light" lang="en"><head>
+<meta charset="utf-8"/>
+<meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+<title>Historical Data Explorer - Nexus Tetouan</title>
+<script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&amp;display=swap" rel="stylesheet"/>
+<link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&amp;display=swap" rel="stylesheet"/>
+<script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "tertiary": "#4b5a70",
+                      "outline-variant": "#c2c6d8",
+                      "surface-dim": "#d8dadc",
+                      "on-surface-variant": "#424656",
+                      "primary-container": "#0066ff",
+                      "on-primary-fixed": "#001849",
+                      "on-tertiary-fixed-variant": "#38485d",
+                      "error": "#ba1a1a",
+                      "on-error-container": "#93000a",
+                      "tertiary-container": "#63738a",
+                      "on-primary": "#ffffff",
+                      "on-secondary": "#ffffff",
+                      "on-tertiary-fixed": "#0b1c30",
+                      "surface-container-lowest": "#ffffff",
+                      "outline": "#727687",
+                      "on-primary-container": "#f8f7ff",
+                      "secondary-fixed": "#69ff87",
+                      "on-primary-fixed-variant": "#003fa4",
+                      "on-background": "#191c1e",
+                      "on-secondary-fixed-variant": "#00531e",
+                      "on-tertiary-container": "#f6f8ff",
+                      "background": "#f7f9fb",
+                      "error-container": "#ffdad6",
+                      "surface-container-highest": "#e0e3e5",
+                      "on-tertiary": "#ffffff",
+                      "surface-container-high": "#e6e8ea",
+                      "primary-fixed-dim": "#b3c5ff",
+                      "tertiary-fixed-dim": "#b7c8e1",
+                      "secondary-container": "#5cfd80",
+                      "primary-fixed": "#dae1ff",
+                      "surface-variant": "#e0e3e5",
+                      "surface-container-low": "#f2f4f6",
+                      "on-secondary-fixed": "#002108",
+                      "inverse-surface": "#2d3133",
+                      "secondary-fixed-dim": "#3ce36a",
+                      "surface-tint": "#0054d6",
+                      "on-surface": "#191c1e",
+                      "on-secondary-container": "#00732c",
+                      "primary": "#0050cb",
+                      "surface": "#f7f9fb",
+                      "on-error": "#ffffff",
+                      "inverse-primary": "#b3c5ff",
+                      "secondary": "#006e2a",
+                      "surface-container": "#eceef0",
+                      "surface-bright": "#f7f9fb",
+                      "inverse-on-surface": "#eff1f3",
+                      "tertiary-fixed": "#d3e4fe"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "margin-mobile": "16px",
+                      "container-max": "1280px",
+                      "unit": "4px",
+                      "xl": "40px",
+                      "sm": "8px",
+                      "md": "16px",
+                      "xs": "4px",
+                      "gutter": "24px",
+                      "lg": "24px"
+              },
+              "fontFamily": {
+                      "body-sm": ["Inter"],
+                      "label-md": ["Inter"],
+                      "body-lg": ["Inter"],
+                      "headline-xl": ["Inter"],
+                      "body-md": ["Inter"],
+                      "headline-lg": ["Inter"],
+                      "label-sm": ["Inter"],
+                      "headline-md": ["Inter"],
+                      "headline-lg-mobile": ["Inter"]
+              },
+              "fontSize": {
+                      "body-sm": ["14px", { "lineHeight": "20px", "fontWeight": "400" }],
+                      "label-md": ["14px", { "lineHeight": "16px", "letterSpacing": "0.01em", "fontWeight": "600" }],
+                      "body-lg": ["18px", { "lineHeight": "28px", "fontWeight": "400" }],
+                      "headline-xl": ["48px", { "lineHeight": "56px", "letterSpacing": "-0.02em", "fontWeight": "700" }],
+                      "body-md": ["16px", { "lineHeight": "24px", "fontWeight": "400" }],
+                      "headline-lg": ["32px", { "lineHeight": "40px", "letterSpacing": "-0.01em", "fontWeight": "600" }],
+                      "label-sm": ["12px", { "lineHeight": "16px", "fontWeight": "500" }],
+                      "headline-md": ["20px", { "lineHeight": "28px", "fontWeight": "600" }],
+                      "headline-lg-mobile": ["24px", { "lineHeight": "32px", "fontWeight": "600" }]
+              }
+            }
+          }
+        }
+    </script>
+<style type="text/tailwindcss">
+        @layer utilities {
+            .glass-panel {
+                @apply bg-surface-container-lowest/90 backdrop-blur-md border border-outline-variant/30 shadow-[0_4px_6px_-1px_rgba(0,0,0,0.05),_0_2px_4px_-2px_rgba(0,0,0,0.03)];
+            }
+            .tech-focus {
+                @apply focus:outline-none focus:ring-2 focus:ring-primary focus:border-primary transition-all duration-200;
+            }
+            .table-row-hover {
+                @apply hover:bg-[#EFF6FF] transition-colors duration-150;
+            }
+        }
+    </style>
+</head>
+<body class="bg-background text-on-background font-body-md min-h-screen flex antialiased">
+<!-- SideNavBar -->
+<nav class="bg-surface shadow-sm h-screen w-64 fixed left-0 top-0 flex flex-col h-full py-md px-sm z-50">
+<div class="mb-xl px-sm flex items-center gap-sm">
+<div class="w-10 h-10 rounded-full bg-primary flex items-center justify-center text-on-primary">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">bolt</span>
+</div>
+<div>
+<div class="font-headline-md text-headline-md font-bold text-primary">Nexus Tetouan</div>
+<div class="font-label-sm text-label-sm text-tertiary">Energy Management</div>
+</div>
+</div>
+<div class="flex flex-col gap-sm flex-grow">
+<!-- Inactive -->
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-tertiary hover:bg-surface-container-low transition-colors active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined">dashboard</span>
+<span class="font-label-md text-label-md">Dashboard</span>
+</a>
+<!-- Inactive -->
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-tertiary hover:bg-surface-container-low transition-colors active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined">compare_arrows</span>
+<span class="font-label-md text-label-md">Model Comparison</span>
+</a>
+<!-- Active -->
+<a class="flex items-center gap-md px-md py-sm rounded-lg bg-surface-container-low text-primary font-bold border-r-4 border-primary transition-colors active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined" style="font-variation-settings: 'FILL' 1;">history</span>
+<span class="font-label-md text-label-md">Historical Data</span>
+</a>
+<!-- Inactive -->
+<a class="flex items-center gap-md px-md py-sm rounded-lg text-tertiary hover:bg-surface-container-low transition-colors active:scale-95 duration-150" href="#">
+<span class="material-symbols-outlined">settings</span>
+<span class="font-label-md text-label-md">Settings</span>
+</a>
+</div>
+<div class="mt-auto pt-md border-t border-outline-variant/30 flex items-center gap-md px-sm">
+<img alt="User profile photo" class="w-8 h-8 rounded-full object-cover shadow-sm" data-alt="A professional headshot of an administrator in a well-lit, modern office setting. Clean tech aesthetic with bright white lighting and subtle blue accents in the background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuD7_H_Y25krwN0Ge_NRoJfQh2nWrFMlFwiRuzkGFF-uJu-oN-7H07QrtgStXBkMwzrEd2sWdgr4YdXgOfbIuYwuSajc2lx5p5HvxgtKviEGqQP8TXvh9IhnOGbUTwS3qqCOog-7hoRjsnS4n_PAw4i0sW96rlIrycU0DAQjpwA9QJLSbxc0Jn-PzA52UQZGBX1QPJlBHO0ma2ICghPy0jxlxB8RrzVjPtl2ZsTpUKGfF20psBTw9pAKe4QWe_J8JXez8feAujD9bX7e"/>
+<div class="flex flex-col">
+<span class="font-label-sm text-label-sm font-semibold text-on-surface">Admin User</span>
+</div>
+</div>
+</nav>
+<!-- Main Content Area -->
+<div class="flex-grow flex flex-col ml-64 min-h-screen">
+<!-- TopAppBar -->
+<header class="bg-surface-bright shadow-sm docked full-width top-0 sticky z-40 flex justify-between items-center h-16 px-lg">
+<div class="flex items-center gap-md w-1/3">
+<div class="relative w-full max-w-md">
+<span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline text-sm">search</span>
+<input class="w-full pl-10 pr-4 py-2 rounded-full border border-outline-variant bg-surface-container-lowest text-body-sm tech-focus placeholder:text-outline-variant" placeholder="Search data points..." type="text"/>
+</div>
+</div>
+<div class="flex items-center gap-lg">
+<div class="flex items-center gap-sm">
+<button class="p-2 rounded-full text-on-surface-variant hover:text-primary-container hover:bg-surface-container-low transition-all active:opacity-80">
+<span class="material-symbols-outlined">notifications</span>
+</button>
+<button class="p-2 rounded-full text-on-surface-variant hover:text-primary-container hover:bg-surface-container-low transition-all active:opacity-80">
+<span class="material-symbols-outlined">help</span>
+</button>
+</div>
+<img alt="Administrator Avatar" class="w-9 h-9 rounded-full object-cover border-2 border-surface-container-highest" data-alt="A professional headshot of an administrator in a well-lit, modern office setting. Clean tech aesthetic with bright white lighting and subtle blue accents in the background." src="https://lh3.googleusercontent.com/aida-public/AB6AXuBOpb8xfMX7KFLghf9s5q3pNx1B400fnOwVHsF-_V60WMoqBOvPStwq0OqCTzRaZ1hIPV1hsg6C4pWas6EJVOqrLF5KOsEL31D9T7gePi66MLB1DlLH4VfXN39i-ECnnamnmzyLlkdeT8F3vRBB35aTmHnBefSBQNGEQ2fn7UXF7CWbgnWFXnCFTTYCFKB-5AsqTS7uvlU44KiWKudvwVm843ZXnSqNpf4kGSCRZTSt4tr4zPJu9h4B8v2TBlloFhsYFvRNPwjg_WLC"/>
+</div>
+</header>
+<!-- Page Content -->
+<main class="flex-grow p-xl overflow-y-auto bg-background">
+<div class="max-w-container-max mx-auto space-y-lg">
+<!-- Page Header -->
+<div class="flex flex-col md:flex-row md:items-end justify-between gap-md mb-xl">
+<div>
+<h1 class="font-headline-lg text-headline-lg text-on-background mb-xs">Historical Data Explorer</h1>
+<p class="font-body-md text-body-md text-on-surface-variant">Analyze historical energy consumption and meteorological impact.</p>
+</div>
+</div>
+<!-- Filter Bar (Bento style card) -->
+<div class="glass-panel rounded-xl p-lg flex flex-col lg:flex-row gap-lg items-end justify-between border border-outline-variant/50">
+<div class="flex flex-wrap gap-md w-full lg:w-auto">
+<!-- Date Range -->
+<div class="flex flex-col gap-xs flex-grow lg:flex-grow-0">
+<label class="font-label-sm text-label-sm text-tertiary">Date Range</label>
+<div class="flex items-center gap-xs">
+<input class="rounded-lg border-outline-variant bg-surface-container-lowest text-body-sm tech-focus text-on-surface w-full lg:w-auto px-3 py-2" type="date" value="2023-01-01"/>
+<span class="text-outline-variant">-</span>
+<input class="rounded-lg border-outline-variant bg-surface-container-lowest text-body-sm tech-focus text-on-surface w-full lg:w-auto px-3 py-2" type="date" value="2023-12-31"/>
+</div>
+</div>
+<!-- City Zone -->
+<div class="flex flex-col gap-xs flex-grow lg:flex-grow-0">
+<label class="font-label-sm text-label-sm text-tertiary">City Zone</label>
+<select class="rounded-lg border-outline-variant bg-surface-container-lowest text-body-sm tech-focus text-on-surface w-full lg:w-48 px-3 py-2 appearance-none">
+<option>All Zones</option>
+<option>Zone A (Industrial)</option>
+<option>Zone B (Residential)</option>
+<option>Zone C (Commercial)</option>
+</select>
+</div>
+<!-- Weather Features Checkboxes -->
+<div class="flex flex-col gap-xs">
+<label class="font-label-sm text-label-sm text-tertiary">Weather Features</label>
+<div class="flex items-center gap-md h-[40px]">
+<label class="flex items-center gap-sm cursor-pointer">
+<input checked="" class="rounded border-outline-variant text-primary tech-focus w-4 h-4" type="checkbox"/>
+<span class="font-body-sm text-body-sm text-on-surface">Temp</span>
+</label>
+<label class="flex items-center gap-sm cursor-pointer">
+<input checked="" class="rounded border-outline-variant text-primary tech-focus w-4 h-4" type="checkbox"/>
+<span class="font-body-sm text-body-sm text-on-surface">Humidity</span>
+</label>
+<label class="flex items-center gap-sm cursor-pointer">
+<input class="rounded border-outline-variant text-primary tech-focus w-4 h-4" type="checkbox"/>
+<span class="font-body-sm text-body-sm text-on-surface">Wind</span>
+</label>
+</div>
+</div>
+</div>
+<!-- Actions -->
+<div class="flex gap-md w-full lg:w-auto">
+<button class="px-4 py-2 rounded-lg font-label-md text-label-md text-primary bg-surface-container-low hover:bg-surface-container-high transition-colors w-full lg:w-auto">
+                            Reset Filters
+                        </button>
+<button class="px-4 py-2 rounded-lg font-label-md text-label-md text-on-primary bg-primary hover:bg-surface-tint shadow-sm transition-colors flex items-center justify-center gap-sm w-full lg:w-auto whitespace-nowrap">
+<span class="material-symbols-outlined text-sm">download</span>
+                            Export to CSV
+                        </button>
+</div>
+</div>
+<!-- Data Table Container -->
+<div class="glass-panel rounded-xl overflow-hidden flex flex-col border border-outline-variant/50">
+<div class="overflow-x-auto">
+<table class="w-full text-left border-collapse">
+<thead>
+<tr class="bg-surface-container-low border-b border-outline-variant/30">
+<th class="sticky top-0 p-4 font-label-sm text-label-sm text-tertiary whitespace-nowrap bg-surface-container-low z-10">Timestamp</th>
+<th class="sticky top-0 p-4 font-label-sm text-label-sm text-tertiary whitespace-nowrap bg-surface-container-low z-10">Zone</th>
+<th class="sticky top-0 p-4 font-label-sm text-label-sm text-tertiary whitespace-nowrap bg-surface-container-low z-10 text-right">Consumption (kW)</th>
+<th class="sticky top-0 p-4 font-label-sm text-label-sm text-tertiary whitespace-nowrap bg-surface-container-low z-10 text-right">Temperature (°C)</th>
+<th class="sticky top-0 p-4 font-label-sm text-label-sm text-tertiary whitespace-nowrap bg-surface-container-low z-10 text-right">Humidity (%)</th>
+<th class="sticky top-0 p-4 font-label-sm text-label-sm text-tertiary whitespace-nowrap bg-surface-container-low z-10 text-center">Status</th>
+</tr>
+</thead>
+<tbody class="font-body-sm text-body-sm text-on-surface divide-y divide-surface-container-highest">
+<!-- Row 1 -->
+<tr class="table-row-hover bg-surface-container-lowest">
+<td class="p-4 whitespace-nowrap">2023-10-27 08:00</td>
+<td class="p-4">Zone A (Industrial)</td>
+<td class="p-4 text-right font-medium">1,245.5</td>
+<td class="p-4 text-right">22.4</td>
+<td class="p-4 text-right">45</td>
+<td class="p-4 text-center">
+<span class="inline-flex items-center px-2 py-1 rounded-full bg-secondary-container/20 text-on-secondary-container font-label-sm text-[10px]">Normal</span>
+</td>
+</tr>
+<!-- Row 2 (Faint grey) -->
+<tr class="table-row-hover bg-[#F8FAFC]">
+<td class="p-4 whitespace-nowrap">2023-10-27 09:00</td>
+<td class="p-4">Zone A (Industrial)</td>
+<td class="p-4 text-right font-medium text-error">1,580.2</td>
+<td class="p-4 text-right">24.1</td>
+<td class="p-4 text-right">42</td>
+<td class="p-4 text-center">
+<span class="inline-flex items-center px-2 py-1 rounded-full bg-error-container/50 text-on-error-container font-label-sm text-[10px]">Peak Alert</span>
+</td>
+</tr>
+<!-- Row 3 -->
+<tr class="table-row-hover bg-surface-container-lowest">
+<td class="p-4 whitespace-nowrap">2023-10-27 08:00</td>
+<td class="p-4">Zone B (Residential)</td>
+<td class="p-4 text-right font-medium">420.8</td>
+<td class="p-4 text-right">22.1</td>
+<td class="p-4 text-right">46</td>
+<td class="p-4 text-center">
+<span class="inline-flex items-center px-2 py-1 rounded-full bg-secondary-container/20 text-on-secondary-container font-label-sm text-[10px]">Normal</span>
+</td>
+</tr>
+<!-- Row 4 -->
+<tr class="table-row-hover bg-[#F8FAFC]">
+<td class="p-4 whitespace-nowrap">2023-10-27 09:00</td>
+<td class="p-4">Zone B (Residential)</td>
+<td class="p-4 text-right font-medium">485.3</td>
+<td class="p-4 text-right">23.8</td>
+<td class="p-4 text-right">43</td>
+<td class="p-4 text-center">
+<span class="inline-flex items-center px-2 py-1 rounded-full bg-secondary-container/20 text-on-secondary-container font-label-sm text-[10px]">Normal</span>
+</td>
+</tr>
+<!-- Row 5 -->
+<tr class="table-row-hover bg-surface-container-lowest">
+<td class="p-4 whitespace-nowrap">2023-10-27 08:00</td>
+<td class="p-4">Zone C (Commercial)</td>
+<td class="p-4 text-right font-medium">890.1</td>
+<td class="p-4 text-right">22.6</td>
+<td class="p-4 text-right">44</td>
+<td class="p-4 text-center">
+<span class="inline-flex items-center px-2 py-1 rounded-full bg-secondary-container/20 text-on-secondary-container font-label-sm text-[10px]">Normal</span>
+</td>
+</tr>
+<!-- Row 6 -->
+<tr class="table-row-hover bg-[#F8FAFC]">
+<td class="p-4 whitespace-nowrap">2023-10-27 09:00</td>
+<td class="p-4">Zone C (Commercial)</td>
+<td class="p-4 text-right font-medium">1,020.5</td>
+<td class="p-4 text-right">24.5</td>
+<td class="p-4 text-right">41</td>
+<td class="p-4 text-center">
+<span class="inline-flex items-center px-2 py-1 rounded-full bg-secondary-container/20 text-on-secondary-container font-label-sm text-[10px]">Normal</span>
+</td>
+</tr>
+<!-- Row 7 -->
+<tr class="table-row-hover bg-surface-container-lowest">
+<td class="p-4 whitespace-nowrap">2023-10-27 10:00</td>
+<td class="p-4">Zone A (Industrial)</td>
+<td class="p-4 text-right font-medium">1,490.0</td>
+<td class="p-4 text-right">25.2</td>
+<td class="p-4 text-right">39</td>
+<td class="p-4 text-center">
+<span class="inline-flex items-center px-2 py-1 rounded-full bg-secondary-container/20 text-on-secondary-container font-label-sm text-[10px]">Normal</span>
+</td>
+</tr>
+<!-- Row 8 -->
+<tr class="table-row-hover bg-[#F8FAFC]">
+<td class="p-4 whitespace-nowrap">2023-10-27 10:00</td>
+<td class="p-4">Zone B (Residential)</td>
+<td class="p-4 text-right font-medium">460.2</td>
+<td class="p-4 text-right">25.0</td>
+<td class="p-4 text-right">40</td>
+<td class="p-4 text-center">
+<span class="inline-flex items-center px-2 py-1 rounded-full bg-secondary-container/20 text-on-secondary-container font-label-sm text-[10px]">Normal</span>
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+<!-- Pagination -->
+<div class="bg-surface-container-lowest px-4 py-3 border-t border-outline-variant/30 flex items-center justify-between sm:px-6">
+<div class="hidden sm:flex-1 sm:flex sm:items-center sm:justify-between">
+<div>
+<p class="font-body-sm text-body-sm text-on-surface-variant">
+                                    Showing <span class="font-medium text-on-surface">1</span> to <span class="font-medium text-on-surface">8</span> of <span class="font-medium text-on-surface">2,450</span> results
+                                </p>
+</div>
+<div>
+<nav aria-label="Pagination" class="relative z-0 inline-flex rounded-md shadow-sm -space-x-px">
+<a class="relative inline-flex items-center px-2 py-2 rounded-l-md border border-outline-variant/50 bg-surface-container-lowest text-sm font-medium text-on-surface-variant hover:bg-surface-container-low transition-colors" href="#">
+<span class="sr-only">Previous</span>
+<span class="material-symbols-outlined text-sm">chevron_left</span>
+</a>
+<a aria-current="page" class="z-10 bg-primary-container/10 border-primary text-primary relative inline-flex items-center px-4 py-2 border text-sm font-medium" href="#">
+                                        1
+                                    </a>
+<a class="bg-surface-container-lowest border-outline-variant/50 text-on-surface-variant hover:bg-surface-container-low relative inline-flex items-center px-4 py-2 border text-sm font-medium transition-colors" href="#">
+                                        2
+                                    </a>
+<a class="bg-surface-container-lowest border-outline-variant/50 text-on-surface-variant hover:bg-surface-container-low hidden md:inline-flex relative items-center px-4 py-2 border text-sm font-medium transition-colors" href="#">
+                                        3
+                                    </a>
+<span class="relative inline-flex items-center px-4 py-2 border border-outline-variant/50 bg-surface-container-lowest text-sm font-medium text-on-surface-variant">
+                                        ...
+                                    </span>
+<a class="bg-surface-container-lowest border-outline-variant/50 text-on-surface-variant hover:bg-surface-container-low relative inline-flex items-center px-4 py-2 border text-sm font-medium transition-colors" href="#">
+                                        10
+                                    </a>
+<a class="relative inline-flex items-center px-2 py-2 rounded-r-md border border-outline-variant/50 bg-surface-container-lowest text-sm font-medium text-on-surface-variant hover:bg-surface-container-low transition-colors" href="#">
+<span class="sr-only">Next</span>
+<span class="material-symbols-outlined text-sm">chevron_right</span>
+</a>
+</nav>
+</div>
+</div>
+</div>
+</div>
+</div>
+</main>
+</div>
+</body></html>
